@@ -1,0 +1,6 @@
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 900 ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton

@@ -1,0 +1,2 @@
+{"IfcEntity": "IfcColumn", "PredefinedType": "COLUMN", "Name": " ", "Material": ["S235JR"], "GUID": "1sXekCV3zCshAc0UPG67d4", "Status": ["NEW"], "Length": 2.5, "NetVolume": 0.028}
+{"IfcEntity": "IfcWall", "Name": "Wand", "Material": ["Beton", "XPS", "Gipsputz"], "GUID": "35PSKAHH12tfH0oWF$ePoZ", "Status": ["NEW"], "Length": 6.88, "NetVolume": 9.804}
