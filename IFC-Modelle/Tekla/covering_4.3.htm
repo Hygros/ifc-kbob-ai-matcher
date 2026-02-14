@@ -1,0 +1,136 @@
+<!-- saved from url=(0014)about:internet -->
+<html lang=en>
+<head>
+<title>IFC4Export Log</title>
+<style>
+  table { width:100%; }
+  table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+  }
+  th, td { padding: 5px; text-align: left; }
+  tr:hover td { background: #33CCFF }
+  table#t01 tr:nth-child(even) { background-color: #FFFFCC; }
+  table#t01 tr:nth-child(odd) { background-color:white; }
+  table#t01 th { background-color:blue; color: white; }
+  h1 { font-family:verdana; color:green; }
+  h2 { font-family:verdana; color:blue; }
+  p { font-family:Times New Roman; color:black; }
+  p.small { line-height:120%; }
+  body {
+    background: white;
+    margin-left: 40 pt;
+    margin-right: 40 pt;
+    margin-top: 40 pt;
+    margin-bottom: 40 pt;
+  }
+  table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
+    content: "\25B4\25BE"
+  }
+  li{
+    cursor:pointer;
+    display:block;
+    width:300px;
+  }
+  .Level{
+  }
+  .ExpandCollapse{
+    float:left;
+    margin - right:5px;
+    width:8px;
+  }
+</style>
+<script src=ifc4export.js type=text/javascript></script>
+<script>
+ function CopyToClipBoard(value) {
+  var tsId = document.getElementById(value).value;
+  var dummy = document.createElement("textarea");
+  document.body.appendChild(dummy);
+  dummy.value = tsId;
+  dummy.select();
+  document.execCommand("copy");
+  document.body.removeChild(dummy);
+  alert("Tekla Structures Id [" + tsId + "] copied to clipboard.");
+ }
+</script>
+</head>
+<body>
+<h2>IFC4X3 Export results</h2>
+<p><b>IfcExporter:</b>Tekla Structures <b>Version:</b>2025 Service Pack 6.1 <b>Compiled:</b>Wed Dec 17 12:35:08 2025.</p>
+<p><b>File:</b>C:\Users\wpx619\AAA_Python_MTH\Matching\IFC-Modelle\Tekla\covering_4.3.ifc. <b>Size:</b>0.03 MB. <b>Last modified time:</b>Fri Feb 13 11:39:04 2026.</p>
+<p class="small"><b>Configured PropertySet File(s):</b><br>
+&nbsp&nbsp-C:\TeklaStructuresModels\IFC-Test\AdditionalPSets\Bridge view default properties.xml<br>
+</p>
+<p><b>Export part report::</b>true.</p>
+<p><b>View definition:</b>Bridge_view.</p>
+<p><b>Exporting the IfcFile took:</b>0.03 seconds.</p>
+<h3>Integrated Building Hierarchy Tree:</h3><ul onmouseover="resolveSrcMouseover(event); " onmouseout="resolveSrcMouseout(event); " onclick="takeAction(event);">
+ <li><div id="Level3OPznpQEb618FFOI9JWPQ1" class="ExpandCollapse">-</div><div class = "Level">Project:Unknown</div></li>
+ <ul id="ExpandCollapseLevel3OPznpQEb618FFOI9JWPQ1">
+  <li><div id="Level0qwr6muDn2evvtfg40LP5Q" class="ExpandCollapse">-</div><div class = "Level">Site:Unknown</div></li>
+  <ul id="ExpandCollapseLevel0qwr6muDn2evvtfg40LP5Q">
+   <li><div id="Level1LsGBLWxP92QxtY4Jtno7C" class="ExpandCollapse">-</div><div class = "Level">Bridge:Unknown</div></li>
+   <ul id="ExpandCollapseLevel1LsGBLWxP92QxtY4Jtno7C">
+   <table style="width:20%" class="sortable">
+   <tr>
+     <th width="65%">Entity</th>
+     <th width="35%">Count</th>
+   </tr>
+   <tr>
+   <td>IfcBeam</td>
+   <td>1</td>
+   </tr>
+   <tr>
+   <td>IfcCovering</td>
+   <td>6</td>
+   </tr>
+   <tr>
+   <td>IfcElementAssembly</td>
+   <td>1</td>
+   </tr>
+   <tr>
+   <td>IfcReinforcingBar</td>
+   <td>2</td>
+   </tr>
+   </table>
+   </ul>
+  </ul>
+ </ul>
+</ul>
+<h3>Log messages:</h3>
+<table style="width:100%" class="sortable">
+<tr>
+  <th width="10%">Log::Level</th>
+  <th width="10%">Entity</th>
+  <th width="60%">Message</th>
+  <th width="20%">Count / TS Id</th>
+</tr>
+<tr>
+  <td><font color="#000000">1</font></td>
+  <td><font color="#000000">59</font></td>
+  <td><font color="#000000">MessageId:21</font></td>
+  <td>000002 <select id="1">
+    <option value="10">10</option>
+    <option value="10">10</option>
+  </select>
+<input type="submit" value=">" onclick="CopyToClipBoard(1)">
+</td>
+</tr>
+<tr>
+  <td><font color="#000000">1</font></td>
+  <td><font color="#000000">66</font></td>
+  <td><font color="#000000">Unable to create sweep geometry representation. Reverted to Brep!</font></td>
+  <td>000006 <select id="2">
+    <option value="33819">33819</option>
+    <option value="33885">33885</option>
+    <option value="33947">33947</option>
+    <option value="34011">34011</option>
+    <option value="34077">34077</option>
+    <option value="34135">34135</option>
+  </select>
+<input type="submit" value=">" onclick="CopyToClipBoard(2)">
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,999 @@
+IfcEntity: IfcBeam
+PredefinedType: BEAM
+Name: Rammprofil
+Description: HEA300
+GUID: 2gJeSetYX5txMf9xVVAH50
+Material: S235JR
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NICHT DEFINIERT'], 'id': 99}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.05314, 'id': 101}, 'Mengeninformationen': {'Fläche': 8.585, 'id': 103}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: BEAM
+Name: Rammprofil
+Description: HEA300
+GUID: 2Oz7bRRYXAYeABQ_VxyILM
+Material: S235JR
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NICHT DEFINIERT'], 'id': 99}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.05314, 'id': 101}, 'Mengeninformationen': {'Fläche': 8.585, 'id': 103}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: BEAM
+Name: Rammprofil
+Description: HEA300
+GUID: 3z2Iv4kaf1Pw5snLEvaYro
+Material: S235JR
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NICHT DEFINIERT'], 'id': 99}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.05314, 'id': 101}, 'Mengeninformationen': {'Fläche': 8.585, 'id': 103}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: BEAM
+Name: Rammprofil
+Description: HEA300
+GUID: 3aOElqx_v8wOOhweVRq80K
+Material: S235JR
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NICHT DEFINIERT'], 'id': 99}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.05314, 'id': 101}, 'Mengeninformationen': {'Fläche': 8.585, 'id': 103}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: BEAM
+Name: Rammprofil
+Description: HEA300
+GUID: 3TcCv62ef5lgd5zyO3IU4k
+Material: S235JR
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NICHT DEFINIERT'], 'id': 99}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.05314, 'id': 101}, 'Mengeninformationen': {'Fläche': 8.585, 'id': 103}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 2wM47UYyH53Od2ayet5fnR
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 1zO45ajxb0J97zODJnANeW
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 2UY_UFjiH9ff_8U4yPS9tO
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 2FgtcdEmvFdx$zACDED8Wy
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 2b2LrG9X12ggowDIdaxuXx
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 0_bEGb5DD95xT_WM46mWfr
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 0fL8g_zd5Eufhz34$rN5RI
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 1AYYpfYe9FBOj0IvOxtr9K
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 2h4WakHATBdAhRUyHQPoiF
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 3T4x52NXT4vxJNPXWzbTwM
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 3TyDu3wGLDqRG$40hUa0Ri
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 3X$dt8FOfBQwdu5woyW4T7
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 0wVaPoL1n2TeWQsJsZ0wYU
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 2Z$Mc7hNX7mxi88a7RFV10
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 0KyUN9HPvC4udLqAdyVybx
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 3u2azfqkLFb9fVfYwXb9Bl
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 0nzIp$GmfAXwCjU4UjsG8u
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 2f648ExPzDiRNK41EDkDaw
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 3miBUTjGDDGhbMp7JqFTvp
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 0yKAjDdZ1968jaVchuY4dS
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 3mtB27H$XDbhref4JKZjzc
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 28zEkAwn9EruzbSd6heiIR
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 2Qqm7EZ2j8dvc5bBma8Kva
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Ausfachung
+Description: Test-Kommentar
+GUID: 1pvqQsLtHAd8Xo2ooYemm3
+Material: Beton
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Qto_BeamBaseQuantities': {'NetVolume': 0.072, 'id': 169}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 174}, 'Mengeninformationen': {'Fläche': 1.68, 'Bewehrungsgehalt': 200.0, 'id': 177}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Pfahlkopf
+Description: Pfahlkopf-Fundament
+GUID: 2fLEfIuMjCUw6ODxSUW6Kk
+Material: Beton NPK G
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK G', 'StrengthClass': 'C30/37', 'ExposureClass': 'XC4, XD3, XF4', 'ReinforcementVolumeRatio': 150.0, 'ReinforcementStrengthClass': None, 'id': 853}, 'Mengeninformationen': {'Fläche': 12.0, 'Bewehrungsgehalt': 150.0, 'id': 855}, 'Qto_BeamBaseQuantities': {'NetVolume': 7.2, 'id': 872}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Randbord
+Description: Randträger bewehrt
+GUID: 1NfRj_nGX3fu7JYv5n6AOy
+Material: Beton NPK G
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK G', 'StrengthClass': 'C30/37', 'ExposureClass': 'XC4, XD3, XF4', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 772}, 'Qto_BeamBaseQuantities': {'NetVolume': 5.625, 'id': 897}, 'Mengeninformationen': {'Fläche': 28.75, 'Bewehrungsgehalt': 200.0, 'id': 899}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Randbord
+Description: None
+GUID: 0NoPvl22T1lPucxr04dddn
+Material: 
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 756}, 'Qto_BeamBaseQuantities': {'NetVolume': 5.625, 'id': 897}, 'Mengeninformationen': {'Fläche': 35.9, 'Bewehrungsgehalt': 200.0, 'id': 1241}}
+------------------------------------------------------------
+IfcEntity: IfcBeam
+PredefinedType: USERDEFINED
+Name: Randbord
+Description: Test-Kommentar
+GUID: 2kldBsGUz3txA6xYKZG$ha
+Material: Beton NPK G
+Property sets:
+{'Pset_BeamCommon': {'Status': ['NEU'], 'id': 167}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK G', 'StrengthClass': 'C30/37', 'ExposureClass': 'XC4, XD3, XF4', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 772}, 'Qto_BeamBaseQuantities': {'NetVolume': 5.625, 'id': 897}, 'Mengeninformationen': {'Fläche': 28.75, 'Bewehrungsgehalt': 200.0, 'id': 899}}
+------------------------------------------------------------
+IfcEntity: IfcCovering
+PredefinedType: None
+Name: Abdichtung
+Description: None
+GUID: 2Q8e4pnhPBswbCJ4wwvY$E
+Material: Undefined
+Property sets:
+{'Mengeninformationen': {'Fläche': 125.0, 'id': 831}}
+------------------------------------------------------------
+IfcEntity: IfcCovering
+PredefinedType: None
+Name: Oberflächenbehandlung
+Description: None
+GUID: 0MZMN6lDz90PYZ5KnPsaCk
+Material: Undefined
+Property sets:
+{'Mengeninformationen': {'Fläche': 11.25, 'id': 1195}}
+------------------------------------------------------------
+IfcEntity: IfcCovering
+PredefinedType: None
+Name: Oberflächenbehandlung
+Description: None
+GUID: 38MWtD3UH31QGy6PmAWK5_
+Material: Undefined
+Property sets:
+{'Mengeninformationen': {'Fläche': 6.25, 'id': 1205}}
+------------------------------------------------------------
+IfcEntity: IfcCovering
+PredefinedType: None
+Name: Oberflächenbehandlung
+Description: None
+GUID: 0f45INH6b5BR8wZObwVH1s
+Material: Undefined
+Property sets:
+{'Mengeninformationen': {'Fläche': 11.25, 'id': 1195}}
+------------------------------------------------------------
+IfcEntity: IfcCovering
+PredefinedType: None
+Name: Oberflächenbehandlung
+Description: None
+GUID: 2GGpGTFoL9eA9Iu2S1Fa6F
+Material: Undefined
+Property sets:
+{'Mengeninformationen': {'Fläche': 6.25, 'id': 1205}}
+------------------------------------------------------------
+IfcEntity: IfcCovering
+PredefinedType: None
+Name: Oberflächenbehandlung
+Description: None
+GUID: 1zsn6MM6b1wQj3jHQ1YTXz
+Material: Undefined
+Property sets:
+{'Mengeninformationen': {'Fläche': 0.45, 'id': 1227}}
+------------------------------------------------------------
+IfcEntity: IfcCovering
+PredefinedType: None
+Name: Oberflächenbehandlung
+Description: None
+GUID: 3_rlIp$kH0XP1yXQuaN_Bs
+Material: Undefined
+Property sets:
+{'Mengeninformationen': {'Fläche': 0.45, 'id': 1227}}
+------------------------------------------------------------
+IfcEntity: IfcCovering
+PredefinedType: None
+Name: Abdichtung
+Description: None
+GUID: 0G3xFjWNrEa9GJlbD9t9Ri
+Material: Undefined
+Property sets:
+{'Mengeninformationen': {'Fläche': 11.25, 'id': 1195}}
+------------------------------------------------------------
+IfcEntity: IfcFooting
+PredefinedType: STRIP_FOOTING
+Name: Fundament
+Description: None
+GUID: 014KmKXN18BfCj1wmukhaO
+Material: 
+Property sets:
+{'Pset_FootingCommon': {'Status': ['NEU'], 'id': 838}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 150.0, 'ReinforcementStrengthClass': None, 'id': 840}, 'Mengeninformationen': {'Fläche': 37.439999, 'Bewehrungsgehalt': 150.0, 'id': 843}}
+------------------------------------------------------------
+IfcEntity: IfcFooting
+PredefinedType: STRIP_FOOTING
+Name: Fundament
+Description: Ausführung Pilgerschritt
+GUID: 33z$Fd6MD5svDeMgZFX_Uu
+Material: Beton NPK G
+Property sets:
+{'Pset_FootingCommon': {'Status': ['NEU'], 'id': 838}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK G', 'StrengthClass': 'C30/37', 'ExposureClass': 'XC4, XD3, XF4', 'ReinforcementVolumeRatio': 150.0, 'ReinforcementStrengthClass': None, 'id': 853}, 'Mengeninformationen': {'Fläche': 12.0, 'Bewehrungsgehalt': 150.0, 'id': 855}}
+------------------------------------------------------------
+IfcEntity: IfcFooting
+PredefinedType: STRIP_FOOTING
+Name: Pfahlkopf
+Description: None
+GUID: 3KDxUz3BP8uext4VHdP3lq
+Material: 
+Property sets:
+{'Pset_FootingCommon': {'Status': ['NEU'], 'id': 838}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 150.0, 'ReinforcementStrengthClass': None, 'id': 840}, 'Mengeninformationen': {'Fläche': 37.439999, 'Bewehrungsgehalt': 150.0, 'id': 843}}
+------------------------------------------------------------
+IfcEntity: IfcFooting
+PredefinedType: STRIP_FOOTING
+Name: Fundament
+Description: 100*1200
+GUID: 0pTHdZy9L8BxHbfzgt6LmY
+Material: Magerbeton
+Property sets:
+{'Pset_FootingCommon': {'Status': ['NEU'], 'id': 838}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 0.0, 'ReinforcementStrengthClass': None, 'id': 1281}, 'Mengeninformationen': {'Fläche': 2.0, 'Bewehrungsgehalt': 0.0, 'id': 1284}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Bohrpfahl
+Description: None
+GUID: 0jA4AIgNrCPPXeiT1wFtlu
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 2500.0, 'NetVolume': 0.70396, 'id': 589}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementStrengthClass': None, 'id': 591}, 'Mengeninformationen': {'Fläche': 5.27071, 'id': 593}, 'zus Mengen PILE': {'Ansichtsfläche': 1.5, 'id': 595}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Bohrpfahl
+Description: D600
+GUID: 007Hx0Stz6TRNQuP3GkRUA
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 2500.0, 'NetVolume': 0.70396, 'id': 589}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementStrengthClass': None, 'id': 636}, 'Mengeninformationen': {'Fläche': 4.707546, 'id': 638}, 'zus Mengen PILE': {'Durchmesser': 600.0, 'Ansichtsfläche': 1.5, 'id': 640}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 0_YQIIeGjE48NxL1lL8pTJ
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Mengeninformationen': {'Fläche': 14.564434, 'Bewehrungsgehalt': 100.0, 'id': 1297}, 'zus Mengen PILE': {'Ansichtsfläche': 4.32, 'id': 1299}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Pfahlreihe Süd
+GUID: 0sumxAlOT3jgYE5WcnMHr1
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Mengeninformationen': {'Fläche': 13.561993, 'Bewehrungsgehalt': 100.0, 'id': 1321}, 'zus Mengen PILE': {'Durchmesser': 800.0, 'Ansichtsfläche': 4.32, 'id': 1323}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 1_TRU$abv5UwNgG8hLCafD
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 3.42698, 'id': 1330}, 'Mengeninformationen': {'Fläche': 16.528105, 'Bewehrungsgehalt': 100.0, 'id': 1332}, 'zus Mengen PILE': {'Ansichtsfläche': 4.86, 'id': 1334}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Pfahlreihe Süd
+GUID: 2rLBpx2pnFRurMkif0hKmu
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 3.42698, 'id': 1330}, 'Mengeninformationen': {'Fläche': 15.258854, 'Bewehrungsgehalt': 100.0, 'id': 1350}, 'zus Mengen PILE': {'Durchmesser': 900.0, 'Ansichtsfläche': 4.86, 'id': 1352}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 11iJ6j76HDNvOYxCMozkla
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Mengeninformationen': {'Fläche': 14.564434, 'Bewehrungsgehalt': 100.0, 'id': 1297}, 'zus Mengen PILE': {'Ansichtsfläche': 4.32, 'id': 1299}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Pfahlreihe Süd
+GUID: 39CDy_oJX3bf7IIqq7K1D_
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Mengeninformationen': {'Fläche': 13.561993, 'Bewehrungsgehalt': 100.0, 'id': 1321}, 'zus Mengen PILE': {'Durchmesser': 800.0, 'Ansichtsfläche': 4.32, 'id': 1323}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 0r2e0cTwD1XQ7t5zE0Ylty
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Mengeninformationen': {'Fläche': 14.564434, 'Bewehrungsgehalt': 100.0, 'id': 1297}, 'zus Mengen PILE': {'Ansichtsfläche': 4.32, 'id': 1299}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Pfahlreihe Süd
+GUID: 1yQEie70z3YguswtQoM_xT
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Mengeninformationen': {'Fläche': 13.561993, 'Bewehrungsgehalt': 100.0, 'id': 1321}, 'zus Mengen PILE': {'Durchmesser': 800.0, 'Ansichtsfläche': 4.32, 'id': 1323}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 1MMm$ebWTBSwbKJZavHV9C
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Mengeninformationen': {'Fläche': 14.564434, 'Bewehrungsgehalt': 100.0, 'id': 1297}, 'zus Mengen PILE': {'Ansichtsfläche': 4.32, 'id': 1299}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Pfahlreihe Süd
+GUID: 1c3AMe03z3KBh6EU7WnYB9
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Mengeninformationen': {'Fläche': 13.561993, 'Bewehrungsgehalt': 100.0, 'id': 1321}, 'zus Mengen PILE': {'Durchmesser': 800.0, 'Ansichtsfläche': 4.32, 'id': 1323}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 0_dv05dw9A39Jf9o74tFsq
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Mengeninformationen': {'Fläche': 14.564434, 'Bewehrungsgehalt': 100.0, 'id': 1297}, 'zus Mengen PILE': {'Ansichtsfläche': 4.32, 'id': 1299}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Pfahlreihe Süd
+GUID: 3T12F2ZVP9yfdT_NPAtQNE
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Mengeninformationen': {'Fläche': 13.561993, 'Bewehrungsgehalt': 100.0, 'id': 1321}, 'zus Mengen PILE': {'Durchmesser': 800.0, 'Ansichtsfläche': 4.32, 'id': 1323}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 258iOPnYT88fCGz1aTXAzD
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Mengeninformationen': {'Fläche': 14.564434, 'Bewehrungsgehalt': 100.0, 'id': 1297}, 'zus Mengen PILE': {'Ansichtsfläche': 4.32, 'id': 1299}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Pfahlreihe Süd
+GUID: 0WQCxJtSj2BQYjW50PdQK2
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Mengeninformationen': {'Fläche': 13.561993, 'Bewehrungsgehalt': 100.0, 'id': 1321}, 'zus Mengen PILE': {'Durchmesser': 800.0, 'Ansichtsfläche': 4.32, 'id': 1323}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 0nvw_0r3z8ePSntdMtnJtg
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Mengeninformationen': {'Fläche': 14.564434, 'Bewehrungsgehalt': 100.0, 'id': 1297}, 'zus Mengen PILE': {'Ansichtsfläche': 4.32, 'id': 1299}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Pfahlreihe Süd
+GUID: 3D3dawQ4X2_QBJ45giDzMH
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Mengeninformationen': {'Fläche': 13.561993, 'Bewehrungsgehalt': 100.0, 'id': 1321}, 'zus Mengen PILE': {'Durchmesser': 800.0, 'Ansichtsfläche': 4.32, 'id': 1323}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 221$mvXPzDMxDzYmM91geL
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Mengeninformationen': {'Fläche': 14.564434, 'Bewehrungsgehalt': 100.0, 'id': 1297}, 'zus Mengen PILE': {'Ansichtsfläche': 4.32, 'id': 1299}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Pfahlreihe Süd
+GUID: 0xKE9WZOX8ogBb6hYlawdH
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Mengeninformationen': {'Fläche': 13.561993, 'Bewehrungsgehalt': 100.0, 'id': 1321}, 'zus Mengen PILE': {'Durchmesser': 800.0, 'Ansichtsfläche': 4.32, 'id': 1323}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 058kQePlHFpRpzvU8a3Mo6
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Mengeninformationen': {'Fläche': 14.564434, 'Bewehrungsgehalt': 100.0, 'id': 1297}, 'zus Mengen PILE': {'Ansichtsfläche': 4.32, 'id': 1299}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Pfahlreihe Süd
+GUID: 3XR4lKwLDChgizTmsBePYz
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 2.70659, 'id': 1292}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Mengeninformationen': {'Fläche': 13.561993, 'Bewehrungsgehalt': 100.0, 'id': 1321}, 'zus Mengen PILE': {'Durchmesser': 800.0, 'Ansichtsfläche': 4.32, 'id': 1323}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: None
+GUID: 0qD6bMSCX1_BttQiNozbLw
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 10.6438, 'id': 1441}, 'Mengeninformationen': {'Fläche': 75.12024, 'Bewehrungsgehalt': 100.0, 'id': 1443}, 'zus Mengen PILE': {'Ansichtsfläche': 22.68, 'id': 1445}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Betonpfahl
+Description: Bohrpfahlwand
+GUID: 3GRHgx72b3UfxqottUP0XJ
+Material: Beton
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': '', 'StrengthClass': '', 'ExposureClass': '', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1319}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 10.6438, 'id': 1441}, 'Mengeninformationen': {'Fläche': 53.383569, 'Bewehrungsgehalt': 100.0, 'id': 1748}, 'zus Mengen PILE': {'Durchmesser': 600.0, 'Ansichtsfläche': 22.68, 'id': 1749}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Bohrpfahlwand
+Description: None
+GUID: 1RsMjZfMn9RR1tH4C6beMk
+Material: 
+Property sets:
+{'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementStrengthClass': None, 'id': 591}, 'Pset_PileCommon': {'Status': ['NICHT DEFINIERT'], 'id': 1755}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 12.73164, 'id': 1757}, 'Mengeninformationen': {'Fläche': 66.104113, 'id': 1759}, 'zus Mengen PILE': {'Ansichtsfläche': 24.84, 'id': 1761}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Bohrpfahlwand
+Description: D600
+GUID: 2lN3yod_91FPIedxX83Xvl
+Material: Beton NPK G
+Property sets:
+{'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK G', 'StrengthClass': 'C30/37', 'ExposureClass': 'XC4, XD3, XF4', 'ReinforcementStrengthClass': None, 'id': 786}, 'Pset_PileCommon': {'Status': ['NICHT DEFINIERT'], 'id': 1755}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 12.73164, 'id': 1757}, 'Mengeninformationen': {'Fläche': 61.388693, 'id': 1972}, 'zus Mengen PILE': {'Durchmesser': 600.0, 'Ansichtsfläche': 24.84, 'id': 1973}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Baugrubensicherung
+Description: None
+GUID: 17wDOvi1fFrxHw8opAVPh6
+Material: 
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1294}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 4.56163, 'id': 1980}, 'Mengeninformationen': {'Fläche': 32.194389, 'Bewehrungsgehalt': 100.0, 'id': 1982}, 'zus Mengen PILE': {'Ansichtsfläche': 8.64, 'id': 1984}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Baugrubensicherung
+Description: Bohrpfahlwand
+GUID: 3iVs7srtD8JQ5xs8Qxjr_k
+Material: Beton NPK G
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 1.52054, 'id': 1993}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK G', 'StrengthClass': 'C30/37', 'ExposureClass': 'XC4, XD3, XF4', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1994}, 'Mengeninformationen': {'Fläche': 10.168299, 'Bewehrungsgehalt': 100.0, 'id': 1996}, 'zus Mengen PILE': {'Durchmesser': 600.0, 'Ansichtsfläche': 3.24, 'id': 1998}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Baugrubensicherung
+Description: Bohrpfahlwand
+GUID: 0izFKBO111Ow6tPc6fiu3k
+Material: Beton NPK G
+Property sets:
+{'Pset_PileCommon': {'Status': ['NEU'], 'id': 586}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 1.52054, 'id': 1993}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK G', 'StrengthClass': 'C30/37', 'ExposureClass': 'XC4, XD3, XF4', 'ReinforcementVolumeRatio': 100.0, 'ReinforcementStrengthClass': None, 'id': 1994}, 'Mengeninformationen': {'Fläche': 10.168299, 'Bewehrungsgehalt': 100.0, 'id': 1996}, 'zus Mengen PILE': {'Durchmesser': 600.0, 'Ansichtsfläche': 3.24, 'id': 1998}}
+------------------------------------------------------------
+IfcEntity: IfcPile
+PredefinedType: BORED
+Name: Baugrubensicherung
+Description: D600
+GUID: 0XIKhDCBTCEOP_YT_fhZNn
+Material: Beton NPK G
+Property sets:
+{'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK G', 'StrengthClass': 'C30/37', 'ExposureClass': 'XC4, XD3, XF4', 'ReinforcementStrengthClass': None, 'id': 786}, 'Pset_PileCommon': {'Status': ['NICHT DEFINIERT'], 'id': 1755}, 'Qto_PileBaseQuantities': {'Length': 5400.0, 'NetVolume': 1.52054, 'id': 1993}, 'zus Mengen PILE': {'Durchmesser': 600.0, 'Ansichtsfläche': 3.24, 'id': 1998}, 'Mengeninformationen': {'Fläche': 10.168299, 'id': 2071}}
+------------------------------------------------------------
+IfcEntity: IfcSlab
+PredefinedType: USERDEFINED
+Name: Fahrbahnplatte
+Description: None
+GUID: 2YB99YMdnEWhayE_iro3kL
+Material: 
+Property sets:
+{'Pset_SlabCommon': {'Status': ['NEU'], 'id': 793}, 'Qto_SlabBaseQuantities': {'NetVolume': 75.0, 'id': 795}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 250.0, 'ReinforcementStrengthClass': None, 'id': 797}, 'Mengeninformationen': {'Fläche': 277.0, 'Bewehrungsgehalt': 250.0, 'id': 800}}
+------------------------------------------------------------
+IfcEntity: IfcSlab
+PredefinedType: FLOOR
+Name: Fahrbahnplatte
+Description: Brückenplatte
+GUID: 0aTmWuzVD9HQaHUjSRoAHO
+Material: Beton NPK D
+Property sets:
+{'Pset_SlabCommon': {'Status': ['NEU'], 'id': 793}, 'Qto_SlabBaseQuantities': {'NetVolume': 75.0, 'id': 795}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK D', 'StrengthClass': 'C25/30', 'ExposureClass': 'XC4, XD1, XF2', 'ReinforcementVolumeRatio': 250.0, 'ReinforcementStrengthClass': None, 'id': 816}, 'Mengeninformationen': {'Fläche': 125.0, 'Bewehrungsgehalt': 250.0, 'id': 818}}
+------------------------------------------------------------
+IfcEntity: IfcWall
+PredefinedType: ELEMENTEDWALL
+Name: Rühlwand
+Description: None
+GUID: 3g5vrujSPF9wdPeBRqZL70
+Material: 
+Property sets:
+{'Pset_WallCommon': {'Status': ['NEU'], 'id': 45}, 'Qto_WallBaseQuantities': {'NetVolume': 8.29128, 'id': 47}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementStrengthClass': None, 'id': 53}, 'Mengeninformationen': {'Fläche': 162.477, 'id': 55}}
+------------------------------------------------------------
+IfcEntity: IfcWall
+PredefinedType: PARAPET
+Name: Ausfachung
+Description: Ausfachung
+GUID: 2WTcGrT_n4M8408Ku$qmB5
+Material: Spritzbeton SC 11
+Property sets:
+{'Pset_WallCommon': {'Status': ['NEU'], 'id': 45}, 'Qto_WallBaseQuantities': {'NetVolume': 1.5744, 'id': 236}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': 'SC 11', 'StrengthClass': 'C25/30', 'ExposureClass': 'XF1', 'ReinforcementStrengthClass': None, 'id': 240}, 'Mengeninformationen': {'Fläche': 17.024, 'id': 242}}
+------------------------------------------------------------
+IfcEntity: IfcWall
+PredefinedType: PARAPET
+Name: Ausfachung
+Description: Ausfachung
+GUID: 3icABQAqv6O9D4fsxoK2YN
+Material: Spritzbeton SC 11
+Property sets:
+{'Pset_WallCommon': {'Status': ['NEU'], 'id': 45}, 'Qto_WallBaseQuantities': {'NetVolume': 1.5744, 'id': 236}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': 'SC 11', 'StrengthClass': 'C25/30', 'ExposureClass': 'XF1', 'ReinforcementStrengthClass': None, 'id': 240}, 'Mengeninformationen': {'Fläche': 17.024, 'id': 242}}
+------------------------------------------------------------
+IfcEntity: IfcWall
+PredefinedType: PARAPET
+Name: Ausfachung
+Description: Ausfachung
+GUID: 2sDWbshqr4WAqolWwqxTL0
+Material: Spritzbeton SC 11
+Property sets:
+{'Pset_WallCommon': {'Status': ['NEU'], 'id': 45}, 'Qto_WallBaseQuantities': {'NetVolume': 1.5744, 'id': 236}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': 'SC 11', 'StrengthClass': 'C25/30', 'ExposureClass': 'XF1', 'ReinforcementStrengthClass': None, 'id': 240}, 'Mengeninformationen': {'Fläche': 17.024, 'id': 242}}
+------------------------------------------------------------
+IfcEntity: IfcWall
+PredefinedType: PARAPET
+Name: Ausfachung
+Description: Ausfachung
+GUID: 0mK_mW3eH5f8kyJ7iC8P$z
+Material: Spritzbeton SC 11
+Property sets:
+{'Pset_WallCommon': {'Status': ['NEU'], 'id': 45}, 'Qto_WallBaseQuantities': {'NetVolume': 1.5744, 'id': 236}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Fertigteil', 'StructuralClass': 'SC 11', 'StrengthClass': 'C25/30', 'ExposureClass': 'XF1', 'ReinforcementStrengthClass': None, 'id': 240}, 'Mengeninformationen': {'Fläche': 17.024, 'id': 242}}
+------------------------------------------------------------
+IfcEntity: IfcWall
+PredefinedType: SOLIDWALL
+Name: Widerlagerwand Süd
+Description: None
+GUID: 1p1Vl49iDEJ92zdroJYLD4
+Material: 
+Property sets:
+{'Pset_WallCommon': {'Status': ['NEU'], 'id': 45}, 'Qto_WallBaseQuantities': {'NetVolume': 12.5, 'id': 755}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 756}, 'Mengeninformationen': {'Fläche': 62.5, 'Bewehrungsgehalt': 200.0, 'id': 758}}
+------------------------------------------------------------
+IfcEntity: IfcWall
+PredefinedType: USERDEFINED
+Name: Widerlagerwand Süd
+Description: Süd
+GUID: 14ZYfHTBT3RgGya3Wqcs9W
+Material: Beton NPK G
+Property sets:
+{'Pset_WallCommon': {'Status': ['NEU'], 'id': 45}, 'Qto_WallBaseQuantities': {'NetVolume': 12.5, 'id': 755}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK G', 'StrengthClass': 'C30/37', 'ExposureClass': 'XC4, XD3, XF4', 'ReinforcementVolumeRatio': 200.0, 'ReinforcementStrengthClass': None, 'id': 772}, 'Mengeninformationen': {'Fläche': 52.5, 'Bewehrungsgehalt': 200.0, 'id': 774}}
+------------------------------------------------------------
+IfcEntity: IfcWall
+PredefinedType: SOLIDWALL
+Name: Widerlagerwand Nord
+Description: None
+GUID: 0MmF5Sy_97Yws63IVsRGmB
+Material: 
+Property sets:
+{'Pset_WallCommon': {'Status': ['NEU'], 'id': 45}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': None, 'StrengthClass': None, 'ExposureClass': None, 'ReinforcementStrengthClass': None, 'id': 591}, 'Qto_WallBaseQuantities': {'NetVolume': 12.5, 'id': 755}, 'Mengeninformationen': {'Fläche': 62.5, 'id': 780}}
+------------------------------------------------------------
+IfcEntity: IfcWall
+PredefinedType: USERDEFINED
+Name: Widerlagerwand Nord
+Description: über Pfahlkopfriegel
+GUID: 3ZM0_oY_HECuOsJtEVs0Cd
+Material: Beton NPK G
+Property sets:
+{'Pset_WallCommon': {'Status': ['NEU'], 'id': 45}, 'Qto_WallBaseQuantities': {'NetVolume': 12.5, 'id': 755}, 'Pset_ConcreteElementGeneral': {'CastingMethod': 'Ortbeton', 'StructuralClass': 'NPK G', 'StrengthClass': 'C30/37', 'ExposureClass': 'XC4, XD3, XF4', 'ReinforcementStrengthClass': None, 'id': 786}, 'Mengeninformationen': {'Fläche': 52.5, 'id': 787}}
+------------------------------------------------------------
+IfcEntity: IfcElementAssembly
+PredefinedType: NOTDEFINED
+Name: Rammprofil
+Description: None
+GUID: 2YwWshYbzBYB4RgIH2EjIV
+Material: 
+Property sets:
+{'Pset_ElementAssemblyCommon': {'Status': ['NICHT DEFINIERT'], 'id': 62}, 'zus Mengen PILE': {'Ansichtsfläche': 1.45, 'id': 64}, 'zus Menge ElementAssembly': {'AREA_PROJECTION_XY_GROSS': 1.45, 'Ansichtsfläche': 1.45, 'id': 66}}
+------------------------------------------------------------
+IfcEntity: IfcElementAssembly
+PredefinedType: NOTDEFINED
+Name: Rammprofil
+Description: None
+GUID: 0bhPdT3Xn7I9FGn1WqIVDw
+Material: 
+Property sets:
+{'Pset_ElementAssemblyCommon': {'Status': ['NICHT DEFINIERT'], 'id': 62}, 'zus Mengen PILE': {'Ansichtsfläche': 1.45, 'id': 64}, 'zus Menge ElementAssembly': {'AREA_PROJECTION_XY_GROSS': 1.45, 'Ansichtsfläche': 1.45, 'id': 66}}
+------------------------------------------------------------
+IfcEntity: IfcElementAssembly
+PredefinedType: NOTDEFINED
+Name: Rammprofil
+Description: None
+GUID: 1N0tCnYfP79gW67K_wfYAg
+Material: 
+Property sets:
+{'Pset_ElementAssemblyCommon': {'Status': ['NICHT DEFINIERT'], 'id': 62}, 'zus Mengen PILE': {'Ansichtsfläche': 1.45, 'id': 64}, 'zus Menge ElementAssembly': {'AREA_PROJECTION_XY_GROSS': 1.45, 'Ansichtsfläche': 1.45, 'id': 66}}
+------------------------------------------------------------
+IfcEntity: IfcElementAssembly
+PredefinedType: NOTDEFINED
+Name: Rammprofil
+Description: None
+GUID: 2iLnDM8FL6LwUxcLJQt3lN
+Material: 
+Property sets:
+{'Pset_ElementAssemblyCommon': {'Status': ['NICHT DEFINIERT'], 'id': 62}, 'zus Mengen PILE': {'Ansichtsfläche': 1.45, 'id': 64}, 'zus Menge ElementAssembly': {'AREA_PROJECTION_XY_GROSS': 1.45, 'Ansichtsfläche': 1.45, 'id': 66}}
+------------------------------------------------------------
+IfcEntity: IfcElementAssembly
+PredefinedType: NOTDEFINED
+Name: Randbord
+Description: None
+GUID: 3F$8IUO9bC9x85k_sfr$wY
+Material: 
+Property sets:
+{'Pset_ElementAssemblyCommon': {'Status': ['NEU'], 'id': 878}, 'zus Mengen PILE': {'Ansichtsfläche': 11.25, 'id': 880}, 'zus Menge ElementAssembly': {'AREA_PROJECTION_XY_GROSS': 11.25, 'Ansichtsfläche': 11.25, 'id': 882}}
+------------------------------------------------------------
+IfcEntity: IfcElementAssembly
+PredefinedType: NOTDEFINED
+Name: Fundament
+Description: None
+GUID: 0Ghh2FTPX579JkmQNGz$KI
+Material: 
+Property sets:
+{'Pset_ElementAssemblyCommon': {'Status': ['NEU'], 'id': 878}, 'zus Mengen PILE': {'Ansichtsfläche': 1.0, 'id': 1268}, 'zus Menge ElementAssembly': {'AREA_PROJECTION_XY_GROSS': 1.0, 'Ansichtsfläche': 1.0, 'id': 1270}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: 1. Lage aussen
+Description: None
+GUID: 31RA8FL8T46wBG5vLcq8Jg
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 3.8868, 'id': 319}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: 1. Lage aussen
+Description: None
+GUID: 33wU_retj4Iu4CwzdkE50i
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 3.8868, 'id': 319}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: 1. Lage aussen
+Description: None
+GUID: 2RA1VCg4j7lvt9N1HWbLNh
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 3.8868, 'id': 319}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: 1. Lage aussen
+Description: None
+GUID: 3qSpeKhMDFpA0VJ5Ie2HVX
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 3.8868, 'id': 319}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: 1. Lage aussen
+Description: None
+GUID: 2U3M6pgMX95Ro05T0AMWrx
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 3.8868, 'id': 319}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: 1. Lage aussen
+Description: None
+GUID: 1aOqsUerbDuuoEmtw_dVou
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 3.8868, 'id': 319}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: 1. Lage aussen
+Description: None
+GUID: 31W$EKzEX1gvW2PrTuCkc4
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 3.8868, 'id': 319}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: 1. Lage aussen
+Description: None
+GUID: 3YuFXuD6T29fgbD_iN$1H1
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 3.8868, 'id': 319}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: Bügel
+Description: None
+GUID: 3BXM7d_jfEoxu$clRcm98a
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 1.70174, 'id': 664}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: Bügel
+Description: None
+GUID: 3XlVTN6bDCshEEjHr1S4ku
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 1.70174, 'id': 664}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: Bügel
+Description: None
+GUID: 2RT3O6s2TE3BACGdj6eox8
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 1.70174, 'id': 664}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: Längsstab
+Description: None
+GUID: 2CnFZJXTD9qgkytiWQ8oTs
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 9.0896, 'id': 748}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: SHEAR
+Name: Bügel
+Description: None
+GUID: 2D_cRiv4D2PRk4y5aIgHHo
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 2.06371, 'id': 1165}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: MAIN
+Name: 1. Lage
+Description: None
+GUID: 0mkcb3UT9CnfmTW$VfXReE
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 30.875, 'id': 1185}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: Bügel
+Description: None
+GUID: 3Xz9uQUNL2Fgi_kSJjAzxB
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 1.71203, 'id': 2009}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: Bügel
+Description: None
+GUID: 1kfNqWEnP978e6k54nPF$m
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 88.16867, 'id': 2020}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: Bügel
+Description: None
+GUID: 0hV1Llak10Qh$ZSRo$cVb4
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 1.71203, 'id': 2009}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: Längsstab
+Description: None
+GUID: 37Fl7WHwz3s9ejRnaiQeWG
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 8.4925, 'id': 2056}}
+------------------------------------------------------------
+IfcEntity: IfcReinforcingBar
+PredefinedType: NOTDEFINED
+Name: Bügel
+Description: None
+GUID: 2$Lctcp6X2HeHhQnB5Us1I
+Material: B500B
+Property sets:
+{'Pset_ElementComponentCommon': {'Status': ['NICHT DEFINIERT'], 'id': 317}, 'Qto_ReinforcingElementBaseQuantities': {'Weight': 68.76746, 'id': 2082}}
+------------------------------------------------------------

@@ -8,18 +8,18 @@ IfcCovering ; Oberflächenbehandlung ; Undefined
 IfcCovering ; Oberflächenbehandlung ; Undefined
 IfcCovering ; Oberflächenbehandlung ; Undefined
 IfcCovering ; Oberflächenbehandlung ; Undefined
-IfcPile ; BORED ; Betonpfahl ; Beton ; Bohrpfahlwand ; 600 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Bohrpfahlwand ; 600 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 900 ; Ortbeton
-IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; 800 ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Bohrpfahlwand ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Bohrpfahlwand ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; Ortbeton
+IfcPile ; BORED ; Betonpfahl ; Beton ; Pfahlreihe Süd ; Ortbeton
 IfcFooting ; STRIP_FOOTING ; Fundament ; Magerbeton ; Ortbeton
 IfcFooting ; STRIP_FOOTING ; Fundament ; Beton NPK G ; Ausführung Pilgerschritt ; Ortbeton ; NPK G ; C30/37 ; XC4, XD3, XF4
 IfcSlab ; FLOOR ; Fahrbahnplatte ; Beton NPK D ; Brückenplatte ; Ortbeton ; NPK D ; C25/30 ; XC4, XD1, XF2
