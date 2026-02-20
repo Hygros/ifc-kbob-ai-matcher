@@ -1,2 +1,0 @@
-{"IfcEntity": "IfcBeam", "PredefinedType": "NOTDEFINED", "Name": "Träger", "Material": ["S235JR"], "GUID": "1oTeB3NqfFy8JRDwnW3Cfy", "Status": ["NEW"], "Length": 2000.0, "NetVolume": 0.01021}
-{"IfcEntity": "IfcColumn", "PredefinedType": "NOTDEFINED", "Name": "Stütze", "Material": ["S235JR"], "GUID": "0WcQsCxKb4WA$l2H7hSlX6", "Status": ["NEU"], "Length": 5000.0, "NetVolume": 0.02553}

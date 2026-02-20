@@ -1,0 +1,9 @@
+model,cases,top1_accuracy,top5_accuracy,mrr,avg_expected_score
+google/embeddinggemma-300m,6,0.166667,1.000000,0.583333,0.654107
+BAAI/bge-m3,6,0.166667,1.000000,0.375000,0.623261
+intfloat/multilingual-e5-large,6,1.000000,1.000000,1.000000,0.888329
+intfloat/multilingual-e5-base,6,1.000000,1.000000,1.000000,0.893982
+sentence-transformers/LaBSE,6,0.166667,1.000000,0.444444,0.538201
+sentence-transformers/paraphrase-multilingual-mpnet-base-v2,6,0.166667,1.000000,0.583333,0.733349
+sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,6,0.166667,1.000000,0.583333,0.655412
+sentence-transformers/distiluse-base-multilingual-cased-v2,6,0.166667,1.000000,0.444444,0.560126

@@ -1,2 +1,0 @@
-IfcBeam ; Träger ; S235JR
-IfcColumn ; Stütze ; S235JR

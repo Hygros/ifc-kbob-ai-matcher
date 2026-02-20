@@ -1,1 +1,0 @@
-IfcPile ; BORED ; Betonpfahl ; Beton ; Bohrpfahlwand ; 600.0 ; Ortbeton

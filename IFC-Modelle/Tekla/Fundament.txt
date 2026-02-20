@@ -1,1 +1,0 @@
-IfcBeam ; PIERCAP ; Pfahlkopf ; Beton NPK G ; Pfahlkopf-Fundament ; Ortbeton ; NPK G ; C30/37 ; XC4, XD3, XF4
