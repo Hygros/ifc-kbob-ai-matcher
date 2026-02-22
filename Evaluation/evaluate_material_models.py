@@ -1,8 +1,8 @@
 import csv
 import os
+import re
 import sqlite3
 from dataclasses import dataclass
-from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Sequence, Tuple
 import torch
@@ -11,6 +11,7 @@ from sentence_transformers import SentenceTransformer, SimilarityFunction
 
 # Top1 Accuracy: Anteil Queries, bei denen das richtige Material auf Rang 1 steht. Beispiel: 0.8 bedeutet 8 von 10 direkt korrekt.
 # Top5 Accuracy: Anteil Queries, bei denen das richtige Material irgendwo in den Top 5 steht.
+# Top10 Accuracy: Anteil Queries, bei denen das richtige Material irgendwo in den Top 10 steht.
 # MRR: bewertet den Rang des richtigen Treffers (MRR = (1/N)*∑ (1/Rang)). Rang 1 zählt voll, Rang 2 nur 0.5, Rang 3 nur 0.33.
 # Avg expected score: mittlerer Similarity-Score des korrekten Materials (nur als internes Vertrauenssignal pro Modell, nicht perfekt modellübergreifend vergleichbar).
 # Die Score-Höhe allein ist nicht das wichtigste Kriterium; Ranking-Metriken (Top1/Top5/MRR) sind für Zuordnung robuster.
@@ -30,9 +31,15 @@ MODEL_NAMES = [
     "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     "sentence-transformers/distiluse-base-multilingual-cased-v2",
+    "kforth/IfcMaterial2MP",
+    "kforth/IfcElement2ConstructionSets",
+    "google-bert/bert-base-german-cased",
+    "google-bert/bert-base-multilingual-uncased",
+    "google-bert/bert-base-multilingual-cased",
 ]
 
 TOP_K = 5
+TOP_K_ADDITIONAL = 10
 SIMILARITY_FUNCTION = SimilarityFunction.COSINE
 SBERT_DEVICE = os.environ.get("SBERT_DEVICE", "").strip().lower()
 SBERT_QUERY_FILE = os.environ.get("SBERT_QUERY_FILE", "").strip()
@@ -56,6 +63,7 @@ class PerModelSummary:
     model_name: str
     top1_accuracy: float
     topk_accuracy: float
+    top10_accuracy: float
     mrr: float
     avg_expected_score: float
     cases: int
@@ -191,6 +199,7 @@ def evaluate_model(
     details: List[Dict[str, str]] = []
     top1_hits = 0
     topk_hits = 0
+    top10_hits = 0
     reciprocal_rank_sum = 0.0
     expected_score_sum = 0.0
 
@@ -216,11 +225,14 @@ def evaluate_model(
         expected_score = max(scores[i] for i in expected_indices)
         top1_correct = expected_rank == 1
         topk_correct = expected_rank <= top_k
+        top10_correct = expected_rank <= TOP_K_ADDITIONAL
 
         if top1_correct:
             top1_hits += 1
         if topk_correct:
             topk_hits += 1
+        if top10_correct:
+            top10_hits += 1
 
         reciprocal_rank_sum += 1.0 / expected_rank
         expected_score_sum += expected_score
@@ -237,6 +249,7 @@ def evaluate_model(
                 "expected_score": f"{expected_score:.6f}",
                 "top1_correct": str(top1_correct),
                 f"top{top_k}_correct": str(topk_correct),
+                f"top{TOP_K_ADDITIONAL}_correct": str(top10_correct),
                 "topk_materials": " | ".join(topk_materials),
                 "topk_scores": " | ".join(f"{s:.6f}" for s in topk_scores),
             }
@@ -247,6 +260,7 @@ def evaluate_model(
         model_name=model_name,
         top1_accuracy=top1_hits / n,
         topk_accuracy=topk_hits / n,
+        top10_accuracy=top10_hits / n,
         mrr=reciprocal_rank_sum / n,
         avg_expected_score=expected_score_sum / n,
         cases=n,
@@ -260,6 +274,12 @@ def write_csv(file_path: Path, rows: List[Dict[str, str]], fieldnames: Sequence[
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
+
+
+def make_query_label(query_file: Path) -> str:
+    base_name = query_file.stem or "latest"
+    safe_name = re.sub(r"[^A-Za-z0-9._-]", "_", base_name).strip("._-")
+    return safe_name or "latest"
 
 
 def main() -> None:
@@ -297,8 +317,8 @@ def main() -> None:
         exact_index.setdefault(material, []).append(idx)
         normalized_index.setdefault(normalize(material), []).append(idx)
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_dir = project_root / DEFAULT_EVALUATION_OUTPUT_RELATIVE
+    query_label = make_query_label(query_file)
 
     summary_rows: List[Dict[str, str]] = []
     all_detail_rows: List[Dict[str, str]] = []
@@ -318,6 +338,7 @@ def main() -> None:
         print(
             f"  Top-1: {summary.top1_accuracy:.2%} | "
             f"Top-{TOP_K}: {summary.topk_accuracy:.2%} | "
+            f"Top-{TOP_K_ADDITIONAL}: {summary.top10_accuracy:.2%} | "
             f"MRR: {summary.mrr:.4f} | "
             f"Avg expected score: {summary.avg_expected_score:.4f}"
         )
@@ -328,19 +349,28 @@ def main() -> None:
                 "cases": str(summary.cases),
                 "top1_accuracy": f"{summary.top1_accuracy:.6f}",
                 f"top{TOP_K}_accuracy": f"{summary.topk_accuracy:.6f}",
+                f"top{TOP_K_ADDITIONAL}_accuracy": f"{summary.top10_accuracy:.6f}",
                 "mrr": f"{summary.mrr:.6f}",
                 "avg_expected_score": f"{summary.avg_expected_score:.6f}",
             }
         )
         all_detail_rows.extend(details)
 
-    summary_file = output_dir / f"summary_{timestamp}.csv"
-    details_file = output_dir / f"details_{timestamp}.csv"
+    summary_file = output_dir / f"summary_{query_label}.csv"
+    details_file = output_dir / f"details_{query_label}.csv"
 
     write_csv(
         file_path=summary_file,
         rows=summary_rows,
-        fieldnames=["model", "cases", "top1_accuracy", f"top{TOP_K}_accuracy", "mrr", "avg_expected_score"],
+        fieldnames=[
+            "model",
+            "cases",
+            "top1_accuracy",
+            f"top{TOP_K}_accuracy",
+            f"top{TOP_K_ADDITIONAL}_accuracy",
+            "mrr",
+            "avg_expected_score",
+        ],
     )
 
     detail_fields = [
@@ -354,6 +384,7 @@ def main() -> None:
         "expected_score",
         "top1_correct",
         f"top{TOP_K}_correct",
+        f"top{TOP_K_ADDITIONAL}_correct",
         "topk_materials",
         "topk_scores",
     ]

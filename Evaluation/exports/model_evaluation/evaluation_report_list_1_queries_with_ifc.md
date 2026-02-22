@@ -1,10 +1,10 @@
 ## Evaluation Report
 
-Generated: 2026-02-22 16:40:20
+Generated: 2026-02-22 16:38:31
 
 ### Inputs
-- Summary CSV: `summary_list_1_queries_without_ifc.csv`
-- Details CSV: `details_list_1_queries_without_ifc.csv`
+- Summary CSV: `summary_list_1_queries_with_ifc.csv`
+- Details CSV: `details_list_1_queries_with_ifc.csv`
 
 ### Metric Meaning
 - Top1 Accuracy: Anteil Queries, bei denen das richtige Material auf Rang 1 steht.
@@ -33,31 +33,31 @@ Dabei ist $i$ die Query, $E_i$ die Menge der passenden Expected-Kandidaten, und 
 Die Score-Höhe allein ist nicht das wichtigste Kriterium; Ranking-Metriken (Top1/Top5/Top10/MRR) sind für Zuordnung robuster.
 
 ### Overview
-![Model overview](overview_list_1_queries_without_ifc.svg)
+![Model overview](overview_list_1_queries_with_ifc.svg)
 
 ### Leaderboard
 
 | Rank | Model | Cases | Top1 | Top5 | Top10 | MRR | Avg expected score | Top1 errors |
 |---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 1 | google/embeddinggemma-300m | 28 | 21.4% | 32.1% | 42.9% | 0.282 | 0.496 | 22 |
-| 2 | intfloat/multilingual-e5-base | 28 | 21.4% | 25.0% | 25.0% | 0.245 | 0.823 | 22 |
-| 3 | sentence-transformers/LaBSE | 28 | 17.9% | 25.0% | 32.1% | 0.251 | 0.352 | 23 |
-| 4 | BAAI/bge-m3 | 28 | 14.3% | 28.6% | 39.3% | 0.247 | 0.492 | 24 |
-| 5 | sentence-transformers/distiluse-base-multilingual-cased-v2 | 28 | 14.3% | 35.7% | 35.7% | 0.233 | 0.289 | 24 |
-| 6 | intfloat/multilingual-e5-large | 28 | 14.3% | 28.6% | 28.6% | 0.228 | 0.833 | 24 |
-| 7 | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | 28 | 3.6% | 32.1% | 39.3% | 0.165 | 0.387 | 27 |
-| 8 | google-bert/bert-base-multilingual-uncased | 28 | 3.6% | 21.4% | 42.9% | 0.117 | 0.614 | 27 |
-| 9 | sentence-transformers/paraphrase-multilingual-mpnet-base-v2 | 28 | 3.6% | 17.9% | 17.9% | 0.110 | 0.472 | 27 |
-| 10 | google-bert/bert-base-multilingual-cased | 28 | 0.0% | 25.0% | 25.0% | 0.124 | 0.581 | 28 |
-| 11 | google-bert/bert-base-german-cased | 28 | 0.0% | 17.9% | 21.4% | 0.084 | 0.772 | 28 |
-| 12 | kforth/IfcMaterial2MP | 28 | 0.0% | 7.1% | 14.3% | 0.069 | 0.485 | 28 |
-| 13 | kforth/IfcElement2ConstructionSets | 28 | 0.0% | 0.0% | 7.1% | 0.035 | 0.728 | 28 |
+| 1 | intfloat/multilingual-e5-base | 28 | 21.4% | 25.0% | 25.0% | 0.247 | 0.822 | 22 |
+| 2 | BAAI/bge-m3 | 28 | 17.9% | 32.1% | 53.6% | 0.283 | 0.495 | 23 |
+| 3 | google/embeddinggemma-300m | 28 | 17.9% | 32.1% | 46.4% | 0.273 | 0.486 | 23 |
+| 4 | intfloat/multilingual-e5-large | 28 | 17.9% | 28.6% | 28.6% | 0.243 | 0.831 | 23 |
+| 5 | sentence-transformers/LaBSE | 28 | 17.9% | 25.0% | 28.6% | 0.240 | 0.307 | 23 |
+| 6 | sentence-transformers/distiluse-base-multilingual-cased-v2 | 28 | 14.3% | 25.0% | 25.0% | 0.201 | 0.238 | 24 |
+| 7 | sentence-transformers/paraphrase-multilingual-mpnet-base-v2 | 28 | 7.1% | 14.3% | 14.3% | 0.119 | 0.400 | 26 |
+| 8 | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | 28 | 3.6% | 21.4% | 28.6% | 0.127 | 0.299 | 27 |
+| 9 | google-bert/bert-base-multilingual-cased | 28 | 3.6% | 17.9% | 25.0% | 0.116 | 0.557 | 27 |
+| 10 | google-bert/bert-base-multilingual-uncased | 28 | 3.6% | 10.7% | 21.4% | 0.093 | 0.594 | 27 |
+| 11 | google-bert/bert-base-german-cased | 28 | 0.0% | 21.4% | 25.0% | 0.093 | 0.758 | 28 |
+| 12 | kforth/IfcElement2ConstructionSets | 28 | 0.0% | 7.1% | 14.3% | 0.055 | 0.755 | 28 |
+| 13 | kforth/IfcMaterial2MP | 28 | 0.0% | 0.0% | 14.3% | 0.054 | 0.493 | 28 |
 
 ### Hardest Queries
 Queries mit den meisten Top1-Fehlern über alle Modelle:
 
-- (13 Fehler) ReinforcingBar Bügel B500B
-- (13 Fehler) ReinforcingBar Längsstab B500B
-- (13 Fehler) ReinforcingBar SHEAR Bügel B500B
-- (13 Fehler) ReinforcingBar MAIN 1. Lage B500B
-- (13 Fehler) ReinforcingBar unterer Stab B500B
+- (13 Fehler) IfcReinforcingBar
+- (13 Fehler) IfcReinforcingBar Bügel B500B
+- (13 Fehler) IfcReinforcingBar SHEAR Bügel B500B
+- (13 Fehler) IfcReinforcingBar MAIN 1. Lage B500B
+- (13 Fehler) IfcReinforcingBar unterer Stab B500B

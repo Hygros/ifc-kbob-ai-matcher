@@ -1,0 +1,14 @@
+model,cases,top1_accuracy,top5_accuracy,top10_accuracy,mrr,avg_expected_score
+google/embeddinggemma-300m,28,0.178571,0.321429,0.464286,0.272869,0.486205
+BAAI/bge-m3,28,0.178571,0.321429,0.535714,0.283121,0.495144
+intfloat/multilingual-e5-large,28,0.178571,0.285714,0.285714,0.243310,0.831260
+intfloat/multilingual-e5-base,28,0.214286,0.250000,0.250000,0.246852,0.821666
+sentence-transformers/LaBSE,28,0.178571,0.250000,0.285714,0.239625,0.306692
+sentence-transformers/paraphrase-multilingual-mpnet-base-v2,28,0.071429,0.142857,0.142857,0.118947,0.399848
+sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,28,0.035714,0.214286,0.285714,0.126620,0.299351
+sentence-transformers/distiluse-base-multilingual-cased-v2,28,0.142857,0.250000,0.250000,0.200628,0.238216
+kforth/IfcMaterial2MP,28,0.000000,0.000000,0.142857,0.053506,0.493102
+kforth/IfcElement2ConstructionSets,28,0.000000,0.071429,0.142857,0.055351,0.755472
+google-bert/bert-base-german-cased,28,0.000000,0.214286,0.250000,0.092976,0.757558
+google-bert/bert-base-multilingual-uncased,28,0.035714,0.107143,0.214286,0.092735,0.593940
+google-bert/bert-base-multilingual-cased,28,0.035714,0.178571,0.250000,0.116260,0.556920

@@ -1,0 +1,34 @@
+ReinforcingBar
+ReinforcingBar Bügel B500B
+ReinforcingBar Längsstab B500B
+ReinforcingBar SHEAR Bügel B500B
+ReinforcingBar MAIN 1. Lage B500B
+ReinforcingBar unterer Stab B500B
+ReinforcingBar 1. Lage aussen B500B
+ReinforcingBar MAIN 1. Lage aussen B500B
+ReinforcingBar Wendel unten B500B
+ReinforcingBar Wendel mitte B500B
+ReinforcingBar Wendel oben B500B
+ReinforcingBar Wendelbewehrung B500B
+ReinforcingBar Längsarmierung B500B
+
+Beam GIRDER_SEGMENT Randbord Beton NPK G Test-Kommentar Ortbeton
+Beam EDGEBEAM Randbord Beton NPK G Randträger bewehrt Ortbeton
+Beam PIERCAP Pfahlkopf Beton NPK G Pfahlkopf-Fundament Ortbeton
+Footing STRIP_FOOTING Fundament Beton NPK G Ausführung Pilgerschritt Ortbeton
+Slab FLOOR Fahrbahnplatte Beton NPK D Brückenplatte Ortbeton
+Wall RETAININGWALL Widerlagerwand Nord Beton NPK G über Pfahlkopfriegel Ortbeton
+Wall RETAININGWALL Widerlagerwand Süd Beton NPK G Süd Ortbeton
+
+Pile BORED Betonpfahl Beton Pfahlreihe Süd 800 Ortbeton
+Pile BORED Betonpfahl Beton NPK F Pfahlreihe Süd 900 Ortbeton
+Pile BORED Bohrpfahl Beton 600 Ortbeton
+Pile BORED Bohrpfahl Beton 700 Ortbeton
+
+Footing STRIP_FOOTING Fundament Magerbeton Ortbeton
+
+Covering Abdichtung Flüssigkunststoff
+
+Wall RETAININGWALL Rühlwand Fertigteil
+
+Wall RETAININGWALL Bohrpfahlwand Ortbeton

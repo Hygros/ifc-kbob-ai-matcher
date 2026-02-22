@@ -34,6 +34,7 @@ EXPORT_SCRIPT = EVALUATION_DIR / "export_sbert_queries_to_txt.py"
 EVALUATE_SCRIPT = EVALUATION_DIR / "evaluate_material_models.py"
 REPORT_SCRIPT = EVALUATION_DIR / "build_evaluation_report.py"
 QUERIES_EXPORT_DIR = EVALUATION_DIR / "exports" / "queries"
+EXPECTED_MATERIAL_DIR = EVALUATION_DIR / "expected_material"
 SUPPORTED_QUERY_SUFFIXES = {".ifc", ".jsonl", ".txt"}
 IGNORED_DIRS = {".git", "__pycache__", "models", ".venv", "venv", ".pytest_cache", ".mypy_cache", "node_modules"}
 
@@ -99,26 +100,39 @@ def iter_project_files() -> list[Path]:
 
 def find_query_source_candidates() -> list[Path]:
     candidates: list[Path] = []
-    for path in iter_project_files():
-        if path.suffix.lower() in SUPPORTED_QUERY_SUFFIXES:
-            candidates.append(path)
+    if not QUERIES_EXPORT_DIR.is_dir():
+        return candidates
+
+    for root, _, filenames in os.walk(QUERIES_EXPORT_DIR):
+        root_path = Path(root)
+        for filename in filenames:
+            path = root_path / filename
+            if path.suffix.lower() in SUPPORTED_QUERY_SUFFIXES:
+                candidates.append(path)
+
     return sorted(candidates)
 
 
 def find_txt_candidates() -> list[Path]:
     candidates: list[Path] = []
-    for path in iter_project_files():
-        if path.suffix.lower() == ".txt":
-            candidates.append(path)
+    if not EXPECTED_MATERIAL_DIR.is_dir():
+        return candidates
+
+    for root, _, filenames in os.walk(EXPECTED_MATERIAL_DIR):
+        root_path = Path(root)
+        for filename in filenames:
+            path = root_path / filename
+            if path.suffix.lower() == ".txt":
+                candidates.append(path)
 
     return sorted(candidates)
 
 
 def select_query_source_interactively() -> Path | None:
-    print("Suche Query-Dateien im Projekt ...", flush=True)
+    print(f"Suche Query-Dateien in {QUERIES_EXPORT_DIR.relative_to(PROJECT_ROOT)} ...", flush=True)
     candidates = find_query_source_candidates()
     if not candidates:
-        print("Keine .ifc/.jsonl/.txt Dateien im Projekt gefunden.")
+        print(f"Keine .ifc/.jsonl/.txt Dateien in {QUERIES_EXPORT_DIR.relative_to(PROJECT_ROOT)} gefunden.")
         return None
 
     print("\nWähle eine Query-Quelle (.ifc/.jsonl/.txt):")
@@ -146,10 +160,10 @@ def select_expected_file_interactively() -> Path | None:
     if ask not in {"j", "ja", "y", "yes"}:
         return None
 
-    print("Suche TXT-Dateien im Projekt ...", flush=True)
+    print(f"Suche TXT-Dateien in {EXPECTED_MATERIAL_DIR.relative_to(PROJECT_ROOT)} ...", flush=True)
     candidates = find_txt_candidates()
     if not candidates:
-        print("Keine .txt Dateien im Projekt gefunden.")
+        print(f"Keine .txt Dateien in {EXPECTED_MATERIAL_DIR.relative_to(PROJECT_ROOT)} gefunden.")
         return None
 
     print("\nWähle eine Expected-Material-Datei (.txt):")
