@@ -201,7 +201,7 @@ def render_markdown_report(
     lines.append("")
     lines.append("  Formel: $\\mathrm{Top5} = \\frac{1}{N} \\sum_{i=1}^{N} \\mathbf{1}(\\mathrm{Rang}_i \\leq 5)$")
     lines.append("")
-    lines.append("- MRR: bewertet den Rang des richtigen Treffers (höher = besser).")
+    lines.append("- MRR (Mean Reciprocal Rank): bewertet den Rang des richtigen Treffers (höher = besser).")
     lines.append("  Formel: $\\mathrm{MRR} = \\frac{1}{N} \\sum_{i=1}^{N} \\frac{1}{\\mathrm{Rang}_i}$")
 
     lines.append("")

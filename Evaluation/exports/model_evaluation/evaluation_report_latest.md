@@ -16,7 +16,7 @@ Beispiel: 0.8 bedeutet 8 von 10 direkt korrekt.
 
   Formel: $\mathrm{Top5} = \frac{1}{N} \sum_{i=1}^{N} \mathbf{1}(\mathrm{Rang}_i \leq 5)$
 
-- MRR: bewertet den Rang des richtigen Treffers (höher = besser).
+- MRR (Mean Reciprocal Rank): bewertet den Rang des richtigen Treffers (höher = besser).
   Formel: $\mathrm{MRR} = \frac{1}{N} \sum_{i=1}^{N} \frac{1}{\mathrm{Rang}_i}$
 
 Dabei gilt: Rang 1 zählt voll, Rang 2 nur 0.5, Rang 3 nur 0.33, Rang 4: 0.25, Rang 5: 0.2 etc.
