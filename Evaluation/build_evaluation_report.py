@@ -9,17 +9,54 @@ from typing import Dict, List, Tuple
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RESULTS_DIR = PROJECT_ROOT / "Evaluation" / "exports" / "model_evaluation"
+METRIC_EXPLANATIONS_FILE = PROJECT_ROOT / "Evaluation" / "metric_explanations.md"
 
 
 @dataclass
 class SummaryRow:
     model: str
     cases: int
-    top1: float
-    top5: float
-    top10: float
+    hit1: float
+    hit5: float
+    hit10: float
     mrr: float
+    map10: float
+    ndcg10: float
+    recall10: float
+    coverage_at_95acc_margin: float
+    coverage_at_90acc_margin: float
+    coverage_at_97acc: float
+    coverage_at_99acc: float
+    auto_coverage: float
+    auto_accuracy: float
+    auto_threshold: float
+    manual_hit10: float
+    aurc: float
+    val_coverage_at_target: float
+    val_accuracy_at_target: float
+    hit1_ci_low: float
+    hit1_ci_high: float
+    hit10_ci_low: float
+    hit10_ci_high: float
+    mrr10_ci_low: float
+    mrr10_ci_high: float
+    ndcg10_ci_low: float
+    ndcg10_ci_high: float
+    coverage95_ci_low: float
+    coverage95_ci_high: float
     avg_expected_score: float
+
+
+def parse_optional_float(value: str | None, default: float = 0.0) -> float:
+    if value is None:
+        return default
+    raw = str(value).strip()
+    if not raw:
+        return default
+    try:
+        return float(raw)
+    except ValueError:
+        return default
 
 
 def parse_timestamp_from_filename(name: str, prefix: str) -> str:
@@ -74,21 +111,87 @@ def load_summary(summary_file: Path) -> List[SummaryRow]:
     with summary_file.open("r", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
         for raw in reader:
-            top5_accuracy = float(raw.get("top5_accuracy", raw.get("topk_accuracy", "0")))
-            top10_accuracy = float(raw.get("top10_accuracy", "0"))
+            hit1 = parse_optional_float(raw.get("hit@1"), default=parse_optional_float(raw.get("top1_accuracy")))
+            hit5 = parse_optional_float(raw.get("hit@5"), default=parse_optional_float(raw.get("top5_accuracy", raw.get("topk_accuracy"))))
+            hit10 = parse_optional_float(raw.get("hit@10"), default=parse_optional_float(raw.get("top10_accuracy")))
+            map10 = parse_optional_float(raw.get("map@10"), default=parse_optional_float(raw.get("map10")))
+            ndcg10 = parse_optional_float(raw.get("ndcg@10"), default=parse_optional_float(raw.get("ndcg10")))
+            recall10 = parse_optional_float(raw.get("recall@10"), default=parse_optional_float(raw.get("recall10")))
+            cov95 = parse_optional_float(raw.get("coverage_at_95acc"), default=parse_optional_float(raw.get("coverage_at_95acc_margin")))
+            cov90 = parse_optional_float(raw.get("coverage_at_90acc"), default=parse_optional_float(raw.get("coverage_at_90acc_margin")))
+            cov97 = parse_optional_float(raw.get("coverage_at_97acc"))
+            cov99 = parse_optional_float(raw.get("coverage_at_99acc"))
+            auto_coverage = parse_optional_float(raw.get("auto_coverage"))
+            auto_accuracy = parse_optional_float(raw.get("auto_accuracy"))
+            auto_threshold = parse_optional_float(raw.get("auto_threshold"))
+            manual_hit10 = parse_optional_float(raw.get("manual_hit@10"), default=parse_optional_float(raw.get("manual_hit10")))
+            aurc = parse_optional_float(raw.get("aurc"))
+            val_cov = parse_optional_float(raw.get("val_coverage_at_target"))
+            val_acc = parse_optional_float(raw.get("val_accuracy_at_target"))
+            hit1_ci_low = parse_optional_float(raw.get("hit@1_ci_low"))
+            hit1_ci_high = parse_optional_float(raw.get("hit@1_ci_high"))
+            hit10_ci_low = parse_optional_float(raw.get("hit@10_ci_low"))
+            hit10_ci_high = parse_optional_float(raw.get("hit@10_ci_high"))
+            mrr10_ci_low = parse_optional_float(raw.get("mrr@10_ci_low"))
+            mrr10_ci_high = parse_optional_float(raw.get("mrr@10_ci_high"))
+            ndcg10_ci_low = parse_optional_float(raw.get("ndcg@10_ci_low"))
+            ndcg10_ci_high = parse_optional_float(raw.get("ndcg@10_ci_high"))
+            cov95_ci_low = parse_optional_float(raw.get("coverage@95_ci_low"))
+            cov95_ci_high = parse_optional_float(raw.get("coverage@95_ci_high"))
             rows.append(
                 SummaryRow(
                     model=raw["model"],
                     cases=int(raw["cases"]),
-                    top1=float(raw["top1_accuracy"]),
-                    top5=top5_accuracy,
-                    top10=top10_accuracy,
+                    hit1=hit1,
+                    hit5=hit5,
+                    hit10=hit10,
                     mrr=float(raw["mrr"]),
+                    map10=map10,
+                    ndcg10=ndcg10,
+                    recall10=recall10,
+                    coverage_at_95acc_margin=cov95,
+                    coverage_at_90acc_margin=cov90,
+                    coverage_at_97acc=cov97,
+                    coverage_at_99acc=cov99,
+                    auto_coverage=auto_coverage,
+                    auto_accuracy=auto_accuracy,
+                    auto_threshold=auto_threshold,
+                    manual_hit10=manual_hit10,
+                    aurc=aurc,
+                    val_coverage_at_target=val_cov,
+                    val_accuracy_at_target=val_acc,
+                    hit1_ci_low=hit1_ci_low,
+                    hit1_ci_high=hit1_ci_high,
+                    hit10_ci_low=hit10_ci_low,
+                    hit10_ci_high=hit10_ci_high,
+                    mrr10_ci_low=mrr10_ci_low,
+                    mrr10_ci_high=mrr10_ci_high,
+                    ndcg10_ci_low=ndcg10_ci_low,
+                    ndcg10_ci_high=ndcg10_ci_high,
+                    coverage95_ci_low=cov95_ci_low,
+                    coverage95_ci_high=cov95_ci_high,
                     avg_expected_score=float(raw["avg_expected_score"]),
                 )
             )
 
-    rows.sort(key=lambda r: (r.top1, r.mrr, r.top5, r.top10, r.avg_expected_score), reverse=True)
+    rows.sort(
+        key=lambda r: (
+            r.hit1,
+            r.coverage_at_95acc_margin,
+            r.mrr,
+            r.map10,
+            r.ndcg10,
+            r.recall10,
+            r.hit5,
+            r.hit10,
+            r.auto_coverage,
+            r.auto_accuracy,
+            r.manual_hit10,
+            -r.aurc,
+            r.avg_expected_score,
+        ),
+        reverse=True,
+    )
     return rows
 
 
@@ -122,7 +225,7 @@ def compute_hard_queries(details: List[dict], top_n: int = 5) -> List[Tuple[str,
 
 
 def to_percent(value: float) -> str:
-    return f"{value * 100:.1f}%"
+    return f"{value * 100:.2f}%"
 
 
 def render_svg_chart(rows: List[SummaryRow], output_file: Path) -> None:
@@ -174,9 +277,9 @@ def render_svg_chart(rows: List[SummaryRow], output_file: Path) -> None:
         y3 = y_base + 30
         y4 = y_base + 42
 
-        w_top1 = bar_width(row.top1)
-        w_top5 = bar_width(row.top5)
-        w_top10 = bar_width(row.top10)
+        w_top1 = bar_width(row.hit1)
+        w_top5 = bar_width(row.hit5)
+        w_top10 = bar_width(row.hit10)
         w_mrr = bar_width(row.mrr)
 
         svg_lines.append(f'<rect x="{left_margin}" y="{y1}" width="{w_top1}" height="8" fill="#2563eb" rx="2"/>')
@@ -185,7 +288,7 @@ def render_svg_chart(rows: List[SummaryRow], output_file: Path) -> None:
         svg_lines.append(f'<rect x="{left_margin}" y="{y4}" width="{w_mrr}" height="8" fill="#f59e0b" rx="2"/>')
         svg_lines.append(
             f'<text x="{left_margin + chart_width + 8}" y="{y_base + 31}" class="value">'
-            f'{to_percent(row.top1)} / {to_percent(row.top5)} / {to_percent(row.top10)} / {row.mrr:.3f}'
+            f'{to_percent(row.hit1)} / {to_percent(row.hit5)} / {to_percent(row.hit10)} / {row.mrr:.3f}'
             '</text>'
         )
 
@@ -214,48 +317,29 @@ def render_markdown_report(
     lines.append("### Inputs")
     lines.append(f"- Summary CSV: `{summary_file.name}`")
     lines.append(f"- Details CSV: `{details_file.name}`")
-    lines.append("")
-    lines.append("### Metric Meaning")
-    lines.append("- Top1 Accuracy: Anteil Queries, bei denen das richtige Material auf Rang 1 steht.")
-    lines.append("")
-
-    lines.append("  Formel: $\\mathrm{Top1} = \\frac{1}{N} \\sum_{i=1}^{N} \\mathbf{1}(\\mathrm{Rang}_i = 1)$")
-    lines.append("Beispiel: 0.8 bedeutet 8 von 10 direkt korrekt.")
-    lines.append("")
-    lines.append("- Top5 Accuracy: Anteil Queries, bei denen das richtige Material irgendwo in den Top 5 steht.")
-    lines.append("")
-    lines.append("  Formel: $\\mathrm{Top5} = \\frac{1}{N} \\sum_{i=1}^{N} \\mathbf{1}(\\mathrm{Rang}_i \\leq 5)$")
-    lines.append("")
-    lines.append("- Top10 Accuracy: Anteil Queries, bei denen das richtige Material irgendwo in den Top 10 steht.")
-    lines.append("")
-    lines.append("  Formel: $\\mathrm{Top10} = \\frac{1}{N} \\sum_{i=1}^{N} \\mathbf{1}(\\mathrm{Rang}_i \\leq 10)$")
-    lines.append("")
-    lines.append("- MRR (Mean Reciprocal Rank): bewertet den Rang des richtigen Treffers (höher = besser).")
-    lines.append("  Formel: $\\mathrm{MRR} = \\frac{1}{N} \\sum_{i=1}^{N} \\frac{1}{\\mathrm{Rang}_i}$")
-    lines.append("Dabei gilt: Rang 1 zählt voll, Rang 2 nur 0.5, Rang 3 nur 0.33, Rang 4: 0.25, Rang 5: 0.2 etc.")
-    lines.append("- Avg expected score: mittlerer Similarity-Score des korrekten Materials (nur als internes Vertrauenssignal pro Modell, nicht perfekt modellübergreifend vergleichbar).")
-    lines.append("  Formel: $\\mathrm{AvgExpectedScore} = \\frac{1}{N} \\sum_{i=1}^{N} \\max_{j \\in E_i} s_{ij}$")
-    lines.append("Dabei ist $E_i$ die Menge der passenden Expected-Kandidaten für Query $i$, $s_{ij}$ der Similarity-Score zwischen Query $i$ und Kandidat $j$, und $N$ die Anzahl der Queries.")
-    lines.append("Beispiel: Bei 3 Queries mit besten Expected-Scores 0.82, 0.67 und 0.91 gilt: $(0.82 + 0.67 + 0.91) / 3 = 0.80$.")
-    lines.append("- Expected score (pro Query): höchster Similarity-Score unter den zum erwarteten Material gehörenden Kandidaten.")
-    lines.append("  Formel: $\\mathrm{ExpectedScore}_i = \\max_{j \\in E_i} s_{ij}$")
-    lines.append("Dabei ist $i$ die Query, $E_i$ die Menge der passenden Expected-Kandidaten, und $s_{ij}$ der Similarity-Score zwischen Query $i$ und Kandidat $j$.")
-    lines.append("Die Score-Höhe allein ist nicht das wichtigste Kriterium; Ranking-Metriken (Top1/Top5/Top10/MRR) sind für Zuordnung robuster.")
+    # lines.append("")
+    # lines.append("### Metric Meaning")
+    # relative_metric_file = os.path.relpath(METRIC_EXPLANATIONS_FILE, report_file.parent).replace("\\", "/")
+    # lines.append(f"- Siehe vollständige Erklärung in: [{METRIC_EXPLANATIONS_FILE.name}]({relative_metric_file})")
     lines.append("")
     lines.append("### Overview")
     lines.append(f"![Model overview]({chart_file.name})")
     lines.append("")
     lines.append("### Leaderboard")
     lines.append("")
-    lines.append("| Rank | Model | Cases | Top1 | Top5 | Top10 | MRR | Avg expected score | Top1 errors |")
-    lines.append("|---:|---|---:|---:|---:|---:|---:|---:|---:|")
+    lines.append("| Rank | Model | Hit@1 | Hit@5 | Hit@10 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 | Cov@95% | Cov@97% | Cov@99% | AutoCov | AutoAcc | AutoThr | ValCov | ValAcc | Manual Hit@10 | AURC | Avg expected score | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI | Cov@95 95% CI | Top1 errors |")
+    lines.append("|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---|---:|")
 
     for rank, row in enumerate(summary_rows, start=1):
         lines.append(
             "| "
-            f"{rank} | {row.model} | {row.cases} | {to_percent(row.top1)} | {to_percent(row.top5)} | {to_percent(row.top10)} | {row.mrr:.3f} | {row.avg_expected_score:.3f} | {error_stats.get(row.model, 0)}"
+            f"{rank} | {row.model} | {to_percent(row.hit1)} | {to_percent(row.hit5)} | {to_percent(row.hit10)} | {row.mrr:.3f} | {row.map10:.3f} | {row.ndcg10:.3f} | {row.recall10:.3f} | {to_percent(row.coverage_at_95acc_margin)} | {to_percent(row.coverage_at_97acc)} | {to_percent(row.coverage_at_99acc)} | {to_percent(row.auto_coverage)} | {to_percent(row.auto_accuracy)} | {row.auto_threshold:.3f} | {to_percent(row.val_coverage_at_target)} | {to_percent(row.val_accuracy_at_target)} | {row.manual_hit10:.3f} | {row.aurc:.3f} | {row.avg_expected_score:.3f} | [{row.hit1_ci_low:.3f}, {row.hit1_ci_high:.3f}] | [{row.hit10_ci_low:.3f}, {row.hit10_ci_high:.3f}] | [{row.mrr10_ci_low:.3f}, {row.mrr10_ci_high:.3f}] | [{row.ndcg10_ci_low:.3f}, {row.ndcg10_ci_high:.3f}] | [{row.coverage95_ci_low:.3f}, {row.coverage95_ci_high:.3f}] | {error_stats.get(row.model, 0)}"
             " |"
         )
+
+    query_count = summary_rows[0].cases if summary_rows else 0
+    lines.append("")
+    lines.append(f"Anzahl Queries: {query_count}")
 
     if hard_queries:
         lines.append("")

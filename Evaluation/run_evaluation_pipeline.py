@@ -1,24 +1,55 @@
 """
-Evaluation-Pipeline (Kurzüberblick)
+Evaluation-Pipeline (How-To)
+============================
 
-Dieses Skript führt die komplette Evaluation aus:
-1) optional Query-Export aus .ifc/.jsonl nach .txt,
-2) Modell-Evaluation,
-3) Report-Generierung.
+Was dieses Skript macht
+-----------------------
+Dieses Skript orchestriert den kompletten Evaluationsablauf für das
+Sentence-Embedding-Retrieval:
 
-Nutzung:
-- Interaktiv (Dateiauswahl im Terminal):
+1) Optionaler Query-Export aus `.ifc` oder `.jsonl` nach `.txt`
+   (bei `.txt` als Quelle wird dieser Schritt übersprungen).
+2) Modell-Evaluation über `Evaluation/evaluate_material_models.py`.
+3) Report-Erstellung über `Evaluation/build_evaluation_report.py`.
+
+Die eigentliche Modellbewertung passiert im Evaluator-Skript; dieses
+Pipeline-Skript kümmert sich um Dateiauswahl, Umgebungsvariablen,
+Abhängigkeits-Check und Reihenfolge der Schritte.
+
+Modi
+----
+- `decision` (Default): Ranking + Split/Kalibrator + Entscheidungsmetriken
+  (z. B. Coverage bei Zielgenauigkeit).
+- `ranking-only`: nur Rankingmetriken ohne Split/Kalibrator.
+
+Eingaben
+--------
+- Query-Quelle (`--query-source`): `.ifc`, `.jsonl` oder `.txt`.
+- Optional `--expected-file`: TXT mit Expected/Relevant-Einträgen
+  (eine Zeile pro Query).
+
+Wenn keine Parameter übergeben werden, fragt das Skript interaktiv
+im Terminal nach Query- und optional Expected-Datei.
+
+Beispiele
+---------
+- Interaktiv starten:
     python Evaluation/run_evaluation_pipeline.py
 
-- Mit fixer Query-Quelle:
-    python Evaluation/run_evaluation_pipeline.py --query-source <pfad_zu_.ifc|.jsonl|.txt>
+- Mit fixer Query-Quelle (TXT):
+    python Evaluation/run_evaluation_pipeline.py --query-source Evaluation/exports/queries/meine_queries.txt
 
-- Optional mit Expected-Datei (eine Zeile pro Query):
-    python Evaluation/run_evaluation_pipeline.py --query-source <...> --expected-file <pfad_zu_.txt>
+- Vollständig mit Expected-Datei und Ranking-only:
+    python Evaluation/run_evaluation_pipeline.py --mode ranking-only --query-source <pfad> --expected-file <pfad>
 
-Ausgaben:
-- Queries: Evaluation/exports/queries/
-- Evaluation + Report: Evaluation/exports/model_evaluation/
+- Decision-Modus explizit:
+    python Evaluation/run_evaluation_pipeline.py --mode decision --query-source <pfad> --expected-file <pfad>
+
+Ausgaben
+--------
+- Query-Export: `Evaluation/exports/queries/`
+- Evaluation + Report: `Evaluation/exports/model_evaluation/`
+  (u. a. `summary*.csv`, `details*.csv`, `evaluation_report*.md`, `overview*.svg`)
 """
 
 import argparse
@@ -47,7 +78,7 @@ def run_command(command: list[str], env: dict[str, str] | None = None) -> None:
 
 
 def ensure_evaluation_dependencies(env: dict[str, str]) -> None:
-    check_code = "import sentence_transformers, torch; print('ok')"
+    check_code = "import sentence_transformers, torch, sklearn; print('ok')"
     result = subprocess.run(
         [sys.executable, "-c", check_code],
         cwd=str(PROJECT_ROOT),
@@ -60,7 +91,7 @@ def ensure_evaluation_dependencies(env: dict[str, str]) -> None:
         return
 
     raise RuntimeError(
-        "Fehlende Python-Pakete für Evaluation (mindestens 'sentence-transformers' und 'torch'). "
+        "Fehlende Python-Pakete für Evaluation (mindestens 'sentence-transformers', 'torch' und 'scikit-learn'). "
         "Installiere sie z.B. mit: python -m pip install -r requirements.txt"
     )
 
@@ -85,7 +116,27 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Bei .ifc beim Query-Export keinen IFC-Export ausführen, sondern vorhandene .jsonl verwenden.",
     )
+    parser.add_argument(
+        "--mode",
+        choices=["ranking-only", "decision"],
+        default=None,
+        help="Evaluationsmodus: ranking-only (nur Rankingmetriken) oder decision (mit Split/Kalibrierung).",
+    )
     return parser.parse_args()
+
+
+def select_mode_interactively() -> str:
+    print("\nWähle Evaluationsmodus:")
+    print("    1: decision (Ranking + Split/Kalibrierung + Decision-Metriken)")
+    print("    2: ranking-only (nur Rankingmetriken, ohne Kalibrierung)")
+
+    while True:
+        user_input = input("Modus wählen [1/2] (Enter = 1): ").strip().lower()
+        if not user_input or user_input in {"1", "decision", "d"}:
+            return "decision"
+        if user_input in {"2", "ranking-only", "ranking", "r"}:
+            return "ranking-only"
+        print("Ungültige Eingabe. Bitte 1 oder 2 eingeben.")
 
 
 def iter_project_files() -> list[Path]:
@@ -222,6 +273,7 @@ def resolve_query_file(args: argparse.Namespace) -> Path | None:
 
 def main() -> None:
     args = parse_args()
+    selected_mode = args.mode or select_mode_interactively()
 
     for script in (EXPORT_SCRIPT, EVALUATE_SCRIPT, REPORT_SCRIPT):
         if not script.is_file():
@@ -247,9 +299,11 @@ def main() -> None:
     if expected_file is not None:
         env["SBERT_EXPECTED_FILE"] = str(expected_file)
         print(f"Using SBERT_EXPECTED_FILE={expected_file}")
+    env["EVAL_MODE"] = selected_mode
+    print(f"Using EVAL_MODE={selected_mode}")
 
     ensure_evaluation_dependencies(env)
-    run_command([sys.executable, str(EVALUATE_SCRIPT)], env=env)
+    run_command([sys.executable, str(EVALUATE_SCRIPT), "--mode", selected_mode], env=env)
     run_command([sys.executable, str(REPORT_SCRIPT)], env=env)
 
     print("\nEvaluation-Pipeline abgeschlossen.")

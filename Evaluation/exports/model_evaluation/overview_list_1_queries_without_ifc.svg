@@ -21,82 +21,82 @@
 <text x="178" y="978" class="axis">Top10</text>
 <rect x="235" y="968" width="12" height="12" fill="#f59e0b"/>
 <text x="253" y="978" class="axis">MRR</text>
-<text x="20" y="78" class="label">embeddinggemma-300m</text>
-<rect x="290" y="66" width="171.4288" height="8" fill="#2563eb" rx="2"/>
-<rect x="290" y="78" width="257.14320000000004" height="8" fill="#059669" rx="2"/>
-<rect x="290" y="90" width="342.85679999999996" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="102" width="225.8864" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="91" class="value">21.4% / 32.1% / 42.9% / 0.282</text>
-<text x="20" y="146" class="label">multilingual-e5-base</text>
-<rect x="290" y="134" width="171.4288" height="8" fill="#2563eb" rx="2"/>
-<rect x="290" y="146" width="200.0" height="8" fill="#059669" rx="2"/>
-<rect x="290" y="158" width="200.0" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="170" width="195.99519999999998" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="159" class="value">21.4% / 25.0% / 25.0% / 0.245</text>
+<text x="20" y="78" class="label">multilingual-e5-base</text>
+<rect x="290" y="66" width="200.0" height="8" fill="#2563eb" rx="2"/>
+<rect x="290" y="78" width="200.0" height="8" fill="#059669" rx="2"/>
+<rect x="290" y="90" width="200.0" height="8" fill="#7c3aed" rx="2"/>
+<rect x="290" y="102" width="215.04319999999998" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="91" class="value">25.0% / 25.0% / 25.0% / 0.269</text>
+<text x="20" y="146" class="label">embeddinggemma-300m</text>
+<rect x="290" y="134" width="200.0" height="8" fill="#2563eb" rx="2"/>
+<rect x="290" y="146" width="257.14320000000004" height="8" fill="#059669" rx="2"/>
+<rect x="290" y="158" width="342.85679999999996" height="8" fill="#7c3aed" rx="2"/>
+<rect x="290" y="170" width="240.172" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="159" class="value">25.0% / 32.1% / 42.9% / 0.300</text>
 <text x="20" y="214" class="label">LaBSE</text>
-<rect x="290" y="202" width="142.8568" height="8" fill="#2563eb" rx="2"/>
+<rect x="290" y="202" width="171.4288" height="8" fill="#2563eb" rx="2"/>
 <rect x="290" y="214" width="200.0" height="8" fill="#059669" rx="2"/>
 <rect x="290" y="226" width="257.14320000000004" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="238" width="201.0888" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="227" class="value">17.9% / 25.0% / 32.1% / 0.251</text>
-<text x="20" y="282" class="label">bge-m3</text>
-<rect x="290" y="270" width="114.28560000000002" height="8" fill="#2563eb" rx="2"/>
+<rect x="290" y="238" width="216.5648" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="227" class="value">21.4% / 25.0% / 32.1% / 0.271</text>
+<text x="20" y="282" class="label">multilingual-e5-large</text>
+<rect x="290" y="270" width="171.4288" height="8" fill="#2563eb" rx="2"/>
 <rect x="290" y="282" width="228.57120000000003" height="8" fill="#059669" rx="2"/>
-<rect x="290" y="294" width="314.2856" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="306" width="197.66" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="295" class="value">14.3% / 28.6% / 39.3% / 0.247</text>
+<rect x="290" y="294" width="228.57120000000003" height="8" fill="#7c3aed" rx="2"/>
+<rect x="290" y="306" width="215.42880000000002" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="295" class="value">21.4% / 28.6% / 28.6% / 0.269</text>
 <text x="20" y="350" class="label">distiluse-base-multilingual-cased-v2</text>
-<rect x="290" y="338" width="114.28560000000002" height="8" fill="#2563eb" rx="2"/>
+<rect x="290" y="338" width="171.4288" height="8" fill="#2563eb" rx="2"/>
 <rect x="290" y="350" width="285.7144" height="8" fill="#059669" rx="2"/>
 <rect x="290" y="362" width="285.7144" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="374" width="186.052" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="363" class="value">14.3% / 35.7% / 35.7% / 0.233</text>
-<text x="20" y="418" class="label">multilingual-e5-large</text>
-<rect x="290" y="406" width="114.28560000000002" height="8" fill="#2563eb" rx="2"/>
-<rect x="290" y="418" width="228.57120000000003" height="8" fill="#059669" rx="2"/>
-<rect x="290" y="430" width="228.57120000000003" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="442" width="182.096" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="431" class="value">14.3% / 28.6% / 28.6% / 0.228</text>
-<text x="20" y="486" class="label">paraphrase-multilingual-MiniLM-L12-v2</text>
-<rect x="290" y="474" width="28.5712" height="8" fill="#2563eb" rx="2"/>
-<rect x="290" y="486" width="257.14320000000004" height="8" fill="#059669" rx="2"/>
-<rect x="290" y="498" width="314.2856" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="510" width="131.6408" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="499" class="value">3.6% / 32.1% / 39.3% / 0.165</text>
-<text x="20" y="554" class="label">bert-base-multilingual-uncased</text>
-<rect x="290" y="542" width="28.5712" height="8" fill="#2563eb" rx="2"/>
-<rect x="290" y="554" width="171.4288" height="8" fill="#059669" rx="2"/>
-<rect x="290" y="566" width="342.85679999999996" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="578" width="93.6768" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="567" class="value">3.6% / 21.4% / 42.9% / 0.117</text>
-<text x="20" y="622" class="label">paraphrase-multilingual-mpnet-base-v2</text>
+<rect x="290" y="374" width="219.3848" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="363" class="value">21.4% / 35.7% / 35.7% / 0.274</text>
+<text x="20" y="418" class="label">bge-m3</text>
+<rect x="290" y="406" width="142.8568" height="8" fill="#2563eb" rx="2"/>
+<rect x="290" y="418" width="257.14320000000004" height="8" fill="#059669" rx="2"/>
+<rect x="290" y="430" width="314.2856" height="8" fill="#7c3aed" rx="2"/>
+<rect x="290" y="442" width="221.4696" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="431" class="value">17.9% / 32.1% / 39.3% / 0.277</text>
+<text x="20" y="486" class="label">bert-base-multilingual-uncased</text>
+<rect x="290" y="474" width="57.14320000000001" height="8" fill="#2563eb" rx="2"/>
+<rect x="290" y="486" width="200.0" height="8" fill="#059669" rx="2"/>
+<rect x="290" y="498" width="342.85679999999996" height="8" fill="#7c3aed" rx="2"/>
+<rect x="290" y="510" width="118.6768" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="499" class="value">7.1% / 25.0% / 42.9% / 0.148</text>
+<text x="20" y="554" class="label">paraphrase-multilingual-mpnet-base-v2</text>
+<rect x="290" y="542" width="57.14320000000001" height="8" fill="#2563eb" rx="2"/>
+<rect x="290" y="554" width="142.8568" height="8" fill="#059669" rx="2"/>
+<rect x="290" y="566" width="171.4288" height="8" fill="#7c3aed" rx="2"/>
+<rect x="290" y="578" width="107.2432" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="567" class="value">7.1% / 17.9% / 21.4% / 0.134</text>
+<text x="20" y="622" class="label">paraphrase-multilingual-MiniLM-L12-v2</text>
 <rect x="290" y="610" width="28.5712" height="8" fill="#2563eb" rx="2"/>
-<rect x="290" y="622" width="142.8568" height="8" fill="#059669" rx="2"/>
-<rect x="290" y="634" width="142.8568" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="646" width="87.72" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="635" class="value">3.6% / 17.9% / 17.9% / 0.110</text>
+<rect x="290" y="622" width="257.14320000000004" height="8" fill="#059669" rx="2"/>
+<rect x="290" y="634" width="314.2856" height="8" fill="#7c3aed" rx="2"/>
+<rect x="290" y="646" width="141.1648" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="635" class="value">3.6% / 32.1% / 39.3% / 0.176</text>
 <text x="20" y="690" class="label">bert-base-multilingual-cased</text>
-<rect x="290" y="678" width="0.0" height="8" fill="#2563eb" rx="2"/>
+<rect x="290" y="678" width="28.5712" height="8" fill="#2563eb" rx="2"/>
 <rect x="290" y="690" width="200.0" height="8" fill="#059669" rx="2"/>
 <rect x="290" y="702" width="200.0" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="714" width="99.27759999999999" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="703" class="value">0.0% / 25.0% / 25.0% / 0.124</text>
+<rect x="290" y="714" width="118.32480000000001" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="703" class="value">3.6% / 25.0% / 25.0% / 0.148</text>
 <text x="20" y="758" class="label">bert-base-german-cased</text>
 <rect x="290" y="746" width="0.0" height="8" fill="#2563eb" rx="2"/>
-<rect x="290" y="758" width="142.8568" height="8" fill="#059669" rx="2"/>
-<rect x="290" y="770" width="171.4288" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="782" width="67.5272" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="771" class="value">0.0% / 17.9% / 21.4% / 0.084</text>
+<rect x="290" y="758" width="171.4288" height="8" fill="#059669" rx="2"/>
+<rect x="290" y="770" width="200.0" height="8" fill="#7c3aed" rx="2"/>
+<rect x="290" y="782" width="70.8608" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="771" class="value">0.0% / 21.4% / 25.0% / 0.089</text>
 <text x="20" y="826" class="label">IfcMaterial2MP</text>
 <rect x="290" y="814" width="0.0" height="8" fill="#2563eb" rx="2"/>
-<rect x="290" y="826" width="57.14320000000001" height="8" fill="#059669" rx="2"/>
+<rect x="290" y="826" width="85.7144" height="8" fill="#059669" rx="2"/>
 <rect x="290" y="838" width="114.28560000000002" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="850" width="55.52160000000001" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="839" class="value">0.0% / 7.1% / 14.3% / 0.069</text>
+<rect x="290" y="850" width="61.995999999999995" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="839" class="value">0.0% / 10.7% / 14.3% / 0.077</text>
 <text x="20" y="894" class="label">IfcElement2ConstructionSets</text>
 <rect x="290" y="882" width="0.0" height="8" fill="#2563eb" rx="2"/>
-<rect x="290" y="894" width="0.0" height="8" fill="#059669" rx="2"/>
-<rect x="290" y="906" width="57.14320000000001" height="8" fill="#7c3aed" rx="2"/>
-<rect x="290" y="918" width="28.1152" height="8" fill="#f59e0b" rx="2"/>
-<text x="1098" y="907" class="value">0.0% / 0.0% / 7.1% / 0.035</text>
+<rect x="290" y="894" width="57.14320000000001" height="8" fill="#059669" rx="2"/>
+<rect x="290" y="906" width="85.7144" height="8" fill="#7c3aed" rx="2"/>
+<rect x="290" y="918" width="38.7776" height="8" fill="#f59e0b" rx="2"/>
+<text x="1098" y="907" class="value">0.0% / 7.1% / 10.7% / 0.048</text>
 </svg>

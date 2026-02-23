@@ -1,57 +1,33 @@
 ## Evaluation Report
 
-Generated: 2026-02-22 16:40:20
+Generated: 2026-02-23 11:15:02
 
 ### Inputs
 - Summary CSV: `summary_list_1_queries_without_ifc.csv`
 - Details CSV: `details_list_1_queries_without_ifc.csv`
-
-### Metric Meaning
-- Top1 Accuracy: Anteil Queries, bei denen das richtige Material auf Rang 1 steht.
-
-  Formel: $\mathrm{Top1} = \frac{1}{N} \sum_{i=1}^{N} \mathbf{1}(\mathrm{Rang}_i = 1)$
-Beispiel: 0.8 bedeutet 8 von 10 direkt korrekt.
-
-- Top5 Accuracy: Anteil Queries, bei denen das richtige Material irgendwo in den Top 5 steht.
-
-  Formel: $\mathrm{Top5} = \frac{1}{N} \sum_{i=1}^{N} \mathbf{1}(\mathrm{Rang}_i \leq 5)$
-
-- Top10 Accuracy: Anteil Queries, bei denen das richtige Material irgendwo in den Top 10 steht.
-
-  Formel: $\mathrm{Top10} = \frac{1}{N} \sum_{i=1}^{N} \mathbf{1}(\mathrm{Rang}_i \leq 10)$
-
-- MRR (Mean Reciprocal Rank): bewertet den Rang des richtigen Treffers (höher = besser).
-  Formel: $\mathrm{MRR} = \frac{1}{N} \sum_{i=1}^{N} \frac{1}{\mathrm{Rang}_i}$
-Dabei gilt: Rang 1 zählt voll, Rang 2 nur 0.5, Rang 3 nur 0.33, Rang 4: 0.25, Rang 5: 0.2 etc.
-- Avg expected score: mittlerer Similarity-Score des korrekten Materials (nur als internes Vertrauenssignal pro Modell, nicht perfekt modellübergreifend vergleichbar).
-  Formel: $\mathrm{AvgExpectedScore} = \frac{1}{N} \sum_{i=1}^{N} \max_{j \in E_i} s_{ij}$
-Dabei ist $E_i$ die Menge der passenden Expected-Kandidaten für Query $i$, $s_{ij}$ der Similarity-Score zwischen Query $i$ und Kandidat $j$, und $N$ die Anzahl der Queries.
-Beispiel: Bei 3 Queries mit besten Expected-Scores 0.82, 0.67 und 0.91 gilt: $(0.82 + 0.67 + 0.91) / 3 = 0.80$.
-- Expected score (pro Query): höchster Similarity-Score unter den zum erwarteten Material gehörenden Kandidaten.
-  Formel: $\mathrm{ExpectedScore}_i = \max_{j \in E_i} s_{ij}$
-Dabei ist $i$ die Query, $E_i$ die Menge der passenden Expected-Kandidaten, und $s_{ij}$ der Similarity-Score zwischen Query $i$ und Kandidat $j$.
-Die Score-Höhe allein ist nicht das wichtigste Kriterium; Ranking-Metriken (Top1/Top5/Top10/MRR) sind für Zuordnung robuster.
 
 ### Overview
 ![Model overview](overview_list_1_queries_without_ifc.svg)
 
 ### Leaderboard
 
-| Rank | Model | Cases | Top1 | Top5 | Top10 | MRR | Avg expected score | Top1 errors |
-|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 1 | google/embeddinggemma-300m | 28 | 21.4% | 32.1% | 42.9% | 0.282 | 0.496 | 22 |
-| 2 | intfloat/multilingual-e5-base | 28 | 21.4% | 25.0% | 25.0% | 0.245 | 0.823 | 22 |
-| 3 | sentence-transformers/LaBSE | 28 | 17.9% | 25.0% | 32.1% | 0.251 | 0.352 | 23 |
-| 4 | BAAI/bge-m3 | 28 | 14.3% | 28.6% | 39.3% | 0.247 | 0.492 | 24 |
-| 5 | sentence-transformers/distiluse-base-multilingual-cased-v2 | 28 | 14.3% | 35.7% | 35.7% | 0.233 | 0.289 | 24 |
-| 6 | intfloat/multilingual-e5-large | 28 | 14.3% | 28.6% | 28.6% | 0.228 | 0.833 | 24 |
-| 7 | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | 28 | 3.6% | 32.1% | 39.3% | 0.165 | 0.387 | 27 |
-| 8 | google-bert/bert-base-multilingual-uncased | 28 | 3.6% | 21.4% | 42.9% | 0.117 | 0.614 | 27 |
-| 9 | sentence-transformers/paraphrase-multilingual-mpnet-base-v2 | 28 | 3.6% | 17.9% | 17.9% | 0.110 | 0.472 | 27 |
-| 10 | google-bert/bert-base-multilingual-cased | 28 | 0.0% | 25.0% | 25.0% | 0.124 | 0.581 | 28 |
-| 11 | google-bert/bert-base-german-cased | 28 | 0.0% | 17.9% | 21.4% | 0.084 | 0.772 | 28 |
-| 12 | kforth/IfcMaterial2MP | 28 | 0.0% | 7.1% | 14.3% | 0.069 | 0.485 | 28 |
-| 13 | kforth/IfcElement2ConstructionSets | 28 | 0.0% | 0.0% | 7.1% | 0.035 | 0.728 | 28 |
+| Rank | Model | Top1 | Top5 | Top10 | MRR | MAP@10 | nDCG@10 | Cov@95% (margin) | Avg expected score | Top1 errors |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | intfloat/multilingual-e5-base | 25.0% | 25.0% | 25.0% | 0.269 | 0.250 | 0.250 | 17.9% | 0.824 | 21 |
+| 2 | google/embeddinggemma-300m | 25.0% | 32.1% | 42.9% | 0.300 | 0.273 | 0.308 | 7.1% | 0.496 | 21 |
+| 3 | sentence-transformers/LaBSE | 21.4% | 25.0% | 32.1% | 0.271 | 0.241 | 0.259 | 10.7% | 0.353 | 22 |
+| 4 | intfloat/multilingual-e5-large | 21.4% | 28.6% | 28.6% | 0.269 | 0.238 | 0.254 | 10.7% | 0.833 | 22 |
+| 5 | sentence-transformers/distiluse-base-multilingual-cased-v2 | 21.4% | 35.7% | 35.7% | 0.274 | 0.260 | 0.285 | 7.1% | 0.291 | 22 |
+| 6 | BAAI/bge-m3 | 17.9% | 32.1% | 39.3% | 0.277 | 0.249 | 0.285 | 10.7% | 0.494 | 23 |
+| 7 | google-bert/bert-base-multilingual-uncased | 7.1% | 25.0% | 42.9% | 0.148 | 0.121 | 0.196 | 0.0% | 0.615 | 26 |
+| 8 | sentence-transformers/paraphrase-multilingual-mpnet-base-v2 | 7.1% | 17.9% | 21.4% | 0.134 | 0.118 | 0.137 | 0.0% | 0.474 | 26 |
+| 9 | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | 3.6% | 32.1% | 39.3% | 0.176 | 0.167 | 0.223 | 0.0% | 0.390 | 27 |
+| 10 | google-bert/bert-base-multilingual-cased | 3.6% | 25.0% | 25.0% | 0.148 | 0.125 | 0.157 | 0.0% | 0.581 | 27 |
+| 11 | google-bert/bert-base-german-cased | 0.0% | 21.4% | 25.0% | 0.089 | 0.081 | 0.122 | 0.0% | 0.773 | 28 |
+| 12 | kforth/IfcMaterial2MP | 0.0% | 10.7% | 14.3% | 0.077 | 0.041 | 0.066 | 0.0% | 0.488 | 28 |
+| 13 | kforth/IfcElement2ConstructionSets | 0.0% | 7.1% | 10.7% | 0.048 | 0.017 | 0.034 | 0.0% | 0.728 | 28 |
+
+Anzahl Queries: 28
 
 ### Hardest Queries
 Queries mit den meisten Top1-Fehlern über alle Modelle:

@@ -1,63 +1,39 @@
 ## Evaluation Report
 
-Generated: 2026-02-22 16:40:20
+Generated: 2026-02-23 16:19:21
 
 ### Inputs
-- Summary CSV: `summary_list_1_queries_without_ifc.csv`
-- Details CSV: `details_list_1_queries_without_ifc.csv`
-
-### Metric Meaning
-- Top1 Accuracy: Anteil Queries, bei denen das richtige Material auf Rang 1 steht.
-
-  Formel: $\mathrm{Top1} = \frac{1}{N} \sum_{i=1}^{N} \mathbf{1}(\mathrm{Rang}_i = 1)$
-Beispiel: 0.8 bedeutet 8 von 10 direkt korrekt.
-
-- Top5 Accuracy: Anteil Queries, bei denen das richtige Material irgendwo in den Top 5 steht.
-
-  Formel: $\mathrm{Top5} = \frac{1}{N} \sum_{i=1}^{N} \mathbf{1}(\mathrm{Rang}_i \leq 5)$
-
-- Top10 Accuracy: Anteil Queries, bei denen das richtige Material irgendwo in den Top 10 steht.
-
-  Formel: $\mathrm{Top10} = \frac{1}{N} \sum_{i=1}^{N} \mathbf{1}(\mathrm{Rang}_i \leq 10)$
-
-- MRR (Mean Reciprocal Rank): bewertet den Rang des richtigen Treffers (höher = besser).
-  Formel: $\mathrm{MRR} = \frac{1}{N} \sum_{i=1}^{N} \frac{1}{\mathrm{Rang}_i}$
-Dabei gilt: Rang 1 zählt voll, Rang 2 nur 0.5, Rang 3 nur 0.33, Rang 4: 0.25, Rang 5: 0.2 etc.
-- Avg expected score: mittlerer Similarity-Score des korrekten Materials (nur als internes Vertrauenssignal pro Modell, nicht perfekt modellübergreifend vergleichbar).
-  Formel: $\mathrm{AvgExpectedScore} = \frac{1}{N} \sum_{i=1}^{N} \max_{j \in E_i} s_{ij}$
-Dabei ist $E_i$ die Menge der passenden Expected-Kandidaten für Query $i$, $s_{ij}$ der Similarity-Score zwischen Query $i$ und Kandidat $j$, und $N$ die Anzahl der Queries.
-Beispiel: Bei 3 Queries mit besten Expected-Scores 0.82, 0.67 und 0.91 gilt: $(0.82 + 0.67 + 0.91) / 3 = 0.80$.
-- Expected score (pro Query): höchster Similarity-Score unter den zum erwarteten Material gehörenden Kandidaten.
-  Formel: $\mathrm{ExpectedScore}_i = \max_{j \in E_i} s_{ij}$
-Dabei ist $i$ die Query, $E_i$ die Menge der passenden Expected-Kandidaten, und $s_{ij}$ der Similarity-Score zwischen Query $i$ und Kandidat $j$.
-Die Score-Höhe allein ist nicht das wichtigste Kriterium; Ranking-Metriken (Top1/Top5/Top10/MRR) sind für Zuordnung robuster.
+- Summary CSV: `summary_list_1_queries_with_ifc.csv`
+- Details CSV: `details_list_1_queries_with_ifc.csv`
 
 ### Overview
-![Model overview](overview_list_1_queries_without_ifc.svg)
+![Model overview](overview_list_1_queries_with_ifc.svg)
 
 ### Leaderboard
 
-| Rank | Model | Cases | Top1 | Top5 | Top10 | MRR | Avg expected score | Top1 errors |
-|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 1 | google/embeddinggemma-300m | 28 | 21.4% | 32.1% | 42.9% | 0.282 | 0.496 | 22 |
-| 2 | intfloat/multilingual-e5-base | 28 | 21.4% | 25.0% | 25.0% | 0.245 | 0.823 | 22 |
-| 3 | sentence-transformers/LaBSE | 28 | 17.9% | 25.0% | 32.1% | 0.251 | 0.352 | 23 |
-| 4 | BAAI/bge-m3 | 28 | 14.3% | 28.6% | 39.3% | 0.247 | 0.492 | 24 |
-| 5 | sentence-transformers/distiluse-base-multilingual-cased-v2 | 28 | 14.3% | 35.7% | 35.7% | 0.233 | 0.289 | 24 |
-| 6 | intfloat/multilingual-e5-large | 28 | 14.3% | 28.6% | 28.6% | 0.228 | 0.833 | 24 |
-| 7 | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | 28 | 3.6% | 32.1% | 39.3% | 0.165 | 0.387 | 27 |
-| 8 | google-bert/bert-base-multilingual-uncased | 28 | 3.6% | 21.4% | 42.9% | 0.117 | 0.614 | 27 |
-| 9 | sentence-transformers/paraphrase-multilingual-mpnet-base-v2 | 28 | 3.6% | 17.9% | 17.9% | 0.110 | 0.472 | 27 |
-| 10 | google-bert/bert-base-multilingual-cased | 28 | 0.0% | 25.0% | 25.0% | 0.124 | 0.581 | 28 |
-| 11 | google-bert/bert-base-german-cased | 28 | 0.0% | 17.9% | 21.4% | 0.084 | 0.772 | 28 |
-| 12 | kforth/IfcMaterial2MP | 28 | 0.0% | 7.1% | 14.3% | 0.069 | 0.485 | 28 |
-| 13 | kforth/IfcElement2ConstructionSets | 28 | 0.0% | 0.0% | 7.1% | 0.035 | 0.728 | 28 |
+| Rank | Model | Hit@1 | Hit@5 | Hit@10 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 | Cov@95% | Cov@97% | Cov@99% | AutoCov | AutoAcc | AutoThr | ValCov | ValAcc | Manual Hit@10 | AURC | Avg expected score | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI | Cov@95 95% CI | Top1 errors |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---|---:|
+| 1 | intfloat/multilingual-e5-large | 25.00% | 28.57% | 28.57% | 0.268 | 0.258 | 0.268 | 0.286 | 21.43% | 21.43% | 21.43% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.286 | 0.440 | 0.859 | [0.088, 0.429] | [0.143, 0.464] | [0.107, 0.446] | [0.114, 0.446] | [0.071, 0.393] | 21 |
+| 2 | intfloat/multilingual-e5-base | 25.00% | 25.00% | 25.00% | 0.250 | 0.250 | 0.250 | 0.250 | 21.43% | 21.43% | 21.43% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.250 | 0.423 | 0.865 | [0.107, 0.393] | [0.107, 0.393] | [0.107, 0.393] | [0.107, 0.393] | [0.071, 0.393] | 21 |
+| 3 | sentence-transformers/LaBSE | 21.43% | 25.00% | 28.57% | 0.231 | 0.231 | 0.243 | 0.286 | 17.86% | 17.86% | 17.86% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.286 | 0.461 | 0.438 | [0.071, 0.393] | [0.143, 0.429] | [0.088, 0.395] | [0.107, 0.408] | [0.053, 0.357] | 22 |
+| 4 | sentence-transformers/distiluse-base-multilingual-cased-v2 | 21.43% | 25.00% | 25.00% | 0.232 | 0.235 | 0.239 | 0.250 | 14.29% | 14.29% | 14.29% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.250 | 0.509 | 0.436 | [0.071, 0.357] | [0.107, 0.393] | [0.098, 0.375] | [0.101, 0.388] | [0.036, 0.304] | 22 |
+| 5 | google/embeddinggemma-300m | 21.43% | 32.14% | 46.43% | 0.267 | 0.259 | 0.309 | 0.464 | 7.14% | 7.14% | 7.14% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.464 | 0.489 | 0.552 | [0.071, 0.357] | [0.286, 0.679] | [0.135, 0.413] | [0.167, 0.453] | [0.000, 0.321] | 22 |
+| 6 | BAAI/bge-m3 | 21.43% | 32.14% | 53.57% | 0.287 | 0.293 | 0.349 | 0.536 | 3.57% | 3.57% | 3.57% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.536 | 0.621 | 0.545 | [0.071, 0.357] | [0.357, 0.714] | [0.151, 0.442] | [0.216, 0.506] | [0.000, 0.162] | 22 |
+| 7 | google-bert/bert-base-multilingual-cased | 10.71% | 21.43% | 25.00% | 0.151 | 0.144 | 0.173 | 0.250 | 3.57% | 3.57% | 3.57% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.250 | 0.771 | 0.654 | [0.000, 0.214] | [0.088, 0.429] | [0.043, 0.274] | [0.058, 0.303] | [0.000, 0.107] | 25 |
+| 8 | sentence-transformers/paraphrase-multilingual-mpnet-base-v2 | 10.71% | 17.86% | 17.86% | 0.137 | 0.128 | 0.141 | 0.167 | 3.57% | 3.57% | 3.57% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.179 | 0.737 | 0.629 | [0.000, 0.250] | [0.036, 0.357] | [0.036, 0.274] | [0.036, 0.285] | [0.000, 0.143] | 25 |
+| 9 | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | 7.14% | 21.43% | 28.57% | 0.142 | 0.133 | 0.174 | 0.286 | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.286 | 0.858 | 0.535 | [0.000, 0.179] | [0.143, 0.464] | [0.050, 0.249] | [0.070, 0.288] | [0.000, 0.071] | 26 |
+| 10 | google-bert/bert-base-multilingual-uncased | 3.57% | 14.29% | 21.43% | 0.087 | 0.080 | 0.117 | 0.214 | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.214 | 0.896 | 0.701 | [0.000, 0.107] | [0.071, 0.393] | [0.021, 0.167] | [0.036, 0.206] | [0.000, 0.071] | 27 |
+| 11 | google-bert/bert-base-german-cased | 0.00% | 25.00% | 25.00% | 0.087 | 0.083 | 0.129 | 0.250 | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.250 | 0.982 | 0.853 | [0.000, 0.000] | [0.088, 0.429] | [0.027, 0.153] | [0.042, 0.226] | [0.000, 0.000] | 28 |
+| 12 | kforth/IfcElement2ConstructionSets | 0.00% | 10.71% | 17.86% | 0.046 | 0.031 | 0.062 | 0.143 | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.179 | 0.982 | 0.985 | [0.000, 0.000] | [0.071, 0.321] | [0.010, 0.095] | [0.018, 0.117] | [0.000, 0.000] | 28 |
+| 13 | kforth/IfcMaterial2MP | 0.00% | 3.57% | 14.29% | 0.025 | 0.026 | 0.054 | 0.143 | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 2.000 | 0.00% | 0.00% | 0.143 | 0.982 | 0.626 | [0.000, 0.000] | [0.036, 0.286] | [0.005, 0.048] | [0.012, 0.103] | [0.000, 0.000] | 28 |
+
+Anzahl Queries: 28
 
 ### Hardest Queries
 Queries mit den meisten Top1-Fehlern über alle Modelle:
 
-- (13 Fehler) ReinforcingBar Bügel B500B
-- (13 Fehler) ReinforcingBar Längsstab B500B
-- (13 Fehler) ReinforcingBar SHEAR Bügel B500B
-- (13 Fehler) ReinforcingBar MAIN 1. Lage B500B
-- (13 Fehler) ReinforcingBar unterer Stab B500B
+- (13 Fehler) IfcReinforcingBar
+- (13 Fehler) IfcReinforcingBar Bügel B500B
+- (13 Fehler) IfcReinforcingBar SHEAR Bügel B500B
+- (13 Fehler) IfcReinforcingBar MAIN 1. Lage B500B
+- (13 Fehler) IfcReinforcingBar unterer Stab B500B

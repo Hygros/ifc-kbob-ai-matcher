@@ -1,3 +1,204 @@
+IfcBeam GIRDER_SEGMENT Randbord Beton NPK G Test-Kommentar Ortbeton
+IfcBeam EDGEBEAM Randbord Beton NPK G Randträger bewehrt Ortbeton
+IfcBeam PIERCAP Pfahlkopf Beton NPK G Pfahlkopf-Fundament Ortbeton
+IfcBeam	BEAM Beton
+IfcBeam	CORNICE Beton
+IfcBeam	DIAPHRAGM Beton
+IfcBeam	EDGEBEAM Beton
+IfcBeam	GIRDER_SEGMENT Beton
+IfcBeam	HATSTONE Beton
+IfcBeam	HOLLOWCORE Beton
+IfcBeam	JOIST Beton
+IfcBeam	PIERCAP Beton
+IfcBeam	SPANDREL Beton
+IfcBeam	T_BEAM Beton
+
+IfcBearing CYLINDRICAL S235JR
+IfcBearing CYLINDRICAL Stahl
+IfcBearing DISK Elastomer
+IfcBearing ELASTOMERIC Elastomer
+IfcBearing GUIDE PTFE
+IfcBearing GUIDE Polytetrafluoroethylene
+IfcBearing GUIDE Teflon
+IfcBearing POT S235JR
+IfcBearing POT Stahl
+IfcBearing ROCKER S235JR
+IfcBearing ROCKER Stahl
+IfcBearing ROLLER S235JR
+IfcBearing ROLLER Stahl
+IfcBearing SPHERICAL S235JR
+IfcBearing SPHERICAL Stahl
+
+IfcCaissonFoundation CAISSON Beton
+IfcCaissonFoundation CAISSON Stahlbeton
+IfcCaissonFoundation WELL Beton
+IfcCaissonFoundation WELL Stahlbeton
+
+IfcColumn COLUMN Beton
+IfcColumn COLUMN Stahlbeton
+IfcColumn COLUMN S235JR
+IfcColumn PIERSTEM Beton
+IfcColumn PIERSTEM Stahlbeton
+IfcColumn PIERSTEM S235JR
+IfcColumn PIERSTEM_SEGMENT Beton
+IfcColumn PIERSTEM_SEGMENT Stahlbeton
+IfcColumn PIERSTEM_SEGMENT S235JR
+IfcColumn PILASTER Beton
+IfcColumn PILASTER Stahlbeton
+IfcColumn PILASTER S235JR
+IfcColumn STANDCOLUMN Beton
+IfcColumn STANDCOLUMN Stahlbeton
+IfcColumn STANDCOLUMN S235JR
+
+IfcCourse ARMOUR Gestein
+IfcCourse ARMOUR Schotter
+IfcCourse BALLASTBED Schotter
+IfcCourse BALLASTBED Kies
+IfcCourse CORE Gestein
+IfcCourse CORE Erdmaterial
+IfcCourse FILTER Mineralischer Filter
+IfcCourse FILTER Kies-Sand-Gemisch
+IfcCourse PAVEMENT Asphalt
+IfcCourse PAVEMENT Beton
+IfcCourse PROTECTION Gestein
+IfcCourse PROTECTION Schotter
+
+IfcCovering CLADDING Metall
+IfcCovering CLADDING Faserzement
+IfcCovering COPING Beton
+IfcCovering COPING Naturstein
+IfcCovering MEMBRANE Abdichtung
+IfcCovering MEMBRANE Bitumenbahn
+IfcCovering TOPPING Feinmörtel
+IfcCovering WRAPPING Kunststoff
+
+IfcFooting CAISSON_FOUNDATION Beton
+IfcFooting CAISSON_FOUNDATION Stahl
+IfcFooting CAISSON_FOUNDATION S235JR
+IfcFooting FOOTING_BEAM Beton
+IfcFooting FOOTING_BEAM Stahlbeton
+IfcFooting PAD_FOOTING Beton
+IfcFooting PAD_FOOTING Stahlbeton
+IfcFooting PILE_CAP Beton
+IfcFooting PILE_CAP Stahlbeton
+IfcFooting STRIP_FOOTING Beton
+IfcFooting STRIP_FOOTING Stahlbeton
+
+IfcMember ARCH_SEGMENT Beton
+IfcMember ARCH_SEGMENT Stahl
+IfcMember ARCH_SEGMENT Naturstein
+IfcMember BRACE Stahl
+IfcMember BRACE Holz
+IfcMember CHORD Stahl
+IfcMember CHORD Holz
+IfcMember MEMBER Stahl
+IfcMember MEMBER Holz
+IfcMember PLATE Holz
+IfcMember PLATE Brettschichtholz
+IfcMember POST Holz
+IfcMember POST Stahl
+IfcMember PURLIN Holz
+IfcMember PURLIN Stahl
+IfcMember RAFTER Holz
+IfcMember RAFTER Stahl
+IfcMember STAY_CABLE Stahl
+IfcMember STAY_CABLE Litze
+IfcMember STIFFENING_RIB Stahl
+IfcMember STRINGER Beton
+IfcMember STRINGER Stahl
+IfcMember STRUCTURALCABLE Stahl
+IfcMember STRUCTURALCABLE Litze
+IfcMember STRUT Stahl
+IfcMember STRUT Holz
+IfcMember STUD Holz
+IfcMember SUSPENDER Stahl
+IfcMember SUSPENDER Litze
+IfcMember SUSPENSION_CABLE Stahl
+IfcMember SUSPENSION_CABLE Litze
+IfcMember TIEBAR Stahl
+IfcMember TIEBAR Aluminium
+
+IfcPavement FLEXIBLE Asphalt
+IfcPavement FLEXIBLE Walzasphalt
+IfcPavement FLEXIBLE Splittmastixasphalt
+IfcPavement FLEXIBLE Offenporiger Asphalt
+IfcPavement FLEXIBLE Bitumenmischgut
+IfcPavement FLEXIBLE Polymermodifiziertes Bitumen
+IfcPavement FLEXIBLE Hydraulisch gebundene Tragschicht
+IfcPavement FLEXIBLE Ungebundene Tragschicht
+IfcPavement RIGID Beton
+IfcPavement RIGID Stahlbeton
+IfcPavement RIGID Faserbeton
+IfcPavement RIGID UHPC
+IfcPavement RIGID Hydraulisch gebundenes Fundament
+IfcPavement RIGID Ungebundene Tragschicht
+
+IfcPile BORED Beton
+IfcPile BORED Stahlbeton
+IfcPile BORED Stahl
+IfcPile COHESION Beton
+IfcPile COHESION Zementsuspension
+IfcPile DRIVEN Stahl
+IfcPile DRIVEN Beton
+IfcPile FRICTION Beton
+IfcPile FRICTION Stahlbeton
+IfcPile FRICTION Stahl
+IfcPile JETGROUTING Mörtel
+IfcPile JETGROUTING Zementmörtel
+IfcPile JETGROUTING Spezialmörtel
+IfcPile SUPPORT Beton
+IfcPile SUPPORT Stahl
+
+IfcPlate BASE_PLATE Stahl
+IfcPlate BASE_PLATE Stahlguss
+IfcPlate COVER_PLATE Stahl
+IfcPlate COVER_PLATE Hochfester Stahl
+IfcPlate FLANGE_PLATE Stahl
+IfcPlate FLANGE_PLATE Hochfester Stahl
+IfcPlate GUSSET_PLATE Stahl
+IfcPlate GUSSET_PLATE Hochfester Stahl
+IfcPlate SHEET Stahlblech
+IfcPlate SHEET Aluminiumblech
+IfcPlate SPLICE_PLATE Stahl
+IfcPlate SPLICE_PLATE Hochfester Stahl
+IfcPlate STIFFENER_PLATE Stahl
+IfcPlate STIFFENER_PLATE Hochfester Stahl
+IfcPlate WEB_PLATE Stahl
+IfcPlate WEB_PLATE Hochfester Stahl
+
+IfcRail BLADE Stahl
+IfcRail BLADE Vergütungsstahl
+IfcRail CHECKRAIL Stahl
+IfcRail CHECKRAIL Hochfester Stahl
+IfcRail GUARDRAIL Stahl
+IfcRail GUARDRAIL Hochfester Stahl
+IfcRail RACKRAIL Stahl
+IfcRail RACKRAIL Vergütungsstahl
+IfcRail RAIL Stahl
+IfcRail RAIL Vergütungsstahl
+IfcRail STOCKRAIL Stahl
+IfcRail STOCKRAIL Vergütungsstahl
+
+IfcRailing BALUSTRADE Stahl
+IfcRailing BALUSTRADE Aluminium
+IfcRailing BALUSTRADE Holz
+IfcRailing FENCE Stahl
+IfcRailing FENCE Aluminium
+IfcRailing FENCE Holz
+IfcRailing FENCE Kunststoff
+IfcRailing GUARDRAIL Stahl
+IfcRailing GUARDRAIL Aluminium
+IfcRailing GUARDRAIL Holz
+IfcRailing HANDRAIL Stahl
+IfcRailing HANDRAIL Aluminium
+IfcRailing HANDRAIL Holz
+
+
+
+
+
+
+
 IfcReinforcingBar
 IfcReinforcingBar Bügel B500B
 IfcReinforcingBar Längsstab B500B
@@ -12,9 +213,7 @@ IfcReinforcingBar Wendel oben B500B
 IfcReinforcingBar Wendelbewehrung B500B
 IfcReinforcingBar Längsarmierung B500B
 
-IfcBeam GIRDER_SEGMENT Randbord Beton NPK G Test-Kommentar Ortbeton
-IfcBeam EDGEBEAM Randbord Beton NPK G Randträger bewehrt Ortbeton
-IfcBeam PIERCAP Pfahlkopf Beton NPK G Pfahlkopf-Fundament Ortbeton
+
 IfcFooting STRIP_FOOTING Fundament Beton NPK G Ausführung Pilgerschritt Ortbeton
 IfcSlab FLOOR Fahrbahnplatte Beton NPK D Brückenplatte Ortbeton
 IfcWall RETAININGWALL Widerlagerwand Nord Beton NPK G über Pfahlkopfriegel Ortbeton
