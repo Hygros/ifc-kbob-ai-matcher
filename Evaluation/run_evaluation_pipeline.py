@@ -16,11 +16,7 @@ Die eigentliche Modellbewertung passiert im Evaluator-Skript; dieses
 Pipeline-Skript kümmert sich um Dateiauswahl, Umgebungsvariablen,
 Abhängigkeits-Check und Reihenfolge der Schritte.
 
-Modi
-----
-- `decision` (Default): Ranking + Split/Kalibrator + Entscheidungsmetriken
-  (z. B. Coverage bei Zielgenauigkeit).
-- `ranking-only`: nur Rankingmetriken ohne Split/Kalibrator.
+Evaluiert werden die Ranking-Metriken: Hit@K, MRR@10, MAP@10, nDCG@10, Recall@10.
 
 Eingaben
 --------
@@ -39,11 +35,11 @@ Beispiele
 - Mit fixer Query-Quelle (TXT):
     python Evaluation/run_evaluation_pipeline.py --query-source Evaluation/exports/queries/meine_queries.txt
 
-- Vollständig mit Expected-Datei und Ranking-only:
-    python Evaluation/run_evaluation_pipeline.py --mode ranking-only --query-source <pfad> --expected-file <pfad>
+- Vollständig mit Expected-Datei:
+    python Evaluation/run_evaluation_pipeline.py --query-source <pfad> --expected-file <pfad>
 
-- Decision-Modus explizit:
-    python Evaluation/run_evaluation_pipeline.py --mode decision --query-source <pfad> --expected-file <pfad>
+- Mit Cross-Encoder-Re-Ranking konfigurieren:
+    python Evaluation/run_evaluation_pipeline.py --cross-encoder-model BAAI/bge-reranker-v2-m3 --rerank-top-n 30
 
 Ausgaben
 --------
@@ -78,7 +74,7 @@ def run_command(command: list[str], env: dict[str, str] | None = None) -> None:
 
 
 def ensure_evaluation_dependencies(env: dict[str, str]) -> None:
-    check_code = "import sentence_transformers, torch, sklearn; print('ok')"
+    check_code = "import sentence_transformers, torch; print('ok')"
     result = subprocess.run(
         [sys.executable, "-c", check_code],
         cwd=str(PROJECT_ROOT),
@@ -91,7 +87,7 @@ def ensure_evaluation_dependencies(env: dict[str, str]) -> None:
         return
 
     raise RuntimeError(
-        "Fehlende Python-Pakete für Evaluation (mindestens 'sentence-transformers', 'torch' und 'scikit-learn'). "
+        "Fehlende Python-Pakete für Evaluation (mindestens 'sentence-transformers' und 'torch'). "
         "Installiere sie z.B. mit: python -m pip install -r requirements.txt"
     )
 
@@ -117,26 +113,21 @@ def parse_args() -> argparse.Namespace:
         help="Bei .ifc beim Query-Export keinen IFC-Export ausführen, sondern vorhandene .jsonl verwenden.",
     )
     parser.add_argument(
-        "--mode",
-        choices=["ranking-only", "decision"],
-        default=None,
-        help="Evaluationsmodus: ranking-only (nur Rankingmetriken) oder decision (mit Split/Kalibrierung).",
+        "--cross-encoder-model",
+        default="BAAI/bge-reranker-v2-m3",
+        help=(
+            "Cross-Encoder-Modell für Re-Ranking in der Evaluation "
+            "(Default: BAAI/bge-reranker-v2-m3)."
+        ),
+    )
+    parser.add_argument(
+        "--rerank-top-n",
+        type=int,
+        default=30,
+        help="Anzahl Top-Kandidaten pro Query, die per Cross-Encoder neu sortiert werden (Default: 30).",
     )
     return parser.parse_args()
 
-
-def select_mode_interactively() -> str:
-    print("\nWähle Evaluationsmodus:")
-    print("    1: decision (Ranking + Split/Kalibrierung + Decision-Metriken)")
-    print("    2: ranking-only (nur Rankingmetriken, ohne Kalibrierung)")
-
-    while True:
-        user_input = input("Modus wählen [1/2] (Enter = 1): ").strip().lower()
-        if not user_input or user_input in {"1", "decision", "d"}:
-            return "decision"
-        if user_input in {"2", "ranking-only", "ranking", "r"}:
-            return "ranking-only"
-        print("Ungültige Eingabe. Bitte 1 oder 2 eingeben.")
 
 
 def iter_project_files() -> list[Path]:
@@ -206,16 +197,14 @@ def select_query_source_interactively() -> Path | None:
         print(f"Bitte eine Nummer zwischen 1 und {len(candidates)} wählen.")
 
 
-def select_expected_file_interactively() -> Path | None:
-    ask = input("Expected-Material-Datei (.txt) auswählen? [j/N]: ").strip().lower()
-    if ask not in {"j", "ja", "y", "yes"}:
-        return None
-
+def select_expected_file_interactively() -> Path:
     print(f"Suche TXT-Dateien in {EXPECTED_MATERIAL_DIR.relative_to(PROJECT_ROOT)} ...", flush=True)
     candidates = find_txt_candidates()
     if not candidates:
-        print(f"Keine .txt Dateien in {EXPECTED_MATERIAL_DIR.relative_to(PROJECT_ROOT)} gefunden.")
-        return None
+        raise FileNotFoundError(
+            f"Keine .txt Dateien in {EXPECTED_MATERIAL_DIR.relative_to(PROJECT_ROOT)} gefunden. "
+            "Eine Expected-Material-Datei ist erforderlich."
+        )
 
     print("\nWähle eine Expected-Material-Datei (.txt):")
     for idx, candidate in enumerate(candidates, start=1):
@@ -223,9 +212,7 @@ def select_expected_file_interactively() -> Path | None:
         print(f"  {idx:>3}: {rel}")
 
     while True:
-        user_input = input("Nummer eingeben (Enter = ohne Auswahl): ").strip()
-        if not user_input:
-            return None
+        user_input = input("Nummer eingeben: ").strip()
         if not user_input.isdigit():
             print("Ungültige Eingabe. Bitte nur eine Nummer eingeben.")
             continue
@@ -273,7 +260,9 @@ def resolve_query_file(args: argparse.Namespace) -> Path | None:
 
 def main() -> None:
     args = parse_args()
-    selected_mode = args.mode or select_mode_interactively()
+
+    if args.rerank_top_n <= 0:
+        raise ValueError("--rerank-top-n muss > 0 sein.")
 
     for script in (EXPORT_SCRIPT, EVALUATE_SCRIPT, REPORT_SCRIPT):
         if not script.is_file():
@@ -296,14 +285,16 @@ def main() -> None:
     else:
         expected_file = select_expected_file_interactively()
 
-    if expected_file is not None:
-        env["SBERT_EXPECTED_FILE"] = str(expected_file)
-        print(f"Using SBERT_EXPECTED_FILE={expected_file}")
-    env["EVAL_MODE"] = selected_mode
-    print(f"Using EVAL_MODE={selected_mode}")
+    env["SBERT_EXPECTED_FILE"] = str(expected_file)
+    print(f"Using SBERT_EXPECTED_FILE={expected_file}")
+
+    env["SBERT_CROSS_ENCODER_MODEL"] = str(args.cross_encoder_model).strip()
+    env["SBERT_RERANK_TOP_N"] = str(int(args.rerank_top_n))
+    print(f"Using SBERT_CROSS_ENCODER_MODEL={env['SBERT_CROSS_ENCODER_MODEL']}")
+    print(f"Using SBERT_RERANK_TOP_N={env['SBERT_RERANK_TOP_N']}")
 
     ensure_evaluation_dependencies(env)
-    run_command([sys.executable, str(EVALUATE_SCRIPT), "--mode", selected_mode], env=env)
+    run_command([sys.executable, str(EVALUATE_SCRIPT)], env=env)
     run_command([sys.executable, str(REPORT_SCRIPT)], env=env)
 
     print("\nEvaluation-Pipeline abgeschlossen.")

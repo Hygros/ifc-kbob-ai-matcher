@@ -63,13 +63,13 @@ Hartbeton einschichtig;Hartbeton zweischichtig;Tiefbaubeton
 Kies gebrochen; Rundkies
 Kies gebrochen
 
-Stahlblech
+Stahlblech blank;Stahlblech verzinkt
 Faserzementplatte
 Betonfertigteil normalfest
 Kalksteinplatte;Hartsandsteinplatte;Natursteinplatte geschliffen
-Dichtungsbahn bituminös;Polyethylenfolie PE
-Dichtungsbahn bituminös;Heissbitumen
-Baukleber Einbettmörtel mineralisch;Zementputz
+Dichtungsbahn bituminös;Polyethylenfolie PE;Heissbitumen;Dichtungsbahn Gummi EPDM;Dichtungsbahn Polyolefin FPO;2K-Fliessbelag Epoxidharz;Bitumenemulsion
+Dichtungsbahn bituminös;Heissbitumen;Bitumenemulsion
+Baukleber Einbettmörtel mineralisch
 Polyethylenfolie PE;Polyethylenvlies PE;Polyethylen PE
 
 Tiefbaubeton
@@ -135,19 +135,19 @@ Kies gebrochen
 
 Bohrpfahlbeton;Tiefgründung Mikrobohrpfahl;Tiefgründung Ortbetonbohrpfahl 700;Tiefgründung Ortbetonbohrpfahl 900;Tiefgründung Ortbetonbohrpfahl 1200
 Bohrpfahlbeton;Tiefgründung Mikrobohrpfahl;Tiefgründung Ortbetonbohrpfahl 700;Tiefgründung Ortbetonbohrpfahl 900;Tiefgründung Ortbetonbohrpfahl 1200
-Stahlprofil blank,Stahlblech blank
+Stahlprofil blank;Stahlblech blank
 Tiefbaubeton;Bohrpfahlbeton
 Tiefbaubeton;Bohrpfahlbeton;Baukleber Einbettmörtel mineralisch
-Stahlprofil blank,Stahlblech blank
+Stahlprofil blank;Stahlblech blank
 Tiefgründung Vorgefertigter Betonpfahl;Betonfertigteil hochfest;Betonfertigteil normalfest;Tiefbaubeton
 Tiefgründung Vorgefertigter Betonpfahl;Betonfertigteil hochfest;Betonfertigteil normalfest;Tiefbaubeton
 Tiefgründung Vorgefertigter Betonpfahl;Betonfertigteil hochfest;Betonfertigteil normalfest;Tiefbaubeton
-Stahlprofil blank,Stahlblech blank
+Stahlprofil blank;Stahlblech blank
 Baukleber Einbettmörtel mineralisch;Tiefbaubeton;Bohrpfahlbeton
 Baukleber Einbettmörtel mineralisch;Tiefbaubeton;Bohrpfahlbeton
 Baukleber Einbettmörtel mineralisch;Tiefbaubeton;Bohrpfahlbeton
 Tiefbaubeton;Bohrpfahlbeton
-Stahlprofil blank,Stahlblech blank
+Stahlprofil blank;Stahlblech blank
 
 Stahlblech blank;Stahlblech verzinkt
 Stahlblech blank;Stahlblech verzinkt
@@ -181,33 +181,94 @@ Stahlprofil blank
 
 Stahlblech verzinkt;Stahlprofil blank;Stahlblech blank
 Aluminiumblech blank
-Konstruktionsvollholz;Massivholz Buche Eiche kammergetrocknet gehobelt;Massivholz Buche Eiche kammergetrocknet rau;Massivholz Buche Eiche luftgetrocknet rau;Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt;
-Massivholz Fichte Tanne Lärche luftgetrocknet rau
+Konstruktionsvollholz;Massivholz Buche Eiche kammergetrocknet gehobelt;Massivholz Buche Eiche kammergetrocknet rau;Massivholz Buche Eiche luftgetrocknet rau;Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet rau
 Stahlblech verzinkt;Stahlprofil blank;Stahlblech blank
 Aluminiumblech blank
-Konstruktionsvollholz;Massivholz Buche Eiche kammergetrocknet gehobelt;Massivholz Buche Eiche kammergetrocknet rau;Massivholz Buche Eiche luftgetrocknet rau;Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt;
-Massivholz Fichte Tanne Lärche luftgetrocknet rau
+Konstruktionsvollholz;Massivholz Buche Eiche kammergetrocknet gehobelt;Massivholz Buche Eiche kammergetrocknet rau;Massivholz Buche Eiche luftgetrocknet rau;Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet rau
 Polyethylen PE;Polypropylen PP;Polyvinylchlorid PVC
 Stahlblech verzinkt;Stahlprofil blank;Stahlblech blank
 Aluminiumblech blank
-Konstruktionsvollholz;Massivholz Buche Eiche kammergetrocknet gehobelt;Massivholz Buche Eiche kammergetrocknet rau;Massivholz Buche Eiche luftgetrocknet rau;Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt;
-Massivholz Fichte Tanne Lärche luftgetrocknet rau
+Konstruktionsvollholz;Massivholz Buche Eiche kammergetrocknet gehobelt;Massivholz Buche Eiche kammergetrocknet rau;Massivholz Buche Eiche luftgetrocknet rau;Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet rau
 Stahlblech verzinkt;Stahlprofil blank;Stahlblech blank
 Aluminiumblech blank
-Konstruktionsvollholz;Massivholz Buche Eiche kammergetrocknet gehobelt;Massivholz Buche Eiche kammergetrocknet rau;Massivholz Buche Eiche luftgetrocknet rau;Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt;
-Massivholz Fichte Tanne Lärche luftgetrocknet rau
+Konstruktionsvollholz;Massivholz Buche Eiche kammergetrocknet gehobelt;Massivholz Buche Eiche kammergetrocknet rau;Massivholz Buche Eiche luftgetrocknet rau;Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet rau
 
+Tiefbaubeton
+Tiefbaubeton
+Tiefbaubeton
+Tiefbaubeton
+Tiefbaubeton
+Tiefbaubeton
+Tiefbaubeton
+Tiefbaubeton
+Tiefbaubeton
+Tiefbaubeton
+Tiefbaubeton
+Tiefbaubeton
 
+Armierungsstahl
+Armierungsstahl
+Armierungsstahl
+Armierungsstahl
+Armierungsstahl
+Armierungsstahl
+Armierungsstahl
+Armierungsstahl
 
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Polyethylen PE;Polypropylen PP;Polycarbonat PC;Polyvinylchlorid PVC;Polyamid PA glasfaserverstärkt;Polyester UP glasfaserverstärkt
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Polyethylen PE;Polypropylen PP;Polycarbonat PC;Polyvinylchlorid PVC;Polyamid PA glasfaserverstärkt;Polyester UP glasfaserverstärkt
+Polyethylen PE;Polypropylen PP;Polycarbonat PC;Polyvinylchlorid PVC;Polyamid PA glasfaserverstärkt;Polyester UP glasfaserverstärkt
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Polyethylen PE;Polypropylen PP;Polycarbonat PC;Polyvinylchlorid PVC;Polyamid PA glasfaserverstärkt;Polyester UP glasfaserverstärkt
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
 
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Aluminiumprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Aluminiumprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Tiefbaubeton;Betonfertigteil normalfest;Betonfertigteil hochfest
+Tiefbaubeton;Betonfertigteil normalfest;Betonfertigteil hochfest
+Konstruktionsvollholz;Massivholz Buche Eiche kammergetrocknet gehobelt;Massivholz Buche Eiche kammergetrocknet rau;Massivholz Buche Eiche luftgetrocknet rau;Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt;Massivholz Fichte Tanne Lärche luftgetrocknet rau
+Polyethylen PE;Polypropylen PP;Polycarbonat PC;Polyvinylchlorid PVC;Polyamid PA glasfaserverstärkt;Polyester UP glasfaserverstärkt
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Aluminiumprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Aluminiumprofil blank
+Tiefbaubeton;Betonfertigteil normalfest;Betonfertigteil hochfest
+Stahlblech blank;Stahlblech verzinkt;Stahlprofil blank
+Tiefbaubeton;Betonfertigteil normalfest;Betonfertigteil hochfest
+Dichtungsbahn Gummi EPDM
 
-
-
-
-
-
-
-
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Baugrubensicherung Bohrpfahlwand gespriesst;Baugrubensicherung Bohrpfahlwand unverankert;Baugrubensicherung Bohrpfahlwand verankert
+Tiefbaubeton;Baugrubensicherung Bohrpfahlwand gespriesst;Baugrubensicherung Bohrpfahlwand unverankert;Baugrubensicherung Bohrpfahlwand verankert
+Tiefbaubeton;Baugrubensicherung Nagelwand
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
+Tiefbaubeton;Betonfertigteil hochfest;Betonfertigteil normalfest
 
 Armierungsstahl
 Armierungsstahl
@@ -222,7 +283,6 @@ Armierungsstahl
 Armierungsstahl
 Armierungsstahl
 Armierungsstahl
-
 
 Tiefbaubeton
 Tiefbaubeton

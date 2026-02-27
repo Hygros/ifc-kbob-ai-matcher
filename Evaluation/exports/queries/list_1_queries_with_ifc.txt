@@ -1,17 +1,17 @@
 IfcBeam GIRDER_SEGMENT Randbord Beton NPK G Test-Kommentar Ortbeton
 IfcBeam EDGEBEAM Randbord Beton NPK G Randträger bewehrt Ortbeton
 IfcBeam PIERCAP Pfahlkopf Beton NPK G Pfahlkopf-Fundament Ortbeton
-IfcBeam	BEAM Beton
-IfcBeam	CORNICE Beton
-IfcBeam	DIAPHRAGM Beton
-IfcBeam	EDGEBEAM Beton
-IfcBeam	GIRDER_SEGMENT Beton
-IfcBeam	HATSTONE Beton
-IfcBeam	HOLLOWCORE Beton
-IfcBeam	JOIST Beton
-IfcBeam	PIERCAP Beton
-IfcBeam	SPANDREL Beton
-IfcBeam	T_BEAM Beton
+IfcBeam BEAM Beton
+IfcBeam CORNICE Beton
+IfcBeam DIAPHRAGM Beton
+IfcBeam EDGEBEAM Beton
+IfcBeam GIRDER_SEGMENT Beton
+IfcBeam HATSTONE Beton
+IfcBeam HOLLOWCORE Beton
+IfcBeam JOIST Beton
+IfcBeam PIERCAP Beton
+IfcBeam SPANDREL Beton
+IfcBeam T_BEAM Beton
 
 IfcBearing CYLINDRICAL S235JR
 IfcBearing CYLINDRICAL Stahl
@@ -193,11 +193,82 @@ IfcRailing HANDRAIL Stahl
 IfcRailing HANDRAIL Aluminium
 IfcRailing HANDRAIL Holz
 
+IfcRamp HALF_TURN_RAMP Beton
+IfcRamp HALF_TURN_RAMP Stahlbeton
+IfcRamp QUARTER_TURN_RAMP Beton
+IfcRamp QUARTER_TURN_RAMP Stahlbeton
+IfcRamp SPIRAL_RAMP Beton
+IfcRamp SPIRAL_RAMP Stahlbeton
+IfcRamp STRAIGHT_RUN_RAMP Beton
+IfcRamp STRAIGHT_RUN_RAMP Stahlbeton
+IfcRamp TWO_QUARTER_TURN_RAMP Beton
+IfcRamp TWO_QUARTER_TURN_RAMP Stahlbeton
+IfcRamp TWO_STRAIGHT_RUN_RAMP Beton
+IfcRamp TWO_STRAIGHT_RUN_RAMP Stahlbeton
 
+IfcTendon BAR Stahl
+IfcTendon BAR Vergütungsstahl
+IfcTendon COATED Stahl mit Korrosionsschutz
+IfcTendon COATED Vergütungsstahl beschichtet
+IfcTendon STRAND Litze
+IfcTendon STRAND Spannstahl
+IfcTendon WIRE Draht
+IfcTendon WIRE Spannstahl
 
+IfcTendonConduit COUPLER Stahl
+IfcTendonConduit COUPLER Vergütungsstahl
+IfcTendonConduit COUPLER Kunststoff
+IfcTendonConduit DIABOLO Stahl
+IfcTendonConduit DIABOLO Vergütungsstahl
+IfcTendonConduit DIABOLO Kunststoff
+IfcTendonConduit DUCT Kunststoff
+IfcTendonConduit DUCT Stahl
+IfcTendonConduit GROUTING_DUCT Kunststoff
+IfcTendonConduit GROUTING_DUCT Stahl
+IfcTendonConduit TRUMPET Stahl
+IfcTendonConduit TRUMPET Vergütungsstahl
 
+IfcTrackElement BLOCKINGDEVICE Stahl
+IfcTrackElement BLOCKINGDEVICE Aluminium
+IfcTrackElement BLOCKINGDEVICE Stahlguss
+IfcTrackElement DERAILER Stahl
+IfcTrackElement DERAILER Aluminium
+IfcTrackElement DERAILER Stahlguss
+IfcTrackElement FROG Stahl
+IfcTrackElement FROG Manganhartstahl
+IfcTrackElement FROG Vergütungsstahl
+IfcTrackElement HALF_SET_OF_BLADES Stahl
+IfcTrackElement HALF_SET_OF_BLADES Vergütungsstahl
+IfcTrackElement HALF_SET_OF_BLADES Manganhartstahl
+IfcTrackElement SLEEPER Beton
+IfcTrackElement SLEEPER Stahlbeton
+IfcTrackElement SLEEPER Holz
+IfcTrackElement SLEEPER Kunststoff
+IfcTrackElement SPEEDREGULATOR Stahl
+IfcTrackElement SPEEDREGULATOR Aluminium
+IfcTrackElement SPEEDREGULATOR Stahlguss
+IfcTrackElement TRACKENDOFALIGNMENT Stahl
+IfcTrackElement TRACKENDOFALIGNMENT Aluminium
+IfcTrackElement TRACKENDOFALIGNMENT Beton
+IfcTrackElement VEHICLESTOP Stahl
+IfcTrackElement VEHICLESTOP Beton
+IfcTrackElement VEHICLESTOP Gummipuffer
 
-
+IfcWall PARAPET Beton
+IfcWall PARAPET Stahlbeton
+IfcWall POLYGONAL Beton
+IfcWall POLYGONAL Stahlbeton
+IfcWall RETAININGWALL Beton
+IfcWall RETAININGWALL Stahlbeton
+IfcWall RETAININGWALL Spritzbeton
+IfcWall SHEAR Stahlbeton
+IfcWall SHEAR Beton
+IfcWall SOLIDWALL Beton
+IfcWall SOLIDWALL Stahlbeton
+IfcWall STANDARD Beton
+IfcWall STANDARD Stahlbeton
+IfcWall WAVEWALL Beton
+IfcWall WAVEWALL Stahlbeton
 
 IfcReinforcingBar
 IfcReinforcingBar Bügel B500B
@@ -212,7 +283,6 @@ IfcReinforcingBar Wendel mitte B500B
 IfcReinforcingBar Wendel oben B500B
 IfcReinforcingBar Wendelbewehrung B500B
 IfcReinforcingBar Längsarmierung B500B
-
 
 IfcFooting STRIP_FOOTING Fundament Beton NPK G Ausführung Pilgerschritt Ortbeton
 IfcSlab FLOOR Fahrbahnplatte Beton NPK D Brückenplatte Ortbeton

@@ -1,6 +1,6 @@
 ## Evaluation Report
 
-Generated: 2026-02-23 11:15:02
+Generated: 2026-02-26 15:39:54
 
 ### Inputs
 - Summary CSV: `summary_list_1_queries_without_ifc.csv`
@@ -11,29 +11,29 @@ Generated: 2026-02-23 11:15:02
 
 ### Leaderboard
 
-| Rank | Model | Top1 | Top5 | Top10 | MRR | MAP@10 | nDCG@10 | Cov@95% (margin) | Avg expected score | Top1 errors |
-|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | intfloat/multilingual-e5-base | 25.0% | 25.0% | 25.0% | 0.269 | 0.250 | 0.250 | 17.9% | 0.824 | 21 |
-| 2 | google/embeddinggemma-300m | 25.0% | 32.1% | 42.9% | 0.300 | 0.273 | 0.308 | 7.1% | 0.496 | 21 |
-| 3 | sentence-transformers/LaBSE | 21.4% | 25.0% | 32.1% | 0.271 | 0.241 | 0.259 | 10.7% | 0.353 | 22 |
-| 4 | intfloat/multilingual-e5-large | 21.4% | 28.6% | 28.6% | 0.269 | 0.238 | 0.254 | 10.7% | 0.833 | 22 |
-| 5 | sentence-transformers/distiluse-base-multilingual-cased-v2 | 21.4% | 35.7% | 35.7% | 0.274 | 0.260 | 0.285 | 7.1% | 0.291 | 22 |
-| 6 | BAAI/bge-m3 | 17.9% | 32.1% | 39.3% | 0.277 | 0.249 | 0.285 | 10.7% | 0.494 | 23 |
-| 7 | google-bert/bert-base-multilingual-uncased | 7.1% | 25.0% | 42.9% | 0.148 | 0.121 | 0.196 | 0.0% | 0.615 | 26 |
-| 8 | sentence-transformers/paraphrase-multilingual-mpnet-base-v2 | 7.1% | 17.9% | 21.4% | 0.134 | 0.118 | 0.137 | 0.0% | 0.474 | 26 |
-| 9 | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | 3.6% | 32.1% | 39.3% | 0.176 | 0.167 | 0.223 | 0.0% | 0.390 | 27 |
-| 10 | google-bert/bert-base-multilingual-cased | 3.6% | 25.0% | 25.0% | 0.148 | 0.125 | 0.157 | 0.0% | 0.581 | 27 |
-| 11 | google-bert/bert-base-german-cased | 0.0% | 21.4% | 25.0% | 0.089 | 0.081 | 0.122 | 0.0% | 0.773 | 28 |
-| 12 | kforth/IfcMaterial2MP | 0.0% | 10.7% | 14.3% | 0.077 | 0.041 | 0.066 | 0.0% | 0.488 | 28 |
-| 13 | kforth/IfcElement2ConstructionSets | 0.0% | 7.1% | 10.7% | 0.048 | 0.017 | 0.034 | 0.0% | 0.728 | 28 |
+| Rank | Model | Hit@1 | Hit@5 | Hit@10 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 | Avg expected score | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI | Top1 errors |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---:|
+| 1 | BAAI/bge-m3 | 32.26% | 64.87% | 73.12% | 0.450 | 0.387 | 0.465 | 0.623 | 0.552 | [0.272, 0.380] | [0.676, 0.785] | [0.407, 0.496] | [0.422, 0.514] | 189 |
+| 2 | google/embeddinggemma-300m | 31.54% | 69.18% | 85.30% | 0.469 | 0.400 | 0.518 | 0.780 | 0.595 | [0.262, 0.375] | [0.810, 0.896] | [0.428, 0.517] | [0.479, 0.562] | 191 |
+| 3 | intfloat/multilingual-e5-large | 28.67% | 59.14% | 70.61% | 0.411 | 0.361 | 0.443 | 0.619 | 0.852 | [0.237, 0.344] | [0.654, 0.763] | [0.365, 0.468] | [0.402, 0.496] | 199 |
+| 4 | sentence-transformers/LaBSE | 28.32% | 53.41% | 60.22% | 0.396 | 0.344 | 0.406 | 0.512 | 0.504 | [0.233, 0.337] | [0.538, 0.667] | [0.346, 0.453] | [0.359, 0.457] | 200 |
+| 5 | sentence-transformers/distiluse-base-multilingual-cased-v2 | 26.16% | 51.25% | 58.42% | 0.366 | 0.284 | 0.364 | 0.503 | 0.582 | [0.219, 0.315] | [0.525, 0.638] | [0.319, 0.416] | [0.320, 0.409] | 206 |
+| 6 | intfloat/multilingual-e5-base | 26.16% | 48.03% | 60.57% | 0.358 | 0.307 | 0.370 | 0.499 | 0.860 | [0.217, 0.319] | [0.550, 0.670] | [0.314, 0.411] | [0.325, 0.419] | 206 |
+| 7 | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | 14.34% | 33.69% | 50.90% | 0.235 | 0.170 | 0.243 | 0.380 | 0.590 | [0.108, 0.183] | [0.450, 0.565] | [0.197, 0.277] | [0.210, 0.280] | 239 |
+| 8 | google-bert/bert-base-multilingual-cased | 12.19% | 25.81% | 38.35% | 0.190 | 0.137 | 0.185 | 0.277 | 0.610 | [0.086, 0.158] | [0.335, 0.448] | [0.153, 0.228] | [0.151, 0.219] | 245 |
+| 9 | kforth/IfcMaterial2MP | 11.11% | 43.37% | 61.29% | 0.249 | 0.174 | 0.256 | 0.416 | 0.597 | [0.075, 0.154] | [0.559, 0.672] | [0.211, 0.290] | [0.222, 0.290] | 248 |
+| 10 | google-bert/bert-base-multilingual-uncased | 10.39% | 32.97% | 48.39% | 0.192 | 0.130 | 0.197 | 0.329 | 0.703 | [0.070, 0.142] | [0.427, 0.541] | [0.157, 0.229] | [0.164, 0.228] | 250 |
+| 11 | sentence-transformers/paraphrase-multilingual-mpnet-base-v2 | 4.66% | 20.43% | 40.50% | 0.125 | 0.096 | 0.155 | 0.290 | 0.645 | [0.022, 0.072] | [0.348, 0.464] | [0.101, 0.152] | [0.130, 0.185] | 266 |
+| 12 | google-bert/bert-base-german-cased | 0.36% | 5.73% | 7.89% | 0.022 | 0.016 | 0.028 | 0.053 | 0.842 | [0.000, 0.011] | [0.050, 0.111] | [0.013, 0.034] | [0.017, 0.041] | 278 |
+| 13 | kforth/IfcElement2ConstructionSets | 0.00% | 3.23% | 6.81% | 0.016 | 0.008 | 0.017 | 0.031 | 0.980 | [0.000, 0.000] | [0.043, 0.102] | [0.008, 0.025] | [0.009, 0.026] | 279 |
 
-Anzahl Queries: 28
+Anzahl Queries: 279
 
 ### Hardest Queries
 Queries mit den meisten Top1-Fehlern über alle Modelle:
 
-- (13 Fehler) ReinforcingBar Bügel B500B
-- (13 Fehler) ReinforcingBar Längsstab B500B
-- (13 Fehler) ReinforcingBar SHEAR Bügel B500B
-- (13 Fehler) ReinforcingBar MAIN 1. Lage B500B
-- (13 Fehler) ReinforcingBar unterer Stab B500B
+- (13 Fehler) Beam GIRDER_SEGMENT Randbord Beton NPK G Test-Kommentar Ortbeton
+- (13 Fehler) Beam EDGEBEAM Randbord Beton NPK G Randträger bewehrt Ortbeton
+- (13 Fehler) Beam PIERCAP Pfahlkopf Beton NPK G Pfahlkopf-Fundament Ortbeton
+- (13 Fehler) Beam BEAM Beton
+- (13 Fehler) Beam CORNICE Beton

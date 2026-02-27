@@ -1,4 +1,3 @@
-import argparse
 import csv
 import math
 import os
@@ -11,21 +10,47 @@ from typing import Dict, List, Sequence, Tuple
 import numpy as np
 import pandas as pd
 import torch
-from sentence_transformers import SentenceTransformer
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from retrieval_metrics import (
-    best_threshold_for_target_accuracy,
-    binary_ranking_metrics_at_10,
-    coverage_at_target_accuracy,
-    risk_coverage_curve,
-)
+from retrieval_metrics import binary_ranking_metrics_at_10
 
 
-DATABASE_PATH = r"C:\Users\wpx619\AAA_Python_MTH\Ökobilanzdaten.sqlite3"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+
+def resolve_database_path(project_root: Path) -> Path:
+    """Resolve the KBOB/Ökobilanz SQLite DB path.
+
+    Azure/CI/Linux runs must not depend on a developer-specific absolute path.
+
+    Resolution order:
+    1) Env var `KBOB_DB_PATH` (or `ECOBILANZ_DB_PATH`)
+    2) `<project_root>/Ökobilanzdaten.sqlite3`
+    3) `<project_root>/../Ökobilanzdaten.sqlite3` (legacy layout)
+    """
+
+    for env_var in ("KBOB_DB_PATH", "ECOBILANZ_DB_PATH"):
+        raw = os.environ.get(env_var, "").strip()
+        if raw:
+            candidate = Path(raw).expanduser().resolve()
+            if candidate.is_file():
+                return candidate
+
+    candidates = [
+        (project_root / "Ökobilanzdaten.sqlite3").resolve(),
+        (project_root.parent / "Ökobilanzdaten.sqlite3").resolve(),
+    ]
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate
+
+    searched = "\n".join(f"- {p}" for p in candidates)
+    raise FileNotFoundError(
+        "Ökobilanzdaten.sqlite3 nicht gefunden. "
+        "Lege die DB ins Projektverzeichnis oder setze die Umgebungsvariable KBOB_DB_PATH.\n"
+        "Gesucht in:\n"
+        f"{searched}"
+    )
 TABLE_NAME = "Oekobilanzdaten"
 COLUMN_MATERIAL = "Material"
 
@@ -49,19 +74,20 @@ TOP_K = 10
 SBERT_DEVICE = os.environ.get("SBERT_DEVICE", "").strip().lower()
 SBERT_QUERY_FILE = os.environ.get("SBERT_QUERY_FILE", "").strip()
 SBERT_EXPECTED_FILE = os.environ.get("SBERT_EXPECTED_FILE", "").strip()
-EVAL_MODE_ENV = os.environ.get("EVAL_MODE", "decision").strip().lower()
+SBERT_CROSS_ENCODER_MODEL = os.environ.get("SBERT_CROSS_ENCODER_MODEL", "BAAI/bge-reranker-v2-m3").strip()
+SBERT_RERANK_TOP_N = int(os.environ.get("SBERT_RERANK_TOP_N", "30"))
+SBERT_CROSS_ENCODER_REVISION = os.environ.get("SBERT_CROSS_ENCODER_REVISION", "").strip() or None
 
-SPLIT_RANDOM_SEED = int(os.environ.get("EVAL_SPLIT_SEED", "42"))
 BOOTSTRAP_SAMPLES = int(os.environ.get("EVAL_BOOTSTRAP_SAMPLES", "300"))
-DEFAULT_ACCEPTANCE_TARGET = float(os.environ.get("EVAL_ACCEPT_TARGET", "0.95"))
-COVERAGE_TARGETS = [0.90, 0.95, 0.97, 0.99]
+BOOTSTRAP_SEED = 42
 
 DEFAULT_QUERY_FILE_RELATIVE = Path("static") / "Bohrpfahl_4.3_sbert_queries.txt"
 DEFAULT_EVALUATION_OUTPUT_RELATIVE = Path("Evaluation") / "exports" / "model_evaluation"
 
 DEFAULT_EXPECTED_MATERIAL = "Tiefgründung Ortbetonbohrpfahl 900"
 EXPECTED_BY_QUERY_OVERRIDES: Dict[str, str] = {}
-EVAL_MODES = {"ranking-only", "decision"}
+
+_global_cross_encoder_models: dict[tuple[str, str], CrossEncoder] = {}
 
 
 @dataclass
@@ -72,24 +98,12 @@ class EvaluationCase:
 
 @dataclass
 class PerModelResult:
-    summary: Dict[str, str]
+    summaries: List[Dict[str, str]]
     details: List[Dict[str, str]]
 
 
 def normalize(text: str) -> str:
     return " ".join(text.casefold().split())
-
-
-def parse_args() -> argparse.Namespace:
-    default_mode = EVAL_MODE_ENV if EVAL_MODE_ENV in EVAL_MODES else "decision"
-    parser = argparse.ArgumentParser(description="Evaluate embedding retrieval models.")
-    parser.add_argument(
-        "--mode",
-        choices=sorted(EVAL_MODES),
-        default=default_mode,
-        help="ranking-only: nur Rankingmetriken; decision: zusätzlich Kalibrierung/Split/Auto-Decision.",
-    )
-    return parser.parse_args()
 
 
 def fetch_materials_from_db(connection: sqlite3.Connection) -> List[str]:
@@ -254,164 +268,82 @@ def load_or_save_model(model_name: str, project_root: Path, device: str) -> Sent
     return model
 
 
-def safe_std(values: np.ndarray) -> float:
-    std = float(np.std(values))
-    return std if std > 1e-12 else 1e-12
+def _normalize_cross_encoder_scores(raw_scores: np.ndarray) -> list[float]:
+    scores = np.array(raw_scores)
+
+    if scores.ndim == 1:
+        return (1.0 / (1.0 + np.exp(-scores))).tolist()
+
+    if scores.ndim == 2:
+        n_classes = scores.shape[1]
+        exp_s = np.exp(scores - scores.max(axis=1, keepdims=True))
+        probs = exp_s / exp_s.sum(axis=1, keepdims=True)
+        return probs[:, n_classes - 1].tolist()
+
+    s_min, s_max = scores.min(), scores.max()
+    return ((scores - s_min) / (s_max - s_min + 1e-8)).tolist()
 
 
-def entropy_from_top_scores(top_scores: np.ndarray) -> float:
-    shifted = top_scores - np.max(top_scores)
-    probs = np.exp(shifted)
-    probs_sum = float(np.sum(probs))
-    if probs_sum <= 0:
-        return 0.0
-    probs = probs / probs_sum
-    entropy = -float(np.sum(probs * np.log(probs + 1e-12)))
-    return entropy
+def load_or_get_cross_encoder(model_name: str, project_root: Path, device: str) -> CrossEncoder:
+    key = (model_name, device)
+    if key in _global_cross_encoder_models:
+        return _global_cross_encoder_models[key]
+
+    save_path = project_root / "models" / "cross-encoder" / model_name.replace("/", "_")
+    if save_path.exists() and any(save_path.iterdir()):
+        ce = CrossEncoder(
+            str(save_path),
+            device=device,
+            trust_remote_code=True,
+            revision=SBERT_CROSS_ENCODER_REVISION,
+        )
+    else:
+        ce = CrossEncoder(
+            model_name,
+            device=device,
+            trust_remote_code=True,
+            revision=SBERT_CROSS_ENCODER_REVISION,
+        )
+        save_path.mkdir(parents=True, exist_ok=True)
+        ce.save(str(save_path))
+
+    _global_cross_encoder_models[key] = ce
+    return ce
 
 
-def extract_confidence_features(scores: np.ndarray, ranked_indices: Sequence[int]) -> Dict[str, float]:
-    s1 = float(scores[ranked_indices[0]])
-    s2 = float(scores[ranked_indices[1]]) if len(ranked_indices) > 1 else s1
-    s5 = float(scores[ranked_indices[4]]) if len(ranked_indices) > 4 else float(scores[ranked_indices[-1]])
+def rerank_query_indices(
+    query: str,
+    ranked_indices: Sequence[int],
+    materials: Sequence[str],
+    rerank_top_n: int,
+    cross_encoder: CrossEncoder,
+) -> Tuple[List[int], Dict[int, float]]:
+    prefix_n = min(rerank_top_n, len(ranked_indices))
+    if prefix_n <= 0:
+        return list(ranked_indices), {}
 
-    gap12 = s1 - s2
-    gap1_5 = s1 - s5
-    mean_all = float(np.mean(scores))
-    std_all = safe_std(scores)
-    z1 = (s1 - mean_all) / std_all
-    z_gap = gap12 / std_all
+    prefix_indices = list(ranked_indices[:prefix_n])
+    cross_input = [[query, materials[int(idx)]] for idx in prefix_indices]
+    raw_scores = cross_encoder.predict(cross_input, apply_softmax=False)
+    normalized_scores = _normalize_cross_encoder_scores(np.array(raw_scores))
 
-    top10_indices = list(ranked_indices[:10])
-    top10_scores = np.array([scores[i] for i in top10_indices], dtype=float)
-    entropy_top10 = entropy_from_top_scores(top10_scores)
+    scored = list(zip(prefix_indices, normalized_scores))
+    scored.sort(key=lambda item: item[1], reverse=True)
 
-    return {
-        "s1": s1,
-        "s2": s2,
-        "gap12": gap12,
-        "gap1_5": gap1_5,
-        "mean90": mean_all,
-        "std90": std_all,
-        "z1": z1,
-        "z_gap": z_gap,
-        "entropy_top10": entropy_top10,
-    }
+    reranked_prefix = [idx for idx, _ in scored]
+    reranked_full = reranked_prefix + list(ranked_indices[prefix_n:])
+    score_overrides = {int(idx): float(score) for idx, score in zip(prefix_indices, normalized_scores)}
+    return reranked_full, score_overrides
 
-
-def split_indices_train_val_test(y: np.ndarray, random_state: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    def can_use_stratify(labels: np.ndarray) -> bool:
-        if len(labels) < 4:
-            return False
-        values, counts = np.unique(labels, return_counts=True)
-        if len(values) < 2:
-            return False
-        return int(np.min(counts)) >= 2
-
-    def safe_split(
-        indices: np.ndarray,
-        labels: np.ndarray,
-        test_size: float,
-        seed: int,
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        stratify = labels if can_use_stratify(labels) else None
-        try:
-            first, second = train_test_split(
-                indices,
-                test_size=test_size,
-                random_state=seed,
-                stratify=stratify,
-            )
-            return np.array(first), np.array(second)
-        except ValueError:
-            first, second = train_test_split(
-                indices,
-                test_size=test_size,
-                random_state=seed,
-                stratify=None,
-            )
-            return np.array(first), np.array(second)
-
-    n = len(y)
-    all_idx = np.arange(n)
-
-    if n < 10:
-        train_end = max(1, int(0.6 * n))
-        val_end = max(train_end + 1, int(0.8 * n)) if n > 2 else n
-        train_idx = all_idx[:train_end]
-        val_idx = all_idx[train_end:val_end]
-        test_idx = all_idx[val_end:]
-        if len(test_idx) == 0:
-            test_idx = val_idx
-        if len(val_idx) == 0:
-            val_idx = train_idx
-        return train_idx, val_idx, test_idx
-
-    train_idx, temp_idx = safe_split(
-        indices=all_idx,
-        labels=y,
-        test_size=0.4,
-        seed=random_state,
-    )
-
-    y_temp = y[temp_idx]
-    val_idx, test_idx = safe_split(
-        indices=temp_idx,
-        labels=y_temp,
-        test_size=0.5,
-        seed=random_state + 1,
-    )
-
-    return np.array(train_idx), np.array(val_idx), np.array(test_idx)
-
-
-def fit_logistic_calibrator(
-    feature_frame: pd.DataFrame,
-    labels: np.ndarray,
-    train_idx: np.ndarray,
-) -> Pipeline | None:
-    if len(train_idx) < 4:
-        return None
-
-    y_train = labels[train_idx]
-    if len(np.unique(y_train)) < 2:
-        return None
-
-    feature_columns = ["s1", "s2", "gap12", "gap1_5", "mean90", "std90", "z1", "z_gap", "entropy_top10"]
-    x_train = feature_frame.iloc[train_idx][feature_columns].to_numpy(dtype=float)
-
-    model = Pipeline(
-        steps=[
-            ("scaler", StandardScaler()),
-            ("clf", LogisticRegression(max_iter=2000, class_weight="balanced", random_state=SPLIT_RANDOM_SEED)),
-        ]
-    )
-    model.fit(x_train, y_train)
-    return model
-
-
-def predict_probabilities(feature_frame: pd.DataFrame, calibrator: Pipeline | None, labels: np.ndarray, train_idx: np.ndarray) -> np.ndarray:
-    feature_columns = ["s1", "s2", "gap12", "gap1_5", "mean90", "std90", "z1", "z_gap", "entropy_top10"]
-
-    if calibrator is None:
-        if len(train_idx) == 0:
-            base_rate = float(np.mean(labels)) if len(labels) > 0 else 0.5
-        else:
-            base_rate = float(np.mean(labels[train_idx]))
-        return np.full(shape=(len(feature_frame),), fill_value=base_rate, dtype=float)
-
-    x_all = feature_frame[feature_columns].to_numpy(dtype=float)
-    return calibrator.predict_proba(x_all)[:, 1]
 
 
 def bootstrap_metric_ci(
-    test_frame: pd.DataFrame,
+    frame: pd.DataFrame,
     metric_name: str,
     bootstrap_samples: int,
     random_state: int,
-    target_for_coverage: float = 0.95,
 ) -> Tuple[float, float]:
-    n = len(test_frame)
+    n = len(frame)
     if n == 0:
         return 0.0, 0.0
 
@@ -420,16 +352,8 @@ def bootstrap_metric_ci(
 
     for _ in range(bootstrap_samples):
         indices = rng.integers(0, n, size=n)
-        sample = test_frame.iloc[indices]
-
-        if metric_name == "coverage@95":
-            value = coverage_at_target_accuracy(
-                confidences=sample["p_correct"].astype(float).tolist(),
-                correct=sample["top1_correct"].astype(bool).tolist(),
-                target_accuracy=target_for_coverage,
-            )
-        else:
-            value = float(sample[metric_name].mean())
+        sample = frame.iloc[indices]
+        value = float(sample[metric_name].mean())
         estimates.append(value)
 
     low = float(np.quantile(estimates, 0.025))
@@ -443,6 +367,10 @@ def build_model_dataframe(
     cases: Sequence[EvaluationCase],
     exact_index: Dict[str, List[int]],
     normalized_index: Dict[str, List[int]],
+    ranked_indices_per_query: Sequence[Sequence[int]],
+    pipeline_variant: str,
+    cross_encoder_model: str,
+    score_overrides_per_query: Sequence[Dict[int, float]] | None = None,
 ) -> pd.DataFrame:
     rows: List[Dict[str, object]] = []
 
@@ -456,7 +384,12 @@ def build_model_dataframe(
         relevant_set = set(relevant_indices)
 
         scores = similarities[query_index]
-        ranked_indices = np.argsort(-scores).tolist()
+        ranked_indices = list(ranked_indices_per_query[query_index])
+        score_overrides: Dict[int, float]
+        if score_overrides_per_query is None:
+            score_overrides = {}
+        else:
+            score_overrides = dict(score_overrides_per_query[query_index])
         metrics = binary_ranking_metrics_at_10(ranked_indices, relevant_set)
 
         rank_by_index = {material_idx: rank for rank, material_idx in enumerate(ranked_indices, start=1)}
@@ -464,12 +397,20 @@ def build_model_dataframe(
 
         predicted_index = ranked_indices[0]
         predicted_material = materials[predicted_index]
+        if predicted_index in score_overrides:
+            predicted_score = float(score_overrides[predicted_index])
+        else:
+            predicted_score = float(scores[predicted_index])
 
         top10_indices = ranked_indices[:10]
         top10_materials = [str(materials[int(i)]) for i in top10_indices]
-        top10_scores = [float(scores[int(i)]) for i in top10_indices]
-
-        features = extract_confidence_features(scores=scores, ranked_indices=ranked_indices)
+        top10_scores: List[float] = []
+        for material_idx in top10_indices:
+            idx = int(material_idx)
+            if idx in score_overrides:
+                top10_scores.append(float(score_overrides[idx]))
+            else:
+                top10_scores.append(float(scores[idx]))
 
         rows.append(
             {
@@ -478,8 +419,10 @@ def build_model_dataframe(
                 "relevant_input": " | ".join(case.relevant_tokens),
                 "relevant_resolved": " | ".join(resolved_relevant_materials),
                 "relevant_count": len(relevant_set),
+                "pipeline_variant": pipeline_variant,
+                "cross_encoder_model": cross_encoder_model,
                 "predicted_top1": predicted_material,
-                "predicted_top1_score": float(scores[predicted_index]),
+                "predicted_top1_score": predicted_score,
                 "expected_rank": best_rank,
                 "top1_correct": bool(metrics["hit@1"] > 0.0),
                 "hit@1": float(metrics["hit@1"]),
@@ -491,127 +434,36 @@ def build_model_dataframe(
                 "recall@10": float(metrics["recall@10"]),
                 "top10_materials": " | ".join(top10_materials),
                 "top10_scores": " | ".join(f"{s:.6f}" for s in top10_scores),
-                **features,
             }
         )
 
     return pd.DataFrame(rows)
 
 
-def evaluate_model(
+def summarize_and_detail_rows(
+    frame: pd.DataFrame,
     model_name: str,
-    materials: Sequence[str],
-    cases: Sequence[EvaluationCase],
-    exact_index: Dict[str, List[int]],
-    normalized_index: Dict[str, List[int]],
-    project_root: Path,
-    mode: str,
-) -> PerModelResult:
-    device = choose_device()
-    model = load_or_save_model(model_name=model_name, project_root=project_root, device=device)
-
-    queries = [case.query for case in cases]
-    query_embeddings = model.encode(queries, normalize_embeddings=True, convert_to_numpy=True)
-    material_embeddings = model.encode(list(materials), normalize_embeddings=True, convert_to_numpy=True)
-
-    similarities = np.matmul(query_embeddings, material_embeddings.T)
-
-    frame = build_model_dataframe(
-        similarities=similarities,
-        materials=materials,
-        cases=cases,
-        exact_index=exact_index,
-        normalized_index=normalized_index,
-    )
-
-    labels = frame["top1_correct"].astype(int).to_numpy()
-    if mode == "decision":
-        train_idx, val_idx, test_idx = split_indices_train_val_test(labels, random_state=SPLIT_RANDOM_SEED)
-
-        frame["split"] = "train"
-        frame.loc[val_idx, "split"] = "validation"
-        frame.loc[test_idx, "split"] = "test"
-
-        calibrator = fit_logistic_calibrator(frame, labels=labels, train_idx=train_idx)
-        frame["p_correct"] = predict_probabilities(frame, calibrator=calibrator, labels=labels, train_idx=train_idx)
-
-        val_probs = frame.iloc[val_idx]["p_correct"].astype(float).tolist()
-        val_correct = frame.iloc[val_idx]["top1_correct"].astype(bool).tolist()
-        threshold, val_cov, val_acc = best_threshold_for_target_accuracy(
-            probabilities=val_probs,
-            correct=val_correct,
-            target_accuracy=DEFAULT_ACCEPTANCE_TARGET,
-        )
-
-        test_frame = frame.iloc[test_idx].copy()
-        if len(test_frame) == 0:
-            test_frame = frame.copy()
-    else:
-        frame["split"] = "test"
-        frame["p_correct"] = frame["predicted_top1_score"].astype(float)
-        threshold = 2.0
-        val_cov = 0.0
-        val_acc = 0.0
-        test_frame = frame.copy()
-
-    test_probs = test_frame["p_correct"].astype(float).tolist()
-    test_correct = test_frame["top1_correct"].astype(bool).tolist()
-
-    coverages_by_target: Dict[float, float] = {}
-    for target in COVERAGE_TARGETS:
-        coverages_by_target[target] = coverage_at_target_accuracy(
-            confidences=test_probs,
-            correct=test_correct,
-            target_accuracy=target,
-        )
-
-    auto_mask = test_frame["p_correct"] >= threshold
-    auto_frame = test_frame[auto_mask]
-    manual_frame = test_frame[~auto_mask]
-
-    auto_coverage = float(len(auto_frame) / len(test_frame)) if len(test_frame) > 0 else 0.0
-    auto_accuracy = float(auto_frame["top1_correct"].mean()) if len(auto_frame) > 0 else 0.0
-    manual_hit10 = float(manual_frame["hit@10"].mean()) if len(manual_frame) > 0 else 0.0
-
-    _, _, aurc = risk_coverage_curve(probabilities=test_probs, correct=test_correct)
-
-    ci_hit1 = bootstrap_metric_ci(test_frame, metric_name="hit@1", bootstrap_samples=BOOTSTRAP_SAMPLES, random_state=SPLIT_RANDOM_SEED)
-    ci_hit10 = bootstrap_metric_ci(test_frame, metric_name="hit@10", bootstrap_samples=BOOTSTRAP_SAMPLES, random_state=SPLIT_RANDOM_SEED)
-    ci_mrr10 = bootstrap_metric_ci(test_frame, metric_name="mrr@10", bootstrap_samples=BOOTSTRAP_SAMPLES, random_state=SPLIT_RANDOM_SEED)
-    ci_ndcg10 = bootstrap_metric_ci(test_frame, metric_name="ndcg@10", bootstrap_samples=BOOTSTRAP_SAMPLES, random_state=SPLIT_RANDOM_SEED)
-    ci_cov95 = bootstrap_metric_ci(
-        test_frame,
-        metric_name="coverage@95",
-        bootstrap_samples=BOOTSTRAP_SAMPLES,
-        random_state=SPLIT_RANDOM_SEED,
-        target_for_coverage=0.95,
-    )
+    pipeline_variant: str,
+    cross_encoder_model: str,
+) -> Tuple[Dict[str, str], List[Dict[str, str]]]:
+    ci_hit1 = bootstrap_metric_ci(frame, "hit@1", BOOTSTRAP_SAMPLES, BOOTSTRAP_SEED)
+    ci_hit10 = bootstrap_metric_ci(frame, "hit@10", BOOTSTRAP_SAMPLES, BOOTSTRAP_SEED)
+    ci_mrr10 = bootstrap_metric_ci(frame, "mrr@10", BOOTSTRAP_SAMPLES, BOOTSTRAP_SEED)
+    ci_ndcg10 = bootstrap_metric_ci(frame, "ndcg@10", BOOTSTRAP_SAMPLES, BOOTSTRAP_SEED)
 
     summary = {
         "model": model_name,
-        "mode": mode,
-        "cases": str(len(test_frame)),
-        "hit@1": f"{float(test_frame['hit@1'].mean()):.6f}",
-        "hit@5": f"{float(test_frame['hit@5'].mean()):.6f}",
-        "hit@10": f"{float(test_frame['hit@10'].mean()):.6f}",
-        "mrr": f"{float(test_frame['mrr@10'].mean()):.6f}",
-        "map@10": f"{float(test_frame['map@10'].mean()):.6f}",
-        "ndcg@10": f"{float(test_frame['ndcg@10'].mean()):.6f}",
-        "recall@10": f"{float(test_frame['recall@10'].mean()):.6f}",
-        "coverage_at_90acc": f"{coverages_by_target[0.90]:.6f}",
-        "coverage_at_95acc": f"{coverages_by_target[0.95]:.6f}",
-        "coverage_at_97acc": f"{coverages_by_target[0.97]:.6f}",
-        "coverage_at_99acc": f"{coverages_by_target[0.99]:.6f}",
-        "coverage_at_95acc_margin": f"{coverages_by_target[0.95]:.6f}",
-        "coverage_at_90acc_margin": f"{coverages_by_target[0.90]:.6f}",
-        "auto_threshold": f"{threshold:.6f}",
-        "auto_coverage": f"{auto_coverage:.6f}",
-        "auto_accuracy": f"{auto_accuracy:.6f}",
-        "manual_hit@10": f"{manual_hit10:.6f}",
-        "aurc": f"{aurc:.6f}",
-        "val_coverage_at_target": f"{val_cov:.6f}",
-        "val_accuracy_at_target": f"{val_acc:.6f}",
-        "avg_expected_score": f"{float(test_frame['predicted_top1_score'].mean()):.6f}",
+        "pipeline_variant": pipeline_variant,
+        "cross_encoder_model": cross_encoder_model,
+        "cases": str(len(frame)),
+        "hit@1": f"{float(frame['hit@1'].mean()):.6f}",
+        "hit@5": f"{float(frame['hit@5'].mean()):.6f}",
+        "hit@10": f"{float(frame['hit@10'].mean()):.6f}",
+        "mrr": f"{float(frame['mrr@10'].mean()):.6f}",
+        "map@10": f"{float(frame['map@10'].mean()):.6f}",
+        "ndcg@10": f"{float(frame['ndcg@10'].mean()):.6f}",
+        "recall@10": f"{float(frame['recall@10'].mean()):.6f}",
+        "avg_expected_score": f"{float(frame['predicted_top1_score'].mean()):.6f}",
         "hit@1_ci_low": f"{ci_hit1[0]:.6f}",
         "hit@1_ci_high": f"{ci_hit1[1]:.6f}",
         "hit@10_ci_low": f"{ci_hit10[0]:.6f}",
@@ -620,25 +472,22 @@ def evaluate_model(
         "mrr@10_ci_high": f"{ci_mrr10[1]:.6f}",
         "ndcg@10_ci_low": f"{ci_ndcg10[0]:.6f}",
         "ndcg@10_ci_high": f"{ci_ndcg10[1]:.6f}",
-        "coverage@95_ci_low": f"{ci_cov95[0]:.6f}",
-        "coverage@95_ci_high": f"{ci_cov95[1]:.6f}",
     }
 
-    details = []
+    details: List[Dict[str, str]] = []
     for _, row in frame.iterrows():
         details.append(
             {
                 "model": model_name,
+                "pipeline_variant": pipeline_variant,
+                "cross_encoder_model": cross_encoder_model,
                 "query_id": str(int(row["query_id"])),
-                "split": str(row["split"]),
                 "query": str(row["query"]),
                 "relevant_input": str(row["relevant_input"]),
                 "relevant_resolved": str(row["relevant_resolved"]),
                 "relevant_count": str(int(row["relevant_count"])),
                 "predicted_top1": str(row["predicted_top1"]),
                 "predicted_top1_score": f"{float(row['predicted_top1_score']):.6f}",
-                "p_correct": f"{float(row['p_correct']):.6f}",
-                "auto_accept": str(bool(float(row["p_correct"]) >= threshold)),
                 "expected_rank": str(int(row["expected_rank"])),
                 "top1_correct": str(bool(row["top1_correct"])),
                 "hit@1": f"{float(row['hit@1']):.6f}",
@@ -648,21 +497,99 @@ def evaluate_model(
                 "ndcg@10": f"{float(row['ndcg@10']):.6f}",
                 "map@10": f"{float(row['map@10']):.6f}",
                 "recall@10": f"{float(row['recall@10']):.6f}",
-                "s1": f"{float(row['s1']):.6f}",
-                "s2": f"{float(row['s2']):.6f}",
-                "gap12": f"{float(row['gap12']):.6f}",
-                "gap1_5": f"{float(row['gap1_5']):.6f}",
-                "mean90": f"{float(row['mean90']):.6f}",
-                "std90": f"{float(row['std90']):.6f}",
-                "z1": f"{float(row['z1']):.6f}",
-                "z_gap": f"{float(row['z_gap']):.6f}",
-                "entropy_top10": f"{float(row['entropy_top10']):.6f}",
                 "top10_materials": str(row["top10_materials"]),
                 "top10_scores": str(row["top10_scores"]),
             }
         )
 
-    return PerModelResult(summary=summary, details=details)
+    return summary, details
+
+
+def evaluate_model(
+    model_name: str,
+    materials: Sequence[str],
+    cases: Sequence[EvaluationCase],
+    exact_index: Dict[str, List[int]],
+    normalized_index: Dict[str, List[int]],
+    project_root: Path,
+    cross_encoder_model: str,
+    rerank_top_n: int,
+) -> PerModelResult:
+    device = choose_device()
+    print(f"  Loading model ({device})...", flush=True)
+    model = load_or_save_model(model_name=model_name, project_root=project_root, device=device)
+
+    queries = [case.query for case in cases]
+    print(f"  Encoding {len(queries)} queries...", flush=True)
+    query_embeddings = model.encode(queries, normalize_embeddings=True, convert_to_numpy=True)
+    print(f"  Encoding {len(materials)} materials...", flush=True)
+    material_embeddings = model.encode(list(materials), normalize_embeddings=True, convert_to_numpy=True)
+    print("  Computing similarities...", flush=True)
+    similarities = np.matmul(query_embeddings, material_embeddings.T)
+
+    baseline_rankings = [np.argsort(-similarities[query_index]).tolist() for query_index in range(len(cases))]
+
+    baseline_frame = build_model_dataframe(
+        similarities=similarities,
+        materials=materials,
+        cases=cases,
+        exact_index=exact_index,
+        normalized_index=normalized_index,
+        ranked_indices_per_query=baseline_rankings,
+        pipeline_variant="baseline",
+        cross_encoder_model="-",
+    )
+
+    summaries: List[Dict[str, str]] = []
+    details: List[Dict[str, str]] = []
+
+    baseline_summary, baseline_details = summarize_and_detail_rows(
+        frame=baseline_frame,
+        model_name=model_name,
+        pipeline_variant="baseline",
+        cross_encoder_model="-",
+    )
+    summaries.append(baseline_summary)
+    details.extend(baseline_details)
+
+    if cross_encoder_model:
+        print(f"  Re-ranking top {rerank_top_n} with Cross-Encoder: {cross_encoder_model}", flush=True)
+        cross_encoder = load_or_get_cross_encoder(cross_encoder_model, project_root=project_root, device=device)
+        reranked_rankings: List[List[int]] = []
+        reranked_score_overrides: List[Dict[int, float]] = []
+
+        for query_index, case in enumerate(cases):
+            reranked_indices, overrides = rerank_query_indices(
+                query=case.query,
+                ranked_indices=baseline_rankings[query_index],
+                materials=materials,
+                rerank_top_n=rerank_top_n,
+                cross_encoder=cross_encoder,
+            )
+            reranked_rankings.append(reranked_indices)
+            reranked_score_overrides.append(overrides)
+
+        reranked_frame = build_model_dataframe(
+            similarities=similarities,
+            materials=materials,
+            cases=cases,
+            exact_index=exact_index,
+            normalized_index=normalized_index,
+            ranked_indices_per_query=reranked_rankings,
+            pipeline_variant="reranked",
+            cross_encoder_model=cross_encoder_model,
+            score_overrides_per_query=reranked_score_overrides,
+        )
+        reranked_summary, reranked_details = summarize_and_detail_rows(
+            frame=reranked_frame,
+            model_name=model_name,
+            pipeline_variant="reranked",
+            cross_encoder_model=cross_encoder_model,
+        )
+        summaries.append(reranked_summary)
+        details.extend(reranked_details)
+
+    return PerModelResult(summaries=summaries, details=details)
 
 
 def write_csv(file_path: Path, rows: List[Dict[str, str]], fieldnames: Sequence[str]) -> None:
@@ -680,7 +607,6 @@ def make_query_label(query_file: Path) -> str:
 
 
 def main() -> None:
-    args = parse_args()
     script_dir = Path(__file__).resolve().parent
     project_root = script_dir.parent
 
@@ -700,11 +626,18 @@ def main() -> None:
     print(f"Using query file: {query_file}")
     if expected_file is not None:
         print(f"Using expected file: {expected_file}")
-    print(f"Using eval mode: {args.mode}")
+    print(f"Using cross-encoder model: {SBERT_CROSS_ENCODER_MODEL or '-'}")
+    print(f"Using rerank top-n: {SBERT_RERANK_TOP_N}")
+
+    if SBERT_RERANK_TOP_N <= 0:
+        raise ValueError("SBERT_RERANK_TOP_N muss > 0 sein.")
 
     cases = build_evaluation_cases(query_file=query_file, expected_file=expected_file)
 
-    with sqlite3.connect(DATABASE_PATH) as connection:
+    database_path = resolve_database_path(project_root)
+    print(f"Using database: {database_path}")
+
+    with sqlite3.connect(str(database_path)) as connection:
         materials = fetch_materials_from_db(connection)
 
     if not materials:
@@ -733,19 +666,24 @@ def main() -> None:
             exact_index=exact_index,
             normalized_index=normalized_index,
             project_root=project_root,
-            mode=args.mode,
+            cross_encoder_model=SBERT_CROSS_ENCODER_MODEL,
+            rerank_top_n=SBERT_RERANK_TOP_N,
         )
 
-        summary_rows.append(result.summary)
+        summary_rows.extend(result.summaries)
         detail_rows.extend(result.details)
 
-        print(
-            f"  Hit@1: {float(result.summary['hit@1']):.2%} | "
-            f"Hit@10: {float(result.summary['hit@10']):.2%} | "
-            f"MRR@10: {float(result.summary['mrr']):.4f} | "
-            f"nDCG@10: {float(result.summary['ndcg@10']):.4f} | "
-            f"Cov@95: {float(result.summary['coverage_at_95acc']):.2%}"
-        )
+        for summary in result.summaries:
+            print(
+                f"  [{summary['pipeline_variant']}] "
+                f"Hit@1: {float(summary['hit@1']):.2%} | "
+                f"Hit@5: {float(summary['hit@5']):.2%} | "
+                f"Hit@10: {float(summary['hit@10']):.2%} | "
+                f"MRR@10: {float(summary['mrr']):.4f} | "
+                f"MAP@10: {float(summary['map@10']):.4f} | "
+                f"nDCG@10: {float(summary['ndcg@10']):.4f} | "
+                f"Recall@10: {float(summary['recall@10']):.4f}"
+            )
 
     summary_rows.sort(key=lambda r: (float(r["hit@1"]), float(r["mrr"]), float(r["ndcg@10"])), reverse=True)
 

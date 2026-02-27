@@ -15,6 +15,8 @@ METRIC_EXPLANATIONS_FILE = PROJECT_ROOT / "Evaluation" / "metric_explanations.md
 @dataclass
 class SummaryRow:
     model: str
+    pipeline_variant: str
+    cross_encoder_model: str
     cases: int
     hit1: float
     hit5: float
@@ -23,17 +25,7 @@ class SummaryRow:
     map10: float
     ndcg10: float
     recall10: float
-    coverage_at_95acc_margin: float
-    coverage_at_90acc_margin: float
-    coverage_at_97acc: float
-    coverage_at_99acc: float
-    auto_coverage: float
-    auto_accuracy: float
-    auto_threshold: float
-    manual_hit10: float
-    aurc: float
-    val_coverage_at_target: float
-    val_accuracy_at_target: float
+    avg_expected_score: float
     hit1_ci_low: float
     hit1_ci_high: float
     hit10_ci_low: float
@@ -42,9 +34,6 @@ class SummaryRow:
     mrr10_ci_high: float
     ndcg10_ci_low: float
     ndcg10_ci_high: float
-    coverage95_ci_low: float
-    coverage95_ci_high: float
-    avg_expected_score: float
 
 
 def parse_optional_float(value: str | None, default: float = 0.0) -> float:
@@ -117,17 +106,6 @@ def load_summary(summary_file: Path) -> List[SummaryRow]:
             map10 = parse_optional_float(raw.get("map@10"), default=parse_optional_float(raw.get("map10")))
             ndcg10 = parse_optional_float(raw.get("ndcg@10"), default=parse_optional_float(raw.get("ndcg10")))
             recall10 = parse_optional_float(raw.get("recall@10"), default=parse_optional_float(raw.get("recall10")))
-            cov95 = parse_optional_float(raw.get("coverage_at_95acc"), default=parse_optional_float(raw.get("coverage_at_95acc_margin")))
-            cov90 = parse_optional_float(raw.get("coverage_at_90acc"), default=parse_optional_float(raw.get("coverage_at_90acc_margin")))
-            cov97 = parse_optional_float(raw.get("coverage_at_97acc"))
-            cov99 = parse_optional_float(raw.get("coverage_at_99acc"))
-            auto_coverage = parse_optional_float(raw.get("auto_coverage"))
-            auto_accuracy = parse_optional_float(raw.get("auto_accuracy"))
-            auto_threshold = parse_optional_float(raw.get("auto_threshold"))
-            manual_hit10 = parse_optional_float(raw.get("manual_hit@10"), default=parse_optional_float(raw.get("manual_hit10")))
-            aurc = parse_optional_float(raw.get("aurc"))
-            val_cov = parse_optional_float(raw.get("val_coverage_at_target"))
-            val_acc = parse_optional_float(raw.get("val_accuracy_at_target"))
             hit1_ci_low = parse_optional_float(raw.get("hit@1_ci_low"))
             hit1_ci_high = parse_optional_float(raw.get("hit@1_ci_high"))
             hit10_ci_low = parse_optional_float(raw.get("hit@10_ci_low"))
@@ -136,11 +114,11 @@ def load_summary(summary_file: Path) -> List[SummaryRow]:
             mrr10_ci_high = parse_optional_float(raw.get("mrr@10_ci_high"))
             ndcg10_ci_low = parse_optional_float(raw.get("ndcg@10_ci_low"))
             ndcg10_ci_high = parse_optional_float(raw.get("ndcg@10_ci_high"))
-            cov95_ci_low = parse_optional_float(raw.get("coverage@95_ci_low"))
-            cov95_ci_high = parse_optional_float(raw.get("coverage@95_ci_high"))
             rows.append(
                 SummaryRow(
                     model=raw["model"],
+                    pipeline_variant=(raw.get("pipeline_variant") or "baseline").strip() or "baseline",
+                    cross_encoder_model=(raw.get("cross_encoder_model") or "-").strip() or "-",
                     cases=int(raw["cases"]),
                     hit1=hit1,
                     hit5=hit5,
@@ -149,17 +127,7 @@ def load_summary(summary_file: Path) -> List[SummaryRow]:
                     map10=map10,
                     ndcg10=ndcg10,
                     recall10=recall10,
-                    coverage_at_95acc_margin=cov95,
-                    coverage_at_90acc_margin=cov90,
-                    coverage_at_97acc=cov97,
-                    coverage_at_99acc=cov99,
-                    auto_coverage=auto_coverage,
-                    auto_accuracy=auto_accuracy,
-                    auto_threshold=auto_threshold,
-                    manual_hit10=manual_hit10,
-                    aurc=aurc,
-                    val_coverage_at_target=val_cov,
-                    val_accuracy_at_target=val_acc,
+                    avg_expected_score=float(raw["avg_expected_score"]),
                     hit1_ci_low=hit1_ci_low,
                     hit1_ci_high=hit1_ci_high,
                     hit10_ci_low=hit10_ci_low,
@@ -168,29 +136,21 @@ def load_summary(summary_file: Path) -> List[SummaryRow]:
                     mrr10_ci_high=mrr10_ci_high,
                     ndcg10_ci_low=ndcg10_ci_low,
                     ndcg10_ci_high=ndcg10_ci_high,
-                    coverage95_ci_low=cov95_ci_low,
-                    coverage95_ci_high=cov95_ci_high,
-                    avg_expected_score=float(raw["avg_expected_score"]),
                 )
             )
 
     rows.sort(
         key=lambda r: (
-            r.hit1,
-            r.coverage_at_95acc_margin,
-            r.mrr,
-            r.map10,
-            r.ndcg10,
-            r.recall10,
-            r.hit5,
-            r.hit10,
-            r.auto_coverage,
-            r.auto_accuracy,
-            r.manual_hit10,
-            -r.aurc,
-            r.avg_expected_score,
+            r.pipeline_variant,
+            -r.hit1,
+            -r.mrr,
+            -r.map10,
+            -r.ndcg10,
+            -r.recall10,
+            -r.hit5,
+            -r.hit10,
+            -r.avg_expected_score,
         ),
-        reverse=True,
     )
     return rows
 
@@ -204,19 +164,24 @@ def short_model_name(model: str) -> str:
     return model.split("/")[-1]
 
 
-def compute_error_stats(details: List[dict]) -> Dict[str, int]:
-    errors_by_model: Dict[str, int] = {}
+def compute_error_stats(details: List[dict]) -> Dict[Tuple[str, str], int]:
+    errors_by_variant_model: Dict[Tuple[str, str], int] = {}
     for row in details:
         model = row["model"]
+        variant = (row.get("pipeline_variant") or "baseline").strip() or "baseline"
         top1 = row.get("top1_correct", "False").strip().lower() == "true"
         if not top1:
-            errors_by_model[model] = errors_by_model.get(model, 0) + 1
-    return errors_by_model
+            key = (variant, model)
+            errors_by_variant_model[key] = errors_by_variant_model.get(key, 0) + 1
+    return errors_by_variant_model
 
 
-def compute_hard_queries(details: List[dict], top_n: int = 5) -> List[Tuple[str, int]]:
+def compute_hard_queries(details: List[dict], pipeline_variant: str, top_n: int = 5) -> List[Tuple[str, int]]:
     wrong_counts: Dict[str, int] = {}
     for row in details:
+        variant = (row.get("pipeline_variant") or "baseline").strip() or "baseline"
+        if variant != pipeline_variant:
+            continue
         query = row["query"]
         top1 = row.get("top1_correct", "False").strip().lower() == "true"
         if not top1:
@@ -305,7 +270,18 @@ def render_markdown_report(
     report_file: Path,
 ) -> None:
     error_stats = compute_error_stats(details)
-    hard_queries = compute_hard_queries(details)
+    baseline_rows = [row for row in summary_rows if row.pipeline_variant == "baseline"]
+    reranked_rows = [row for row in summary_rows if row.pipeline_variant == "reranked"]
+    baseline_rows.sort(
+        key=lambda r: (r.hit1, r.mrr, r.map10, r.ndcg10, r.recall10, r.hit5, r.hit10, r.avg_expected_score),
+        reverse=True,
+    )
+    reranked_rows.sort(
+        key=lambda r: (r.hit1, r.mrr, r.map10, r.ndcg10, r.recall10, r.hit5, r.hit10, r.avg_expected_score),
+        reverse=True,
+    )
+    baseline_hard_queries = compute_hard_queries(details, pipeline_variant="baseline")
+    reranked_hard_queries = compute_hard_queries(details, pipeline_variant="reranked")
 
     generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -327,13 +303,26 @@ def render_markdown_report(
     lines.append("")
     lines.append("### Leaderboard")
     lines.append("")
-    lines.append("| Rank | Model | Hit@1 | Hit@5 | Hit@10 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 | Cov@95% | Cov@97% | Cov@99% | AutoCov | AutoAcc | AutoThr | ValCov | ValAcc | Manual Hit@10 | AURC | Avg expected score | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI | Cov@95 95% CI | Top1 errors |")
-    lines.append("|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---|---:|")
-
-    for rank, row in enumerate(summary_rows, start=1):
+    lines.append("#### Baseline (Bi-Encoder)")
+    lines.append("")
+    lines.append("| Rank | Model | Hit@1 | Hit@5 | Hit@10 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 | Avg expected score | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI | Top1 errors |")
+    lines.append("|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---:|")
+    for rank, row in enumerate(baseline_rows, start=1):
         lines.append(
             "| "
-            f"{rank} | {row.model} | {to_percent(row.hit1)} | {to_percent(row.hit5)} | {to_percent(row.hit10)} | {row.mrr:.3f} | {row.map10:.3f} | {row.ndcg10:.3f} | {row.recall10:.3f} | {to_percent(row.coverage_at_95acc_margin)} | {to_percent(row.coverage_at_97acc)} | {to_percent(row.coverage_at_99acc)} | {to_percent(row.auto_coverage)} | {to_percent(row.auto_accuracy)} | {row.auto_threshold:.3f} | {to_percent(row.val_coverage_at_target)} | {to_percent(row.val_accuracy_at_target)} | {row.manual_hit10:.3f} | {row.aurc:.3f} | {row.avg_expected_score:.3f} | [{row.hit1_ci_low:.3f}, {row.hit1_ci_high:.3f}] | [{row.hit10_ci_low:.3f}, {row.hit10_ci_high:.3f}] | [{row.mrr10_ci_low:.3f}, {row.mrr10_ci_high:.3f}] | [{row.ndcg10_ci_low:.3f}, {row.ndcg10_ci_high:.3f}] | [{row.coverage95_ci_low:.3f}, {row.coverage95_ci_high:.3f}] | {error_stats.get(row.model, 0)}"
+            f"{rank} | {row.model} | {to_percent(row.hit1)} | {to_percent(row.hit5)} | {to_percent(row.hit10)} | {row.mrr:.3f} | {row.map10:.3f} | {row.ndcg10:.3f} | {row.recall10:.3f} | {row.avg_expected_score:.3f} | [{row.hit1_ci_low:.3f}, {row.hit1_ci_high:.3f}] | [{row.hit10_ci_low:.3f}, {row.hit10_ci_high:.3f}] | [{row.mrr10_ci_low:.3f}, {row.mrr10_ci_high:.3f}] | [{row.ndcg10_ci_low:.3f}, {row.ndcg10_ci_high:.3f}] | {error_stats.get((row.pipeline_variant, row.model), 0)}"
+            " |"
+        )
+
+    lines.append("")
+    lines.append("#### Reranked (Bi-Encoder + Cross-Encoder)")
+    lines.append("")
+    lines.append("| Rank | Model | Cross-Encoder | Hit@1 | Hit@5 | Hit@10 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 | Avg expected score | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI | Top1 errors |")
+    lines.append("|---:|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---:|")
+    for rank, row in enumerate(reranked_rows, start=1):
+        lines.append(
+            "| "
+            f"{rank} | {row.model} | {row.cross_encoder_model} | {to_percent(row.hit1)} | {to_percent(row.hit5)} | {to_percent(row.hit10)} | {row.mrr:.3f} | {row.map10:.3f} | {row.ndcg10:.3f} | {row.recall10:.3f} | {row.avg_expected_score:.3f} | [{row.hit1_ci_low:.3f}, {row.hit1_ci_high:.3f}] | [{row.hit10_ci_low:.3f}, {row.hit10_ci_high:.3f}] | [{row.mrr10_ci_low:.3f}, {row.mrr10_ci_high:.3f}] | [{row.ndcg10_ci_low:.3f}, {row.ndcg10_ci_high:.3f}] | {error_stats.get((row.pipeline_variant, row.model), 0)}"
             " |"
         )
 
@@ -341,12 +330,20 @@ def render_markdown_report(
     lines.append("")
     lines.append(f"Anzahl Queries: {query_count}")
 
-    if hard_queries:
+    if baseline_hard_queries:
         lines.append("")
-        lines.append("### Hardest Queries")
-        lines.append("Queries mit den meisten Top1-Fehlern über alle Modelle:")
+        lines.append("### Hardest Queries (Baseline)")
+        lines.append("Queries mit den meisten Top1-Fehlern in der Baseline:")
         lines.append("")
-        for query, count in hard_queries:
+        for query, count in baseline_hard_queries:
+            lines.append(f"- ({count} Fehler) {query}")
+
+    if reranked_hard_queries:
+        lines.append("")
+        lines.append("### Hardest Queries (Reranked)")
+        lines.append("Queries mit den meisten Top1-Fehlern nach Re-Ranking:")
+        lines.append("")
+        for query, count in reranked_hard_queries:
             lines.append(f"- ({count} Fehler) {query}")
 
     report_file.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -365,7 +362,8 @@ def main() -> None:
     latest_report = RESULTS_DIR / "evaluation_report_latest.md"
     latest_chart = RESULTS_DIR / "overview_latest.svg"
 
-    render_svg_chart(summary_rows, chart_file)
+    chart_rows = [row for row in summary_rows if row.pipeline_variant == "reranked"] or summary_rows
+    render_svg_chart(chart_rows, chart_file)
     render_markdown_report(summary_rows, details_rows, summary_file, details_file, chart_file, report_file)
 
     latest_report.write_text(report_file.read_text(encoding="utf-8"), encoding="utf-8")

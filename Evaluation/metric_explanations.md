@@ -83,50 +83,6 @@ Damit gelten für den ersten relevanten Rang: $rank = [1,2,7,6]$.
     - $Q4: 1/1=1.0$
     - Recall@10: $\frac{1+0.5+0.25+1}{4}=0.6875$.
 
-## Decision-Metriken (nur Modus `decision`)
-
-Im Decision-Modus wird ein Kalibrator trainiert, der pro Query
-$p_{correct}=P(\text{Top1 ist korrekt})$ schätzt.
-
-- **AutoThr (auto_threshold)**
-  - Definition: auf Validation gewählte Schwelle für Auto-Akzeptanz.
-  - Beispiel: $AutoThr=0.72$.
-
-- **ValCov (val_coverage_at_target)**
-  - Definition: erreichbare Coverage auf Validation bei Zielgenauigkeit (Standard: 95%).
-  - Beispiel: 40 von 100 Fällen auto-akzeptiert $\Rightarrow 0.40$.
-
-- **ValAcc (val_accuracy_at_target)**
-  - Definition: Genauigkeit der akzeptierten Validation-Fälle bei gewählter Schwelle.
-  - Beispiel: 38 von 40 korrekt $\Rightarrow 0.95$.
-
-- **Cov@90 / Cov@95 / Cov@97 / Cov@99**
-  - Definition: maximale Test-Coverage bei kumulativer Accuracy der akzeptierten Fälle
-    von mindestens 0.90/0.95/0.97/0.99.
-  - Beispielidee: Nach Sortierung nach $p_{correct}$ erfüllen die ersten 30 Fälle noch
-    $\ge95\%$ Accuracy bei 100 Queries $\Rightarrow \mathrm{Cov@95}=0.30$.
-
-- **AutoCov (auto_coverage)**
-  - Definition: Anteil Testfälle mit $p_{correct}\ge AutoThr$.
-  - Beispiel: 28 von 100 $\Rightarrow 0.28$.
-
-- **AutoAcc (auto_accuracy)**
-  - Definition: Hit@1 auf den auto-akzeptierten Fällen.
-  - Beispiel: 27 von 28 korrekt $\Rightarrow 0.9643$.
-
-- **Manual Hit@10 (manual_hit@10)**
-  - Definition: Hit@10 auf den nicht automatisch akzeptierten Fällen.
-  - Beispiel: 60 manuelle Fälle, 48 mit relevantem Treffer in Top10
-    $\Rightarrow 48/60=0.80$.
-
-- **AURC**
-  - Definition: Area Under Risk-Coverage Curve, mit
-    $Risk = 1-Accuracy$ der akzeptierten Fälle bei zunehmender Coverage.
-  - Interpretation: kleiner ist besser (weniger Risiko über die Coverage hinweg).
-  - Beispiel (diskret):
-    Coverages $[0, 0.25, 0.5, 1.0]$, Risks $[0, 0.0, 0.1, 0.2]$,
-    Trapezsumme $=0.5\cdot0.25\cdot(0+0)+0.5\cdot0.25\cdot(0+0.1)+0.5\cdot0.5\cdot(0.1+0.2)=0.0875$.
-
 ## Unsicherheitsangaben (95%-Bootstrap-CIs)
 
 Für einige Kennzahlen werden 95%-Konfidenzintervalle per Bootstrap auf dem Testset berechnet:
@@ -135,7 +91,6 @@ Für einige Kennzahlen werden 95%-Konfidenzintervalle per Bootstrap auf dem Test
 - **Hit@10 95% CI** (`hit@10_ci_low`, `hit@10_ci_high`)
 - **MRR@10 95% CI** (`mrr@10_ci_low`, `mrr@10_ci_high`)
 - **nDCG@10 95% CI** (`ndcg@10_ci_low`, `ndcg@10_ci_high`)
-- **Cov@95 95% CI** (`coverage@95_ci_low`, `coverage@95_ci_high`)
 
 Beispielinterpretation:
 
@@ -156,5 +111,4 @@ Beispielinterpretation:
 
 ## Hinweis zu Modi
 
-- Modus **`ranking-only`**: Fokus auf Rankingmetriken, keine Kalibrierung.
-- Modus **`decision`**: zusätzliche Decision-/Coverage-Metriken mit Split und Kalibrator.
+- Es gibt nur einen Modus: Ranking-Evaluation auf allen Queries.
