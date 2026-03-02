@@ -114,17 +114,17 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--cross-encoder-model",
-        default="BAAI/bge-reranker-v2-m3",
+        default=None,
         help=(
             "Cross-Encoder-Modell für Re-Ranking in der Evaluation "
-            "(Default: BAAI/bge-reranker-v2-m3)."
+            "(Default: BAAI/bge-reranker-v2-m3). Wenn nicht angegeben, wird interaktiv gefragt."
         ),
     )
     parser.add_argument(
         "--rerank-top-n",
         type=int,
-        default=30,
-        help="Anzahl Top-Kandidaten pro Query, die per Cross-Encoder neu sortiert werden (Default: 30).",
+        default=None,
+        help="Anzahl Top-Kandidaten pro Query, die per Cross-Encoder neu sortiert werden (Default: 30). Wenn nicht angegeben, wird interaktiv gefragt.",
     )
     return parser.parse_args()
 
@@ -224,6 +224,76 @@ def select_expected_file_interactively() -> Path:
         print(f"Bitte eine Nummer zwischen 1 und {len(candidates)} wählen.")
 
 
+MULTILINGUAL_CROSS_ENCODER_MODELS: list[tuple[str, str]] = [
+    (
+        "BAAI/bge-reranker-v2-m3",
+        "BGE-M3-basiert · 100+ Sprachen · 0.6B · Apache-2.0 · empfohlen für multilingualen Einsatz",
+    ),
+    (
+        "Alibaba-NLP/gte-multilingual-reranker-base",
+        "GTE-basiert · 75 Sprachen · 0.3B · Apache-2.0 · hohe Leistung, schnelle Inferenz, max 8192 Tokens",
+    ),
+    (
+        "jinaai/jina-reranker-v2-base-multilingual",
+        "Jina v2 · 100+ Sprachen · 0.28B · CC-BY-NC-4.0 (nur nicht-kommerziell) · max 8192 Tokens",
+    ),
+    (
+        "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+        "mMiniLMv2-basiert · 15 Sprachen (inkl. DE+EN) · 0.1B · Apache-2.0 · sehr leichtgewichtig",
+    ),
+]
+
+
+def select_cross_encoder_settings_interactively() -> tuple[str | None, int | None]:
+    """Fragt interaktiv, ob Cross-Encoder genutzt werden soll und wie viele Kandidaten re-ranked werden."""
+    print("\nCross-Encoder Re-Ranking:")
+    while True:
+        use_ce = input("  Mit Cross-Encoder re-ranken? [j/n]: ").strip().lower()
+        if use_ce in ("", "j", "ja", "y", "yes"):
+            break
+        if use_ce in ("n", "nein", "no"):
+            print("  Cross-Encoder wird übersprungen.")
+            return None, None
+        print("  Ungültige Eingabe. Bitte 'j' oder 'n' eingeben.")
+
+    print("\n  Verfügbare Cross-Encoder-Modelle (multilingual empfohlen):")
+    for idx, (model_id, description) in enumerate(MULTILINGUAL_CROSS_ENCODER_MODELS, start=1):
+        print(f"  {idx:>3}: {model_id}")
+        print(f"       {description}")
+
+    default_model = MULTILINGUAL_CROSS_ENCODER_MODELS[0][0]
+    while True:
+        model_input = input(
+            f"\n  Nummer wählen oder Modell-ID eingeben [Default: 1 · {default_model}]: "
+        ).strip()
+        if not model_input:
+            model = default_model
+            break
+        if model_input.isdigit():
+            idx = int(model_input)
+            if 1 <= idx <= len(MULTILINGUAL_CROSS_ENCODER_MODELS):
+                model = MULTILINGUAL_CROSS_ENCODER_MODELS[idx - 1][0]
+                break
+            print(f"  Bitte eine Nummer zwischen 1 und {len(MULTILINGUAL_CROSS_ENCODER_MODELS)} wählen.")
+        else:
+            # Freitext-Eingabe einer beliebigen Modell-ID
+            model = model_input
+            break
+
+    default_top_n = 30
+    while True:
+        top_n_input = input(f"  Anzahl Kandidaten für Re-Ranking [Default: {default_top_n}]: ").strip()
+        if not top_n_input:
+            top_n = default_top_n
+            break
+        if top_n_input.isdigit() and int(top_n_input) > 0:
+            top_n = int(top_n_input)
+            break
+        print("  Ungültige Eingabe. Bitte eine positive ganze Zahl eingeben.")
+
+    return model, top_n
+
+
 def resolve_query_file(args: argparse.Namespace) -> Path | None:
     if args.query_source:
         source = Path(args.query_source)
@@ -261,7 +331,7 @@ def resolve_query_file(args: argparse.Namespace) -> Path | None:
 def main() -> None:
     args = parse_args()
 
-    if args.rerank_top_n <= 0:
+    if args.rerank_top_n is not None and args.rerank_top_n <= 0:
         raise ValueError("--rerank-top-n muss > 0 sein.")
 
     for script in (EXPORT_SCRIPT, EVALUATE_SCRIPT, REPORT_SCRIPT):
@@ -288,10 +358,22 @@ def main() -> None:
     env["SBERT_EXPECTED_FILE"] = str(expected_file)
     print(f"Using SBERT_EXPECTED_FILE={expected_file}")
 
-    env["SBERT_CROSS_ENCODER_MODEL"] = str(args.cross_encoder_model).strip()
-    env["SBERT_RERANK_TOP_N"] = str(int(args.rerank_top_n))
-    print(f"Using SBERT_CROSS_ENCODER_MODEL={env['SBERT_CROSS_ENCODER_MODEL']}")
-    print(f"Using SBERT_RERANK_TOP_N={env['SBERT_RERANK_TOP_N']}")
+    # Cross-Encoder: interaktiv fragen wenn nicht per CLI angegeben
+    if args.cross_encoder_model is None and args.rerank_top_n is None:
+        cross_encoder_model, rerank_top_n = select_cross_encoder_settings_interactively()
+    else:
+        cross_encoder_model = args.cross_encoder_model or "BAAI/bge-reranker-v2-m3"
+        rerank_top_n = args.rerank_top_n if args.rerank_top_n is not None else 30
+
+    if cross_encoder_model is not None and rerank_top_n is not None:
+        env["SBERT_CROSS_ENCODER_MODEL"] = str(cross_encoder_model).strip()
+        env["SBERT_RERANK_TOP_N"] = str(int(rerank_top_n))
+        print(f"Using SBERT_CROSS_ENCODER_MODEL={env['SBERT_CROSS_ENCODER_MODEL']}")
+        print(f"Using SBERT_RERANK_TOP_N={env['SBERT_RERANK_TOP_N']}")
+    else:
+        env.pop("SBERT_CROSS_ENCODER_MODEL", None)
+        env.pop("SBERT_RERANK_TOP_N", None)
+        print("Cross-Encoder Re-Ranking deaktiviert.")
 
     ensure_evaluation_dependencies(env)
     run_command([sys.executable, str(EVALUATE_SCRIPT)], env=env)

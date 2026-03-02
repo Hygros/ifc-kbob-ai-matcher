@@ -1,0 +1,303 @@
+IfcBeam Beton NPK G C30/37
+IfcBeam Beton NPK G C30/37
+IfcBeam Beton NPK G C30/37
+IfcBeam Beton C30/37
+IfcBeam Beton C30/37
+IfcBeam Beton C30/37
+IfcBeam Beton C30/37
+IfcBeam Beton C30/37
+IfcBeam Beton C30/37
+IfcBeam Beton C30/37
+IfcBeam Beton C30/37
+IfcBeam Beton C30/37
+IfcBeam Beton C30/37
+IfcBeam Beton C30/37
+
+IfcBearing S235JR
+IfcBearing Stahl
+IfcBearing Elastomer
+IfcBearing Elastomer
+IfcBearing PTFE
+IfcBearing Polytetrafluoroethylene
+IfcBearing Teflon
+IfcBearing S235JR
+IfcBearing Stahl
+IfcBearing S235JR
+IfcBearing Stahl
+IfcBearing S235JR
+IfcBearing Stahl
+IfcBearing S235JR
+IfcBearing Stahl
+
+IfcCaissonFoundation Beton C20/25
+IfcCaissonFoundation Stahlbeton C20/25
+IfcCaissonFoundation Beton C20/25
+IfcCaissonFoundation Stahlbeton C20/25
+
+IfcColumn Beton C30/37
+IfcColumn Stahlbeton C30/37
+IfcColumn S235JR
+IfcColumn Beton C30/37
+IfcColumn Stahlbeton C30/37
+IfcColumn S235JR
+IfcColumn Beton C30/37
+IfcColumn Stahlbeton C30/37
+IfcColumn S235JR
+IfcColumn Beton C30/37
+IfcColumn Stahlbeton C30/37
+IfcColumn S235JR
+IfcColumn Beton C30/37
+IfcColumn Stahlbeton C30/37
+IfcColumn S235JR
+
+IfcCourse Gestein
+IfcCourse Schotter
+IfcCourse Schotter
+IfcCourse Kies
+IfcCourse Gestein
+IfcCourse Erdmaterial
+IfcCourse Mineralischer Filter
+IfcCourse Kies-Sand-Gemisch
+IfcCourse Asphalt
+IfcCourse Beton C30/37
+IfcCourse Gestein
+IfcCourse Schotter
+
+IfcCovering Metall
+IfcCovering Faserzement
+IfcCovering Beton C30/37
+IfcCovering Naturstein
+IfcCovering Abdichtung
+IfcCovering Bitumenbahn
+IfcCovering Feinmörtel
+IfcCovering Kunststoff
+
+IfcFooting Beton C30/37
+IfcFooting Stahl
+IfcFooting S235JR
+IfcFooting Beton C30/37
+IfcFooting Stahlbeton C30/37
+IfcFooting Beton C30/37
+IfcFooting Stahlbeton C30/37
+IfcFooting Beton C30/37
+IfcFooting Stahlbeton C30/37
+IfcFooting Beton C30/37
+IfcFooting Stahlbeton C30/37
+
+IfcMember Beton C30/37
+IfcMember Stahl
+IfcMember Naturstein
+IfcMember Stahl
+IfcMember Holz
+IfcMember Stahl
+IfcMember Holz
+IfcMember Stahl
+IfcMember Holz
+IfcMember Holz
+IfcMember Brettschichtholz
+IfcMember Holz
+IfcMember Stahl
+IfcMember Holz
+IfcMember Stahl
+IfcMember Holz
+IfcMember Stahl
+IfcMember Stahl
+IfcMember Litze
+IfcMember Stahl
+IfcMember Beton C30/37
+IfcMember Stahl
+IfcMember Stahl
+IfcMember Litze
+IfcMember Stahl
+IfcMember Holz
+IfcMember Holz
+IfcMember Stahl
+IfcMember Litze
+IfcMember Stahl
+IfcMember Litze
+IfcMember Stahl
+IfcMember Aluminium
+
+IfcPavement Asphalt
+IfcPavement Walzasphalt
+IfcPavement Splittmastixasphalt
+IfcPavement Offenporiger Asphalt
+IfcPavement Bitumenmischgut
+IfcPavement Polymermodifiziertes Bitumen
+IfcPavement Hydraulisch gebundene Tragschicht
+IfcPavement Ungebundene Tragschicht
+IfcPavement Beton C30/37
+IfcPavement Stahlbeton C30/37
+IfcPavement Faserbeton C30/37
+IfcPavement UHPC
+IfcPavement Hydraulisch gebundenes Fundament
+IfcPavement Ungebundene Tragschicht
+
+IfcPile Beton C20/25
+IfcPile Stahlbeton C20/25
+IfcPile Stahl
+IfcPile Beton C20/25
+IfcPile Zementsuspension
+IfcPile Stahl
+IfcPile Beton C20/25
+IfcPile Beton C20/25
+IfcPile Stahlbeton C20/25
+IfcPile Stahl
+IfcPile Mörtel
+IfcPile Zementmörtel
+IfcPile Spezialmörtel
+IfcPile Beton C20/25
+IfcPile Stahl
+
+IfcPlate Stahl
+IfcPlate Stahlguss
+IfcPlate Stahl
+IfcPlate Hochfester Stahl
+IfcPlate Stahl
+IfcPlate Hochfester Stahl
+IfcPlate Stahl
+IfcPlate Hochfester Stahl
+IfcPlate Stahlblech
+IfcPlate Aluminiumblech
+IfcPlate Stahl
+IfcPlate Hochfester Stahl
+IfcPlate Stahl
+IfcPlate Hochfester Stahl
+IfcPlate Stahl
+IfcPlate Hochfester Stahl
+
+IfcRail Stahl
+IfcRail Vergütungsstahl
+IfcRail Stahl
+IfcRail Hochfester Stahl
+IfcRail Stahl
+IfcRail Hochfester Stahl
+IfcRail Stahl
+IfcRail Vergütungsstahl
+IfcRail Stahl
+IfcRail Vergütungsstahl
+IfcRail Stahl
+IfcRail Vergütungsstahl
+
+IfcRailing Stahl
+IfcRailing Aluminium
+IfcRailing Holz
+IfcRailing Stahl
+IfcRailing Aluminium
+IfcRailing Holz
+IfcRailing Kunststoff
+IfcRailing Stahl
+IfcRailing Aluminium
+IfcRailing Holz
+IfcRailing Stahl
+IfcRailing Aluminium
+IfcRailing Holz
+
+IfcRamp Beton C30/37
+IfcRamp Stahlbeton C30/37
+IfcRamp Beton C30/37
+IfcRamp Stahlbeton C30/37
+IfcRamp Beton C30/37
+IfcRamp Stahlbeton C30/37
+IfcRamp Beton C30/37
+IfcRamp Stahlbeton C30/37
+IfcRamp Beton C30/37
+IfcRamp Stahlbeton C30/37
+IfcRamp Beton C30/37
+IfcRamp Stahlbeton C30/37
+
+IfcTendon Stahl
+IfcTendon Vergütungsstahl
+IfcTendon Stahl mit Korrosionsschutz
+IfcTendon Vergütungsstahl beschichtet
+IfcTendon Litze
+IfcTendon Spannstahl
+IfcTendon Draht
+IfcTendon Spannstahl
+
+IfcTendonConduit Stahl
+IfcTendonConduit Vergütungsstahl
+IfcTendonConduit Kunststoff
+IfcTendonConduit Stahl
+IfcTendonConduit Vergütungsstahl
+IfcTendonConduit Kunststoff
+IfcTendonConduit Kunststoff
+IfcTendonConduit Stahl
+IfcTendonConduit Kunststoff
+IfcTendonConduit Stahl
+IfcTendonConduit Stahl
+IfcTendonConduit Vergütungsstahl
+
+IfcTrackElement Stahl
+IfcTrackElement Aluminium
+IfcTrackElement Stahlguss
+IfcTrackElement Stahl
+IfcTrackElement Aluminium
+IfcTrackElement Stahlguss
+IfcTrackElement Stahl
+IfcTrackElement Manganhartstahl
+IfcTrackElement Vergütungsstahl
+IfcTrackElement Stahl
+IfcTrackElement Vergütungsstahl
+IfcTrackElement Manganhartstahl
+IfcTrackElement Beton C50/60
+IfcTrackElement Stahlbeton C50/60
+IfcTrackElement Holz
+IfcTrackElement Kunststoff
+IfcTrackElement Stahl
+IfcTrackElement Aluminium
+IfcTrackElement Stahlguss
+IfcTrackElement Stahl
+IfcTrackElement Aluminium
+IfcTrackElement Beton C50/60
+IfcTrackElement Stahl
+IfcTrackElement Beton C50/60
+IfcTrackElement Gummipuffer
+
+IfcWall Beton C30/37
+IfcWall Stahlbeton C30/37
+IfcWall Beton C30/37
+IfcWall Stahlbeton C30/37
+IfcWall Beton C30/37
+IfcWall Stahlbeton C30/37
+IfcWall Spritzbeton C12/15
+IfcWall Stahlbeton C30/37
+IfcWall Beton C30/37
+IfcWall Beton C30/37
+IfcWall Stahlbeton C30/37
+IfcWall Beton C30/37
+IfcWall Stahlbeton C30/37
+IfcWall Beton C30/37
+IfcWall Stahlbeton C30/37
+
+IfcReinforcingBar Stahl
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+IfcReinforcingBar Stahl B500B
+
+IfcFooting Beton NPK G C30/37
+IfcSlab Beton NPK D C20/25
+IfcWall Beton NPK G C30/37
+IfcWall Beton C30/37
+
+IfcPile Beton C20/25
+IfcPile Beton NPK F C20/25
+IfcPile Beton C20/25
+IfcPile Beton C20/25
+
+IfcFooting Magerbeton C15/20
+
+IfcCovering Flüssigkunststoff
+
+IfcWall None
+
+IfcWall None

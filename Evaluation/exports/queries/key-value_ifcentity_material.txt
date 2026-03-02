@@ -1,0 +1,303 @@
+Entity: IfcBeam Material: Beton NPK G
+Entity: IfcBeam Material: Beton NPK G
+Entity: IfcBeam Material: Beton NPK G
+Entity: IfcBeam Material: Beton
+Entity: IfcBeam Material: Beton
+Entity: IfcBeam Material: Beton
+Entity: IfcBeam Material: Beton
+Entity: IfcBeam Material: Beton
+Entity: IfcBeam Material: Beton
+Entity: IfcBeam Material: Beton
+Entity: IfcBeam Material: Beton
+Entity: IfcBeam Material: Beton
+Entity: IfcBeam Material: Beton
+Entity: IfcBeam Material: Beton
+
+Entity: IfcBearing Material: S235JR
+Entity: IfcBearing Material: Stahl
+Entity: IfcBearing Material: Elastomer
+Entity: IfcBearing Material: Elastomer
+Entity: IfcBearing Material: PTFE
+Entity: IfcBearing Material: Polytetrafluoroethylene
+Entity: IfcBearing Material: Teflon
+Entity: IfcBearing Material: S235JR
+Entity: IfcBearing Material: Stahl
+Entity: IfcBearing Material: S235JR
+Entity: IfcBearing Material: Stahl
+Entity: IfcBearing Material: S235JR
+Entity: IfcBearing Material: Stahl
+Entity: IfcBearing Material: S235JR
+Entity: IfcBearing Material: Stahl
+
+Entity: IfcCaissonFoundation Material: Beton
+Entity: IfcCaissonFoundation Material: Stahlbeton
+Entity: IfcCaissonFoundation Material: Beton
+Entity: IfcCaissonFoundation Material: Stahlbeton
+
+Entity: IfcColumn Material: Beton
+Entity: IfcColumn Material: Stahlbeton
+Entity: IfcColumn Material: S235JR
+Entity: IfcColumn Material: Beton
+Entity: IfcColumn Material: Stahlbeton
+Entity: IfcColumn Material: S235JR
+Entity: IfcColumn Material: Beton
+Entity: IfcColumn Material: Stahlbeton
+Entity: IfcColumn Material: S235JR
+Entity: IfcColumn Material: Beton
+Entity: IfcColumn Material: Stahlbeton
+Entity: IfcColumn Material: S235JR
+Entity: IfcColumn Material: Beton
+Entity: IfcColumn Material: Stahlbeton
+Entity: IfcColumn Material: S235JR
+
+Entity: IfcCourse Material: Gestein
+Entity: IfcCourse Material: Schotter
+Entity: IfcCourse Material: Schotter
+Entity: IfcCourse Material: Kies
+Entity: IfcCourse Material: Gestein
+Entity: IfcCourse Material: Erdmaterial
+Entity: IfcCourse Material: Mineralischer Filter
+Entity: IfcCourse Material: Kies-Sand-Gemisch
+Entity: IfcCourse Material: Asphalt
+Entity: IfcCourse Material: Beton
+Entity: IfcCourse Material: Gestein
+Entity: IfcCourse Material: Schotter
+
+Entity: IfcCovering Material: Metall
+Entity: IfcCovering Material: Faserzement
+Entity: IfcCovering Material: Beton
+Entity: IfcCovering Material: Naturstein
+Entity: IfcCovering Material: Abdichtung
+Entity: IfcCovering Material: Bitumenbahn
+Entity: IfcCovering Material: Feinmörtel
+Entity: IfcCovering Material: Kunststoff
+
+Entity: IfcFooting Material: Beton
+Entity: IfcFooting Material: Stahl
+Entity: IfcFooting Material: S235JR
+Entity: IfcFooting Material: Beton
+Entity: IfcFooting Material: Stahlbeton
+Entity: IfcFooting Material: Beton
+Entity: IfcFooting Material: Stahlbeton
+Entity: IfcFooting Material: Beton
+Entity: IfcFooting Material: Stahlbeton
+Entity: IfcFooting Material: Beton
+Entity: IfcFooting Material: Stahlbeton
+
+Entity: IfcMember Material: Beton
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Naturstein
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Holz
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Holz
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Holz
+Entity: IfcMember Material: Holz
+Entity: IfcMember Material: Brettschichtholz
+Entity: IfcMember Material: Holz
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Holz
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Holz
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Litze
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Beton
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Litze
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Holz
+Entity: IfcMember Material: Holz
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Litze
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Litze
+Entity: IfcMember Material: Stahl
+Entity: IfcMember Material: Aluminium
+
+Entity: IfcPavement Material: Asphalt
+Entity: IfcPavement Material: Walzasphalt
+Entity: IfcPavement Material: Splittmastixasphalt
+Entity: IfcPavement Material: Offenporiger Asphalt
+Entity: IfcPavement Material: Bitumenmischgut
+Entity: IfcPavement Material: Polymermodifiziertes Bitumen
+Entity: IfcPavement Material: Hydraulisch gebundene Tragschicht
+Entity: IfcPavement Material: Ungebundene Tragschicht
+Entity: IfcPavement Material: Beton
+Entity: IfcPavement Material: Stahlbeton
+Entity: IfcPavement Material: Faserbeton
+Entity: IfcPavement Material: UHPC
+Entity: IfcPavement Material: Hydraulisch gebundenes Fundament
+Entity: IfcPavement Material: Ungebundene Tragschicht
+
+Entity: IfcPile Material: Beton
+Entity: IfcPile Material: Stahlbeton
+Entity: IfcPile Material: Stahl
+Entity: IfcPile Material: Beton
+Entity: IfcPile Material: Zementsuspension
+Entity: IfcPile Material: Stahl
+Entity: IfcPile Material: Beton
+Entity: IfcPile Material: Beton
+Entity: IfcPile Material: Stahlbeton
+Entity: IfcPile Material: Stahl
+Entity: IfcPile Material: Mörtel
+Entity: IfcPile Material: Zementmörtel
+Entity: IfcPile Material: Spezialmörtel
+Entity: IfcPile Material: Beton
+Entity: IfcPile Material: Stahl
+
+Entity: IfcPlate Material: Stahl
+Entity: IfcPlate Material: Stahlguss
+Entity: IfcPlate Material: Stahl
+Entity: IfcPlate Material: Hochfester Stahl
+Entity: IfcPlate Material: Stahl
+Entity: IfcPlate Material: Hochfester Stahl
+Entity: IfcPlate Material: Stahl
+Entity: IfcPlate Material: Hochfester Stahl
+Entity: IfcPlate Material: Stahlblech
+Entity: IfcPlate Material: Aluminiumblech
+Entity: IfcPlate Material: Stahl
+Entity: IfcPlate Material: Hochfester Stahl
+Entity: IfcPlate Material: Stahl
+Entity: IfcPlate Material: Hochfester Stahl
+Entity: IfcPlate Material: Stahl
+Entity: IfcPlate Material: Hochfester Stahl
+
+Entity: IfcRail Material: Stahl
+Entity: IfcRail Material: Vergütungsstahl
+Entity: IfcRail Material: Stahl
+Entity: IfcRail Material: Hochfester Stahl
+Entity: IfcRail Material: Stahl
+Entity: IfcRail Material: Hochfester Stahl
+Entity: IfcRail Material: Stahl
+Entity: IfcRail Material: Vergütungsstahl
+Entity: IfcRail Material: Stahl
+Entity: IfcRail Material: Vergütungsstahl
+Entity: IfcRail Material: Stahl
+Entity: IfcRail Material: Vergütungsstahl
+
+Entity: IfcRailing Material: Stahl
+Entity: IfcRailing Material: Aluminium
+Entity: IfcRailing Material: Holz
+Entity: IfcRailing Material: Stahl
+Entity: IfcRailing Material: Aluminium
+Entity: IfcRailing Material: Holz
+Entity: IfcRailing Material: Kunststoff
+Entity: IfcRailing Material: Stahl
+Entity: IfcRailing Material: Aluminium
+Entity: IfcRailing Material: Holz
+Entity: IfcRailing Material: Stahl
+Entity: IfcRailing Material: Aluminium
+Entity: IfcRailing Material: Holz
+
+Entity: IfcRamp Material: Beton
+Entity: IfcRamp Material: Stahlbeton
+Entity: IfcRamp Material: Beton
+Entity: IfcRamp Material: Stahlbeton
+Entity: IfcRamp Material: Beton
+Entity: IfcRamp Material: Stahlbeton
+Entity: IfcRamp Material: Beton
+Entity: IfcRamp Material: Stahlbeton
+Entity: IfcRamp Material: Beton
+Entity: IfcRamp Material: Stahlbeton
+Entity: IfcRamp Material: Beton
+Entity: IfcRamp Material: Stahlbeton
+
+Entity: IfcTendon Material: Stahl
+Entity: IfcTendon Material: Vergütungsstahl
+Entity: IfcTendon Material: Stahl mit Korrosionsschutz
+Entity: IfcTendon Material: Vergütungsstahl beschichtet
+Entity: IfcTendon Material: Litze
+Entity: IfcTendon Material: Spannstahl
+Entity: IfcTendon Material: Draht
+Entity: IfcTendon Material: Spannstahl
+
+Entity: IfcTendonConduit Material: Stahl
+Entity: IfcTendonConduit Material: Vergütungsstahl
+Entity: IfcTendonConduit Material: Kunststoff
+Entity: IfcTendonConduit Material: Stahl
+Entity: IfcTendonConduit Material: Vergütungsstahl
+Entity: IfcTendonConduit Material: Kunststoff
+Entity: IfcTendonConduit Material: Kunststoff
+Entity: IfcTendonConduit Material: Stahl
+Entity: IfcTendonConduit Material: Kunststoff
+Entity: IfcTendonConduit Material: Stahl
+Entity: IfcTendonConduit Material: Stahl
+Entity: IfcTendonConduit Material: Vergütungsstahl
+
+Entity: IfcTrackElement Material: Stahl
+Entity: IfcTrackElement Material: Aluminium
+Entity: IfcTrackElement Material: Stahlguss
+Entity: IfcTrackElement Material: Stahl
+Entity: IfcTrackElement Material: Aluminium
+Entity: IfcTrackElement Material: Stahlguss
+Entity: IfcTrackElement Material: Stahl
+Entity: IfcTrackElement Material: Manganhartstahl
+Entity: IfcTrackElement Material: Vergütungsstahl
+Entity: IfcTrackElement Material: Stahl
+Entity: IfcTrackElement Material: Vergütungsstahl
+Entity: IfcTrackElement Material: Manganhartstahl
+Entity: IfcTrackElement Material: Beton
+Entity: IfcTrackElement Material: Stahlbeton
+Entity: IfcTrackElement Material: Holz
+Entity: IfcTrackElement Material: Kunststoff
+Entity: IfcTrackElement Material: Stahl
+Entity: IfcTrackElement Material: Aluminium
+Entity: IfcTrackElement Material: Stahlguss
+Entity: IfcTrackElement Material: Stahl
+Entity: IfcTrackElement Material: Aluminium
+Entity: IfcTrackElement Material: Beton
+Entity: IfcTrackElement Material: Stahl
+Entity: IfcTrackElement Material: Beton
+Entity: IfcTrackElement Material: Gummipuffer
+
+Entity: IfcWall Material: Beton
+Entity: IfcWall Material: Stahlbeton
+Entity: IfcWall Material: Beton
+Entity: IfcWall Material: Stahlbeton
+Entity: IfcWall Material: Beton
+Entity: IfcWall Material: Stahlbeton
+Entity: IfcWall Material: Spritzbeton
+Entity: IfcWall Material: Stahlbeton
+Entity: IfcWall Material: Beton
+Entity: IfcWall Material: Beton
+Entity: IfcWall Material: Stahlbeton
+Entity: IfcWall Material: Beton
+Entity: IfcWall Material: Stahlbeton
+Entity: IfcWall Material: Beton
+Entity: IfcWall Material: Stahlbeton
+
+Entity: IfcReinforcingBar
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+Entity: IfcReinforcingBar Material: B500B
+
+Entity: IfcFooting Material: Beton NPK G
+Entity: IfcSlab Material: Beton NPK D
+Entity: IfcWall Material: Beton NPK G
+Entity: IfcWall Material: Beton NPK G
+
+Entity: IfcPile Material: Beton
+Entity: IfcPile Material: Beton NPK F
+Entity: IfcPile Material: Beton
+Entity: IfcPile Material: Beton
+
+Entity: IfcFooting Material: Magerbeton
+
+Entity: IfcCovering Material: Flüssigkunststoff
+
+Entity: IfcWall Material: None
+
+Entity: IfcWall Material: Ortbeton

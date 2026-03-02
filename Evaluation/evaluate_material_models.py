@@ -17,6 +17,12 @@ from retrieval_metrics import binary_ranking_metrics_at_10
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
+# ── Leicht anpassbar: Bi-Encoder-Kandidaten pro Query ────────────────────────
+# Wie viele Kandidaten der Bi-Encoder maximal zurückgibt.
+# Der Wert sollte >= SBERT_RERANK_TOP_N sein; er wird weiter unten übermax(BI_ENCODER_TOP_K, SBERT_RERANK_TOP_N) erzwungen.
+# 
+BI_ENCODER_TOP_K = 50
+
 
 def resolve_database_path(project_root: Path) -> Path:
     """Resolve the KBOB/Ökobilanz SQLite DB path.
@@ -70,13 +76,16 @@ MODEL_NAMES = [
     "google-bert/bert-base-multilingual-cased",
 ]
 
-TOP_K = 10
 SBERT_DEVICE = os.environ.get("SBERT_DEVICE", "").strip().lower()
 SBERT_QUERY_FILE = os.environ.get("SBERT_QUERY_FILE", "").strip()
 SBERT_EXPECTED_FILE = os.environ.get("SBERT_EXPECTED_FILE", "").strip()
-SBERT_CROSS_ENCODER_MODEL = os.environ.get("SBERT_CROSS_ENCODER_MODEL", "BAAI/bge-reranker-v2-m3").strip()
+SBERT_CROSS_ENCODER_MODEL = os.environ.get("SBERT_CROSS_ENCODER_MODEL", "").strip()
 SBERT_RERANK_TOP_N = int(os.environ.get("SBERT_RERANK_TOP_N", "30"))
 SBERT_CROSS_ENCODER_REVISION = os.environ.get("SBERT_CROSS_ENCODER_REVISION", "").strip() or None
+
+# Bi-Encoder retrieval pool: mindestens 10, mindestens so gross wie der Re-Rank-Pool
+# Standardwert kommt von BI_ENCODER_TOP_K (oben im Skript leicht änderbar).
+TOP_K = max(BI_ENCODER_TOP_K, SBERT_RERANK_TOP_N)
 
 BOOTSTRAP_SAMPLES = int(os.environ.get("EVAL_BOOTSTRAP_SAMPLES", "300"))
 BOOTSTRAP_SEED = 42
@@ -84,7 +93,6 @@ BOOTSTRAP_SEED = 42
 DEFAULT_QUERY_FILE_RELATIVE = Path("static") / "Bohrpfahl_4.3_sbert_queries.txt"
 DEFAULT_EVALUATION_OUTPUT_RELATIVE = Path("Evaluation") / "exports" / "model_evaluation"
 
-DEFAULT_EXPECTED_MATERIAL = "Tiefgründung Ortbetonbohrpfahl 900"
 EXPECTED_BY_QUERY_OVERRIDES: Dict[str, str] = {}
 
 _global_cross_encoder_models: dict[tuple[str, str], CrossEncoder] = {}
@@ -175,7 +183,7 @@ def build_evaluation_cases(query_file: Path, expected_file: Path | None = None) 
 
     cases: List[EvaluationCase] = []
     for index, query in enumerate(queries):
-        expected_default = expected_from_file[index] if expected_from_file is not None else DEFAULT_EXPECTED_MATERIAL
+        expected_default = expected_from_file[index] if expected_from_file is not None else ""
         expected_raw = EXPECTED_BY_QUERY_OVERRIDES.get(query, expected_default).strip()
         tokens = parse_expected_tokens_line(expected_raw)
         if not tokens:
@@ -356,8 +364,9 @@ def bootstrap_metric_ci(
         value = float(sample[metric_name].mean())
         estimates.append(value)
 
-    low = float(np.quantile(estimates, 0.025))
-    high = float(np.quantile(estimates, 0.975))
+    estimates_arr = np.array(estimates, dtype=float)
+    low = float(np.quantile(estimates_arr, 0.025))
+    high = float(np.quantile(estimates_arr, 0.975))
     return low, high
 
 
@@ -426,8 +435,10 @@ def build_model_dataframe(
                 "expected_rank": best_rank,
                 "top1_correct": bool(metrics["hit@1"] > 0.0),
                 "hit@1": float(metrics["hit@1"]),
-                "hit@5": float(metrics["hit@5"]),
                 "hit@10": float(metrics["hit@10"]),
+                "hit@20": float(metrics["hit@20"]),
+                "hit@30": float(metrics["hit@30"]),
+                "hit@50": float(metrics["hit@50"]),
                 "mrr@10": float(metrics["mrr@10"]),
                 "ndcg@10": float(metrics["ndcg@10"]),
                 "map@10": float(metrics["map@10"]),
@@ -457,8 +468,10 @@ def summarize_and_detail_rows(
         "cross_encoder_model": cross_encoder_model,
         "cases": str(len(frame)),
         "hit@1": f"{float(frame['hit@1'].mean()):.6f}",
-        "hit@5": f"{float(frame['hit@5'].mean()):.6f}",
         "hit@10": f"{float(frame['hit@10'].mean()):.6f}",
+        "hit@20": f"{float(frame['hit@20'].mean()):.6f}",
+        "hit@30": f"{float(frame['hit@30'].mean()):.6f}",
+        "hit@50": f"{float(frame['hit@50'].mean()):.6f}",
         "mrr": f"{float(frame['mrr@10'].mean()):.6f}",
         "map@10": f"{float(frame['map@10'].mean()):.6f}",
         "ndcg@10": f"{float(frame['ndcg@10'].mean()):.6f}",
@@ -491,8 +504,10 @@ def summarize_and_detail_rows(
                 "expected_rank": str(int(row["expected_rank"])),
                 "top1_correct": str(bool(row["top1_correct"])),
                 "hit@1": f"{float(row['hit@1']):.6f}",
-                "hit@5": f"{float(row['hit@5']):.6f}",
                 "hit@10": f"{float(row['hit@10']):.6f}",
+                "hit@20": f"{float(row['hit@20']):.6f}",
+                "hit@30": f"{float(row['hit@30']):.6f}",
+                "hit@50": f"{float(row['hit@50']):.6f}",
                 "mrr@10": f"{float(row['mrr@10']):.6f}",
                 "ndcg@10": f"{float(row['ndcg@10']):.6f}",
                 "map@10": f"{float(row['map@10']):.6f}",
@@ -527,6 +542,12 @@ def evaluate_model(
     print("  Computing similarities...", flush=True)
     similarities = np.matmul(query_embeddings, material_embeddings.T)
 
+    # Bi-Encoder nach dem Encoding vom GPU entladen, damit der Cross-Encoder
+    # (der ggf. noch im VRAM ist) ausreichend Speicher hat.
+    if device == "cuda":
+        model.cpu()
+        torch.cuda.empty_cache()
+
     baseline_rankings = [np.argsort(-similarities[query_index]).tolist() for query_index in range(len(cases))]
 
     baseline_frame = build_model_dataframe(
@@ -558,16 +579,48 @@ def evaluate_model(
         reranked_rankings: List[List[int]] = []
         reranked_score_overrides: List[Dict[int, float]] = []
 
+        # ── Batched Cross-Encoder Inference ──────────────────────────────────
+        # Alle Query-Kandidaten-Paare über alle Queries hinweg in einem einzigen
+        # cross_encoder.predict()-Aufruf bündeln.  Das vermeidet N_queries
+        # separate Vorwärtspässe (mit je Python- und CUDA-Overhead) und ist
+        # typischerweise 5–20× schneller als eine Query-by-Query-Schleife.
+        all_pairs: List[List[str]] = []
+        prefix_indices_per_query: List[List[int]] = []
+        pair_counts: List[int] = []
+
         for query_index, case in enumerate(cases):
-            reranked_indices, overrides = rerank_query_indices(
-                query=case.query,
-                ranked_indices=baseline_rankings[query_index],
-                materials=materials,
-                rerank_top_n=rerank_top_n,
-                cross_encoder=cross_encoder,
+            ranked = baseline_rankings[query_index]
+            prefix_n = min(rerank_top_n, len(ranked))
+            prefix_indices = list(ranked[:prefix_n])
+            prefix_indices_per_query.append(prefix_indices)
+            pairs = [[case.query, materials[int(idx)]] for idx in prefix_indices]
+            all_pairs.extend(pairs)
+            pair_counts.append(len(pairs))
+
+        if all_pairs:
+            raw_scores_all = cross_encoder.predict(all_pairs, apply_softmax=False, batch_size=64)
+            normalized_all = _normalize_cross_encoder_scores(np.array(raw_scores_all))
+        else:
+            normalized_all = []
+
+        offset = 0
+        for query_index in range(len(cases)):
+            ranked = baseline_rankings[query_index]
+            prefix_indices = prefix_indices_per_query[query_index]
+            count = pair_counts[query_index]
+            normalized_scores = list(normalized_all[offset : offset + count])
+            offset += count
+
+            scored = list(zip(prefix_indices, normalized_scores))
+            scored.sort(key=lambda item: item[1], reverse=True)
+
+            reranked_prefix = [idx for idx, _ in scored]
+            reranked_full = reranked_prefix + list(ranked[count:])
+            reranked_rankings.append(reranked_full)
+            reranked_score_overrides.append(
+                {int(idx): float(score) for idx, score in zip(prefix_indices, normalized_scores)}
             )
-            reranked_rankings.append(reranked_indices)
-            reranked_score_overrides.append(overrides)
+        # ─────────────────────────────────────────────────────────────────────
 
         reranked_frame = build_model_dataframe(
             similarities=similarities,
@@ -604,6 +657,15 @@ def make_query_label(query_file: Path) -> str:
     base_name = query_file.stem or "latest"
     safe_name = re.sub(r"[^A-Za-z0-9._-]", "_", base_name).strip("._-")
     return safe_name or "latest"
+
+
+def make_cross_encoder_label(model_id: str) -> str:
+    """Leitet einen dateisicheren Kürzel aus dem Cross-Encoder-Modell-Namen ab."""
+    if not model_id:
+        return "no-reranker"
+    short = model_id.split("/")[-1]
+    safe = re.sub(r"[^A-Za-z0-9._-]", "_", short).strip("._-")
+    return safe or "reranker"
 
 
 def main() -> None:
@@ -677,8 +739,10 @@ def main() -> None:
             print(
                 f"  [{summary['pipeline_variant']}] "
                 f"Hit@1: {float(summary['hit@1']):.2%} | "
-                f"Hit@5: {float(summary['hit@5']):.2%} | "
                 f"Hit@10: {float(summary['hit@10']):.2%} | "
+                f"Hit@20: {float(summary['hit@20']):.2%} | "
+                f"Hit@30: {float(summary['hit@30']):.2%} | "
+                f"Hit@50: {float(summary['hit@50']):.2%} | "
                 f"MRR@10: {float(summary['mrr']):.4f} | "
                 f"MAP@10: {float(summary['map@10']):.4f} | "
                 f"nDCG@10: {float(summary['ndcg@10']):.4f} | "
@@ -690,8 +754,11 @@ def main() -> None:
     summary_fieldnames = list(summary_rows[0].keys()) if summary_rows else []
     details_fieldnames = list(detail_rows[0].keys()) if detail_rows else []
 
-    summary_labeled = output_dir / f"summary_{query_label}.csv"
-    details_labeled = output_dir / f"details_{query_label}.csv"
+    ce_label = make_cross_encoder_label(SBERT_CROSS_ENCODER_MODEL)
+    file_label = f"{query_label}_{ce_label}"
+
+    summary_labeled = output_dir / f"summary_{file_label}.csv"
+    details_labeled = output_dir / f"details_{file_label}.csv"
     summary_latest = output_dir / "summary.csv"
     details_latest = output_dir / "details.csv"
 

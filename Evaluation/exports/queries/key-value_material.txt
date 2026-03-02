@@ -1,0 +1,303 @@
+Material: Beton NPK G
+Material: Beton NPK G
+Material: Beton NPK G
+Material: Beton
+Material: Beton
+Material: Beton
+Material: Beton
+Material: Beton
+Material: Beton
+Material: Beton
+Material: Beton
+Material: Beton
+Material: Beton
+Material: Beton
+
+Material: S235JR
+Material: Stahl
+Material: Elastomer
+Material: Elastomer
+Material: PTFE
+Material: Polytetrafluoroethylene
+Material: Teflon
+Material: S235JR
+Material: Stahl
+Material: S235JR
+Material: Stahl
+Material: S235JR
+Material: Stahl
+Material: S235JR
+Material: Stahl
+
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+
+Material: Beton
+Material: Stahlbeton
+Material: S235JR
+Material: Beton
+Material: Stahlbeton
+Material: S235JR
+Material: Beton
+Material: Stahlbeton
+Material: S235JR
+Material: Beton
+Material: Stahlbeton
+Material: S235JR
+Material: Beton
+Material: Stahlbeton
+Material: S235JR
+
+Material: Gestein
+Material: Schotter
+Material: Schotter
+Material: Kies
+Material: Gestein
+Material: Erdmaterial
+Material: Mineralischer Filter
+Material: Kies-Sand-Gemisch
+Material: Asphalt
+Material: Beton
+Material: Gestein
+Material: Schotter
+
+Material: Metall
+Material: Faserzement
+Material: Beton
+Material: Naturstein
+Material: Abdichtung
+Material: Bitumenbahn
+Material: Feinmörtel
+Material: Kunststoff
+
+Material: Beton
+Material: Stahl
+Material: S235JR
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+
+Material: Beton
+Material: Stahl
+Material: Naturstein
+Material: Stahl
+Material: Holz
+Material: Stahl
+Material: Holz
+Material: Stahl
+Material: Holz
+Material: Holz
+Material: Brettschichtholz
+Material: Holz
+Material: Stahl
+Material: Holz
+Material: Stahl
+Material: Holz
+Material: Stahl
+Material: Stahl
+Material: Litze
+Material: Stahl
+Material: Beton
+Material: Stahl
+Material: Stahl
+Material: Litze
+Material: Stahl
+Material: Holz
+Material: Holz
+Material: Stahl
+Material: Litze
+Material: Stahl
+Material: Litze
+Material: Stahl
+Material: Aluminium
+
+Material: Asphalt
+Material: Walzasphalt
+Material: Splittmastixasphalt
+Material: Offenporiger Asphalt
+Material: Bitumenmischgut
+Material: Polymermodifiziertes Bitumen
+Material: Tragschicht
+Material: Ungebundene Tragschicht
+Material: Beton
+Material: Stahlbeton
+Material: Faserbeton
+Material: UHPC
+Material: Hydraulisch gebundenes Fundament
+Material: Ungebundene Tragschicht
+
+Material: Beton
+Material: Stahlbeton
+Material: Stahl
+Material: Beton
+Material: Zementsuspension
+Material: Stahl
+Material: Beton
+Material: Beton
+Material: Stahlbeton
+Material: Stahl
+Material: Mörtel
+Material: Zementmörtel
+Material: Spezialmörtel
+Material: Beton
+Material: Stahl
+
+Material: Stahl
+Material: Stahlguss
+Material: Stahl
+Material: Hochfester Stahl
+Material: Stahl
+Material: Hochfester Stahl
+Material: Stahl
+Material: Hochfester Stahl
+Material: Stahlblech
+Material: Aluminiumblech
+Material: Stahl
+Material: Hochfester Stahl
+Material: Stahl
+Material: Hochfester Stahl
+Material: Stahl
+Material: Hochfester Stahl
+
+Material: Stahl
+Material: Vergütungsstahl
+Material: Stahl
+Material: Hochfester Stahl
+Material: Stahl
+Material: Hochfester Stahl
+Material: Stahl
+Material: Vergütungsstahl
+Material: Stahl
+Material: Vergütungsstahl
+Material: Stahl
+Material: Vergütungsstahl
+
+Material: Stahl
+Material: Aluminium
+Material: Holz
+Material: Stahl
+Material: Aluminium
+Material: Holz
+Material: Kunststoff
+Material: Stahl
+Material: Aluminium
+Material: Holz
+Material: Stahl
+Material: Aluminium
+Material: Holz
+
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+
+Material: Stahl
+Material: Vergütungsstahl
+Material: Stahl mit Korrosionsschutz
+Material: Vergütungsstahl beschichtet
+Material: Litze
+Material: Spannstahl
+Material: Draht
+Material: Spannstahl
+
+Material: Stahl
+Material: Vergütungsstahl
+Material: Kunststoff
+Material: Stahl
+Material: Vergütungsstahl
+Material: Kunststoff
+Material: Kunststoff
+Material: Stahl
+Material: Kunststoff
+Material: Stahl
+Material: Stahl
+Material: Vergütungsstahl
+
+Material: Stahl
+Material: Aluminium
+Material: Stahlguss
+Material: Stahl
+Material: Aluminium
+Material: Stahlguss
+Material: Stahl
+Material: Manganhartstahl
+Material: Vergütungsstahl
+Material: Stahl
+Material: Vergütungsstahl
+Material: Manganhartstahl
+Material: Beton
+Material: Stahlbeton
+Material: Holz
+Material: Kunststoff
+Material: Stahl
+Material: Aluminium
+Material: Stahlguss
+Material: Stahl
+Material: Aluminium
+Material: Beton
+Material: Stahl
+Material: Beton
+Material: Gummipuffer
+
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+Material: Spritzbeton
+Material: Stahlbeton
+Material: Beton
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+Material: Beton
+Material: Stahlbeton
+
+Material: B500B
+Material: B500B
+Material: B500B
+Material: B500B
+Material: B500B
+Material: B500B
+Material: B500B
+Material: B500B
+Material: B500B
+Material: B500B
+Material: B500B
+Material: B500B
+Material: B500B
+
+Material: Beton NPK G
+Material: Beton NPK D
+Material: Beton NPK G
+Material: Beton NPK G
+
+Material: Beton
+Material: Beton NPK F
+Material: Beton
+Material: Beton
+
+Material: Magerbeton
+
+Material: Flüssigkunststoff
+
+Material: None
+
+Material: Beton

@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1110" height="1499" viewBox="0 0 1110 1499">
+<style>text { font-family: Arial, sans-serif; fill: #1f2937; } .label { font-size: 13px; font-weight: bold; } .title { font-size: 17px; font-weight: bold; } .axis { font-size: 11px; fill: #4b5563; } .value { font-size: 10px; font-weight: bold; } .mlabel { font-size: 10px; fill: #6b7280; }</style>
+<text x="20" y="28" class="title">Model Comparison — Bi-Encoder vs. Cross-Encoder (Hit@1 / Hit@10 / MRR)</text>
+<line x1="300" y1="60" x2="1060" y2="60" stroke="#d1d5db" stroke-width="1"/>
+<line x1="300" y1="1449" x2="1060" y2="1449" stroke="#d1d5db" stroke-width="1"/>
+<line x1="300.0" y1="60" x2="300.0" y2="1449" stroke="#e5e7eb" stroke-width="1"/>
+<text x="290.0" y="56" class="axis">0%</text>
+<line x1="490.0" y1="60" x2="490.0" y2="1449" stroke="#e5e7eb" stroke-width="1"/>
+<text x="480.0" y="56" class="axis">25%</text>
+<line x1="680.0" y1="60" x2="680.0" y2="1449" stroke="#e5e7eb" stroke-width="1"/>
+<text x="670.0" y="56" class="axis">50%</text>
+<line x1="870.0" y1="60" x2="870.0" y2="1449" stroke="#e5e7eb" stroke-width="1"/>
+<text x="860.0" y="56" class="axis">75%</text>
+<line x1="1060.0" y1="60" x2="1060.0" y2="1449" stroke="#e5e7eb" stroke-width="1"/>
+<text x="1050.0" y="56" class="axis">100%</text>
+<text x="20" y="62" class="label">bge-m3</text>
+<text x="296" y="74" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="66" width="375.91424" height="8" fill="#1d4ed8" rx="2"/>
+<text x="679.9142400000001" y="73" class="value">49.46%</text>
+<rect x="300" y="77" width="128.02884" height="8" fill="#93c5fd" rx="2"/>
+<text x="432.02884" y="84" class="value">16.85%</text>
+<text x="296" y="103" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="95" width="591.11128" height="8" fill="#6d28d9" rx="2"/>
+<text x="895.11128" y="102" class="value">77.78%</text>
+<rect x="300" y="106" width="596.5589600000001" height="8" fill="#c4b5fd" rx="2"/>
+<text x="900.5589600000001" y="113" class="value">78.49%</text>
+<text x="296" y="132" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="124" width="444.21088000000003" height="8" fill="#b45309" rx="2"/>
+<text x="748.2108800000001" y="131" class="value">58.45%</text>
+<rect x="300" y="135" width="259.68364" height="8" fill="#fcd34d" rx="2"/>
+<text x="563.68364" y="142" class="value">34.17%</text>
+<text x="20" y="169" class="label">multilingual-e5-large</text>
+<text x="296" y="181" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="173" width="294.19372000000004" height="8" fill="#1d4ed8" rx="2"/>
+<text x="598.19372" y="180" class="value">38.71%</text>
+<rect x="300" y="184" width="166.16488" height="8" fill="#93c5fd" rx="2"/>
+<text x="470.16488000000004" y="191" class="value">21.86%</text>
+<text x="296" y="210" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="202" width="604.7312400000001" height="8" fill="#6d28d9" rx="2"/>
+<text x="908.7312400000001" y="209" class="value">79.57%</text>
+<rect x="300" y="213" width="580.2151600000001" height="8" fill="#c4b5fd" rx="2"/>
+<text x="884.2151600000001" y="220" class="value">76.34%</text>
+<text x="296" y="239" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="231" width="398.39655999999997" height="8" fill="#b45309" rx="2"/>
+<text x="702.3965599999999" y="238" class="value">52.42%</text>
+<rect x="300" y="242" width="301.3894" height="8" fill="#fcd34d" rx="2"/>
+<text x="605.3894" y="249" class="value">39.66%</text>
+<text x="20" y="276" class="label">LaBSE</text>
+<text x="296" y="288" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="280" width="242.43696" height="8" fill="#1d4ed8" rx="2"/>
+<text x="546.43696" y="287" class="value">31.90%</text>
+<rect x="300" y="291" width="160.7172" height="8" fill="#93c5fd" rx="2"/>
+<text x="464.7172" y="298" class="value">21.15%</text>
+<text x="296" y="317" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="309" width="454.91016" height="8" fill="#6d28d9" rx="2"/>
+<text x="758.91016" y="316" class="value">59.86%</text>
+<rect x="300" y="320" width="525.73456" height="8" fill="#c4b5fd" rx="2"/>
+<text x="829.73456" y="327" class="value">69.18%</text>
+<text x="296" y="346" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="338" width="312.85931999999997" height="8" fill="#b45309" rx="2"/>
+<text x="616.85932" y="345" class="value">41.17%</text>
+<rect x="300" y="349" width="267.49948" height="8" fill="#fcd34d" rx="2"/>
+<text x="571.49948" y="356" class="value">35.20%</text>
+<text x="20" y="383" class="label">embeddinggemma-300m</text>
+<text x="296" y="395" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="387" width="217.92087999999998" height="8" fill="#1d4ed8" rx="2"/>
+<text x="521.92088" y="394" class="value">28.67%</text>
+<rect x="300" y="398" width="125.30499999999999" height="8" fill="#93c5fd" rx="2"/>
+<text x="429.305" y="405" class="value">16.49%</text>
+<text x="296" y="424" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="416" width="634.695" height="8" fill="#6d28d9" rx="2"/>
+<text x="938.695" y="423" class="value">83.51%</text>
+<rect x="300" y="427" width="585.66284" height="8" fill="#c4b5fd" rx="2"/>
+<text x="889.66284" y="434" class="value">77.06%</text>
+<text x="296" y="453" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="445" width="329.98516" height="8" fill="#b45309" rx="2"/>
+<text x="633.98516" y="452" class="value">43.42%</text>
+<rect x="300" y="456" width="252.03196" height="8" fill="#fcd34d" rx="2"/>
+<text x="556.03196" y="463" class="value">33.16%</text>
+<text x="20" y="490" class="label">distiluse-base-multilingual-cased-v2</text>
+<text x="296" y="502" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="494" width="207.02476000000001" height="8" fill="#1d4ed8" rx="2"/>
+<text x="511.02476" y="501" class="value">27.24%</text>
+<rect x="300" y="505" width="119.85656000000002" height="8" fill="#93c5fd" rx="2"/>
+<text x="423.85656" y="512" class="value">15.77%</text>
+<text x="296" y="531" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="523" width="512.1146" height="8" fill="#6d28d9" rx="2"/>
+<text x="816.1146" y="530" class="value">67.38%</text>
+<rect x="300" y="534" width="547.5268" height="8" fill="#c4b5fd" rx="2"/>
+<text x="851.5268" y="541" class="value">72.04%</text>
+<text x="296" y="560" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="552" width="316.78092" height="8" fill="#b45309" rx="2"/>
+<text x="620.7809199999999" y="559" class="value">41.68%</text>
+<rect x="300" y="563" width="250.82736" height="8" fill="#fcd34d" rx="2"/>
+<text x="554.82736" y="570" class="value">33.00%</text>
+<text x="20" y="597" class="label">multilingual-e5-base</text>
+<text x="296" y="609" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="601" width="166.16488" height="8" fill="#1d4ed8" rx="2"/>
+<text x="470.16488000000004" y="608" class="value">21.86%</text>
+<rect x="300" y="612" width="157.99259999999998" height="8" fill="#93c5fd" rx="2"/>
+<text x="461.9926" y="619" class="value">20.79%</text>
+<text x="296" y="638" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="630" width="498.49464" height="8" fill="#6d28d9" rx="2"/>
+<text x="802.49464" y="637" class="value">65.59%</text>
+<rect x="300" y="641" width="550.2506400000001" height="8" fill="#c4b5fd" rx="2"/>
+<text x="854.2506400000001" y="648" class="value">72.40%</text>
+<text x="296" y="667" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="659" width="276.564" height="8" fill="#b45309" rx="2"/>
+<text x="580.5640000000001" y="666" class="value">36.39%</text>
+<rect x="300" y="670" width="270.81004" height="8" fill="#fcd34d" rx="2"/>
+<text x="574.8100400000001" y="677" class="value">35.63%</text>
+<text x="20" y="704" class="label">paraphrase-multilingual-mpnet-base-v2</text>
+<text x="296" y="716" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="708" width="125.30499999999999" height="8" fill="#1d4ed8" rx="2"/>
+<text x="429.305" y="715" class="value">16.49%</text>
+<rect x="300" y="719" width="98.06432000000001" height="8" fill="#93c5fd" rx="2"/>
+<text x="402.06432" y="726" class="value">12.90%</text>
+<text x="296" y="745" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="737" width="245.16156" height="8" fill="#6d28d9" rx="2"/>
+<text x="549.16156" y="744" class="value">32.26%</text>
+<rect x="300" y="748" width="392.25803999999994" height="8" fill="#c4b5fd" rx="2"/>
+<text x="696.2580399999999" y="755" class="value">51.61%</text>
+<text x="296" y="774" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="766" width="162.78135999999998" height="8" fill="#b45309" rx="2"/>
+<text x="466.78135999999995" y="773" class="value">21.42%</text>
+<rect x="300" y="777" width="183.30592" height="8" fill="#fcd34d" rx="2"/>
+<text x="487.30592" y="784" class="value">24.12%</text>
+<text x="20" y="811" class="label">bert-base-multilingual-cased</text>
+<text x="296" y="823" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="815" width="122.5804" height="8" fill="#1d4ed8" rx="2"/>
+<text x="426.5804" y="822" class="value">16.13%</text>
+<rect x="300" y="826" width="103.51275999999999" height="8" fill="#93c5fd" rx="2"/>
+<text x="407.51275999999996" y="833" class="value">13.62%</text>
+<text x="296" y="852" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="844" width="215.19704000000002" height="8" fill="#6d28d9" rx="2"/>
+<text x="519.19704" y="851" class="value">28.32%</text>
+<rect x="300" y="855" width="520.28688" height="8" fill="#c4b5fd" rx="2"/>
+<text x="824.28688" y="862" class="value">68.46%</text>
+<text x="296" y="881" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="873" width="145.18204" height="8" fill="#b45309" rx="2"/>
+<text x="449.18204000000003" y="880" class="value">19.10%</text>
+<rect x="300" y="884" width="234.84152" height="8" fill="#fcd34d" rx="2"/>
+<text x="538.84152" y="891" class="value">30.90%</text>
+<text x="20" y="918" class="label">IfcMaterial2MP</text>
+<text x="296" y="930" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="922" width="92.61664" height="8" fill="#1d4ed8" rx="2"/>
+<text x="396.61664" y="929" class="value">12.19%</text>
+<rect x="300" y="933" width="62.65212" height="8" fill="#93c5fd" rx="2"/>
+<text x="366.65211999999997" y="940" class="value">8.24%</text>
+<text x="296" y="959" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="951" width="430.39408000000003" height="8" fill="#6d28d9" rx="2"/>
+<text x="734.39408" y="958" class="value">56.63%</text>
+<rect x="300" y="962" width="460.3586" height="8" fill="#c4b5fd" rx="2"/>
+<text x="764.3586" y="969" class="value">60.57%</text>
+<text x="296" y="988" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="980" width="168.45856" height="8" fill="#b45309" rx="2"/>
+<text x="472.45856000000003" y="987" class="value">22.17%</text>
+<rect x="300" y="991" width="182.01999999999998" height="8" fill="#fcd34d" rx="2"/>
+<text x="486.02" y="998" class="value">23.95%</text>
+<text x="20" y="1025" class="label">paraphrase-multilingual-MiniLM-L12-v2</text>
+<text x="296" y="1037" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="1029" width="84.44436" height="8" fill="#1d4ed8" rx="2"/>
+<text x="388.44436" y="1036" class="value">11.11%</text>
+<rect x="300" y="1040" width="114.40888000000001" height="8" fill="#93c5fd" rx="2"/>
+<text x="418.40888" y="1047" class="value">15.05%</text>
+<text x="296" y="1066" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="1058" width="299.6414" height="8" fill="#6d28d9" rx="2"/>
+<text x="603.6414" y="1065" class="value">39.43%</text>
+<rect x="300" y="1069" width="449.46247999999997" height="8" fill="#c4b5fd" rx="2"/>
+<text x="753.4624799999999" y="1076" class="value">59.14%</text>
+<text x="296" y="1095" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="1087" width="138.04564" height="8" fill="#b45309" rx="2"/>
+<text x="442.04564" y="1094" class="value">18.16%</text>
+<rect x="300" y="1098" width="204.74324" height="8" fill="#fcd34d" rx="2"/>
+<text x="508.74324" y="1105" class="value">26.94%</text>
+<text x="20" y="1132" class="label">bert-base-multilingual-uncased</text>
+<text x="296" y="1144" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="1136" width="49.032160000000005" height="8" fill="#1d4ed8" rx="2"/>
+<text x="353.03216" y="1143" class="value">6.45%</text>
+<rect x="300" y="1147" width="114.40888000000001" height="8" fill="#93c5fd" rx="2"/>
+<text x="418.40888" y="1154" class="value">15.05%</text>
+<text x="296" y="1173" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="1165" width="310.53752000000003" height="8" fill="#6d28d9" rx="2"/>
+<text x="614.5375200000001" y="1172" class="value">40.86%</text>
+<rect x="300" y="1176" width="525.73456" height="8" fill="#c4b5fd" rx="2"/>
+<text x="829.73456" y="1183" class="value">69.18%</text>
+<text x="296" y="1202" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="1194" width="116.3294" height="8" fill="#b45309" rx="2"/>
+<text x="420.3294" y="1201" class="value">15.31%</text>
+<rect x="300" y="1205" width="237.86479999999997" height="8" fill="#fcd34d" rx="2"/>
+<text x="541.8648" y="1212" class="value">31.30%</text>
+<text x="20" y="1239" class="label">bert-base-german-cased</text>
+<text x="296" y="1251" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="1243" width="8.17228" height="8" fill="#1d4ed8" rx="2"/>
+<text x="312.17228" y="1250" class="value">1.08%</text>
+<rect x="300" y="1254" width="32.68836" height="8" fill="#93c5fd" rx="2"/>
+<text x="336.68836" y="1261" class="value">4.30%</text>
+<text x="296" y="1280" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="1272" width="76.27208" height="8" fill="#6d28d9" rx="2"/>
+<text x="380.27208" y="1279" class="value">10.04%</text>
+<rect x="300" y="1283" width="125.30499999999999" height="8" fill="#c4b5fd" rx="2"/>
+<text x="429.305" y="1290" class="value">16.49%</text>
+<text x="296" y="1309" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="1301" width="21.09608" height="8" fill="#b45309" rx="2"/>
+<text x="325.09608000000003" y="1308" class="value">2.78%</text>
+<rect x="300" y="1312" width="68.0466" height="8" fill="#fcd34d" rx="2"/>
+<text x="372.0466" y="1319" class="value">8.95%</text>
+<text x="20" y="1346" class="label">IfcElement2ConstructionSets</text>
+<text x="296" y="1358" class="mlabel" text-anchor="end">Hit@1</text>
+<rect x="300" y="1350" width="5.44768" height="8" fill="#1d4ed8" rx="2"/>
+<text x="309.44768" y="1357" class="value">0.72%</text>
+<rect x="300" y="1361" width="32.68836" height="8" fill="#93c5fd" rx="2"/>
+<text x="336.68836" y="1368" class="value">4.30%</text>
+<text x="296" y="1387" class="mlabel" text-anchor="end">Hit@10</text>
+<rect x="300" y="1379" width="65.37672" height="8" fill="#6d28d9" rx="2"/>
+<text x="369.37672" y="1386" class="value">8.60%</text>
+<rect x="300" y="1390" width="187.95712" height="8" fill="#c4b5fd" rx="2"/>
+<text x="491.95712000000003" y="1397" class="value">24.73%</text>
+<text x="296" y="1416" class="mlabel" text-anchor="end">MRR</text>
+<rect x="300" y="1408" width="17.62972" height="8" fill="#b45309" rx="2"/>
+<text x="321.62972" y="1415" class="value">2.32%</text>
+<rect x="300" y="1419" width="86.04415999999999" height="8" fill="#fcd34d" rx="2"/>
+<text x="390.04416" y="1426" class="value">11.32%</text>
+<rect x="20" y="1460" width="12" height="9" fill="#1d4ed8" rx="2"/>
+<text x="36" y="1469" class="axis">Hit@1 Bi-Enc</text>
+<rect x="160" y="1460" width="12" height="9" fill="#93c5fd" rx="2"/>
+<text x="176" y="1469" class="axis">Hit@1 Cross-Enc</text>
+<rect x="300" y="1460" width="12" height="9" fill="#6d28d9" rx="2"/>
+<text x="316" y="1469" class="axis">Hit@10 Bi-Enc</text>
+<rect x="440" y="1460" width="12" height="9" fill="#c4b5fd" rx="2"/>
+<text x="456" y="1469" class="axis">Hit@10 Cross-Enc</text>
+<rect x="580" y="1460" width="12" height="9" fill="#b45309" rx="2"/>
+<text x="596" y="1469" class="axis">MRR Bi-Enc</text>
+<rect x="720" y="1460" width="12" height="9" fill="#fcd34d" rx="2"/>
+<text x="736" y="1469" class="axis">MRR Cross-Enc</text>
+</svg>

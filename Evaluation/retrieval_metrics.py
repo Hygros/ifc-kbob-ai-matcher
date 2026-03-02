@@ -54,8 +54,10 @@ def ndcg_at_k_binary(ranked_indices: Sequence[int], relevant: set[int], k: int) 
 def binary_ranking_metrics_at_10(ranked_indices: Sequence[int], relevant: set[int]) -> Dict[str, float]:
     return {
         "hit@1": hit_at_k(ranked_indices, relevant, 1),
-        "hit@5": hit_at_k(ranked_indices, relevant, 5),
+        "hit@50": hit_at_k(ranked_indices, relevant, 50),
         "hit@10": hit_at_k(ranked_indices, relevant, 10),
+        "hit@20": hit_at_k(ranked_indices, relevant, 20),
+        "hit@30": hit_at_k(ranked_indices, relevant, 30),
         "mrr@10": mrr_at_k(ranked_indices, relevant, 10),
         "ndcg@10": ndcg_at_k_binary(ranked_indices, relevant, 10),
         "map@10": average_precision_at_k_binary(ranked_indices, relevant, 10),

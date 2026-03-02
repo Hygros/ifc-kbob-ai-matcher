@@ -1,0 +1,303 @@
+Beam GIRDER_SEGMENT Beton NPK
+Beam EDGEBEAM Beton NPK G
+Beam PIERCAP Beton NPK G
+Beam BEAM Beton
+Beam CORNICE Beton
+Beam DIAPHRAGM Beton
+Beam EDGEBEAM Beton
+Beam GIRDER_SEGMENT Beton
+Beam HATSTONE Beton
+Beam HOLLOWCORE Beton
+Beam JOIST Beton
+Beam PIERCAP Beton
+Beam SPANDREL Beton
+Beam T_BEAM Beton
+
+Bearing CYLINDRICAL S235JR
+Bearing CYLINDRICAL Stahl
+Bearing DISK Elastomer
+Bearing ELASTOMERIC Elastomer
+Bearing GUIDE PTFE
+Bearing GUIDE Polytetrafluoroethylene
+Bearing GUIDE Teflon
+Bearing POT S235JR
+Bearing POT Stahl
+Bearing ROCKER S235JR
+Bearing ROCKER Stahl
+Bearing ROLLER S235JR
+Bearing ROLLER Stahl
+Bearing SPHERICAL S235JR
+Bearing SPHERICAL Stahl
+
+CaissonFoundation CAISSON Beton
+CaissonFoundation CAISSON Stahlbeton
+CaissonFoundation WELL Beton
+CaissonFoundation WELL Stahlbeton
+
+Column COLUMN Beton
+Column COLUMN Stahlbeton
+Column COLUMN S235JR
+Column PIERSTEM Beton
+Column PIERSTEM Stahlbeton
+Column PIERSTEM S235JR
+Column PIERSTEM_SEGMENT Beton
+Column PIERSTEM_SEGMENT Stahlbeton
+Column PIERSTEM_SEGMENT S235JR
+Column PILASTER Beton
+Column PILASTER Stahlbeton
+Column PILASTER S235JR
+Column STANDCOLUMN Beton
+Column STANDCOLUMN Stahlbeton
+Column STANDCOLUMN S235JR
+
+Course ARMOUR Gestein
+Course ARMOUR Schotter
+Course BALLASTBED Schotter
+Course BALLASTBED Kies
+Course CORE Gestein
+Course CORE Erdmaterial
+Course FILTER Mineralischer Filter
+Course FILTER Kies-Sand-Gemisch
+Course PAVEMENT Asphalt
+Course PAVEMENT Beton
+Course PROTECTION Gestein
+Course PROTECTION Schotter
+
+Covering CLADDING Metall
+Covering CLADDING Faserzement
+Covering COPING Beton
+Covering COPING Naturstein
+Covering MEMBRANE Abdichtung
+Covering MEMBRANE Bitumenbahn
+Covering TOPPING Feinmörtel
+Covering WRAPPING Kunststoff
+
+Footing CAISSON_FOUNDATION Beton
+Footing CAISSON_FOUNDATION Stahl
+Footing CAISSON_FOUNDATION S235JR
+Footing FOOTING_BEAM Beton
+Footing FOOTING_BEAM Stahlbeton
+Footing PAD_FOOTING Beton
+Footing PAD_FOOTING Stahlbeton
+Footing PILE_CAP Beton
+Footing PILE_CAP Stahlbeton
+Footing STRIP_FOOTING Beton
+Footing STRIP_FOOTING Stahlbeton
+
+Member ARCH_SEGMENT Beton
+Member ARCH_SEGMENT Stahl
+Member ARCH_SEGMENT Naturstein
+Member BRACE Stahl
+Member BRACE Holz
+Member CHORD Stahl
+Member CHORD Holz
+Member MEMBER Stahl
+Member MEMBER Holz
+Member PLATE Holz
+Member PLATE Brettschichtholz
+Member POST Holz
+Member POST Stahl
+Member PURLIN Holz
+Member PURLIN Stahl
+Member RAFTER Holz
+Member RAFTER Stahl
+Member STAY_CABLE Stahl
+Member STAY_CABLE Litze
+Member STIFFENING_RIB Stahl
+Member STRINGER Beton
+Member STRINGER Stahl
+Member STRUCTURALCABLE Stahl
+Member STRUCTURALCABLE Litze
+Member STRUT Stahl
+Member STRUT Holz
+Member STUD Holz
+Member SUSPENDER Stahl
+Member SUSPENDER Litze
+Member SUSPENSION_CABLE Stahl
+Member SUSPENSION_CABLE Litze
+Member TIEBAR Stahl
+Member TIEBAR Aluminium
+
+Pavement FLEXIBLE Asphalt
+Pavement FLEXIBLE Walzasphalt
+Pavement FLEXIBLE Splittmastixasphalt
+Pavement FLEXIBLE Offenporiger Asphalt
+Pavement FLEXIBLE Bitumenmischgut
+Pavement FLEXIBLE Polymermodifiziertes Bitumen
+Pavement FLEXIBLE Hydraulisch gebundene Tragschicht
+Pavement FLEXIBLE Ungebundene Tragschicht
+Pavement RIGID Beton
+Pavement RIGID Stahlbeton
+Pavement RIGID Faserbeton
+Pavement RIGID UHPC
+Pavement RIGID Hydraulisch gebundenes Fundament
+Pavement RIGID Ungebundene Tragschicht
+
+Pile BORED Beton
+Pile BORED Stahlbeton
+Pile BORED Stahl
+Pile COHESION Beton
+Pile COHESION Zementsuspension
+Pile DRIVEN Stahl
+Pile DRIVEN Beton
+Pile FRICTION Beton
+Pile FRICTION Stahlbeton
+Pile FRICTION Stahl
+Pile JETGROUTING Mörtel
+Pile JETGROUTING Zementmörtel
+Pile JETGROUTING Spezialmörtel
+Pile SUPPORT Beton
+Pile SUPPORT Stahl
+
+Plate BASE_PLATE Stahl
+Plate BASE_PLATE Stahlguss
+Plate COVER_PLATE Stahl
+Plate COVER_PLATE Hochfester Stahl
+Plate FLANGE_PLATE Stahl
+Plate FLANGE_PLATE Hochfester Stahl
+Plate GUSSET_PLATE Stahl
+Plate GUSSET_PLATE Hochfester Stahl
+Plate SHEET Stahlblech
+Plate SHEET Aluminiumblech
+Plate SPLICE_PLATE Stahl
+Plate SPLICE_PLATE Hochfester Stahl
+Plate STIFFENER_PLATE Stahl
+Plate STIFFENER_PLATE Hochfester Stahl
+Plate WEB_PLATE Stahl
+Plate WEB_PLATE Hochfester Stahl
+
+Rail BLADE Stahl
+Rail BLADE Vergütungsstahl
+Rail CHECKRAIL Stahl
+Rail CHECKRAIL Hochfester Stahl
+Rail GUARDRAIL Stahl
+Rail GUARDRAIL Hochfester Stahl
+Rail RACKRAIL Stahl
+Rail RACKRAIL Vergütungsstahl
+Rail RAIL Stahl
+Rail RAIL Vergütungsstahl
+Rail STOCKRAIL Stahl
+Rail STOCKRAIL Vergütungsstahl
+
+Railing BALUSTRADE Stahl
+Railing BALUSTRADE Aluminium
+Railing BALUSTRADE Holz
+Railing FENCE Stahl
+Railing FENCE Aluminium
+Railing FENCE Holz
+Railing FENCE Kunststoff
+Railing GUARDRAIL Stahl
+Railing GUARDRAIL Aluminium
+Railing GUARDRAIL Holz
+Railing HANDRAIL Stahl
+Railing HANDRAIL Aluminium
+Railing HANDRAIL Holz
+
+Ramp HALF_TURN_RAMP Beton
+Ramp HALF_TURN_RAMP Stahlbeton
+Ramp QUARTER_TURN_RAMP Beton
+Ramp QUARTER_TURN_RAMP Stahlbeton
+Ramp SPIRAL_RAMP Beton
+Ramp SPIRAL_RAMP Stahlbeton
+Ramp STRAIGHT_RUN_RAMP Beton
+Ramp STRAIGHT_RUN_RAMP Stahlbeton
+Ramp TWO_QUARTER_TURN_RAMP Beton
+Ramp TWO_QUARTER_TURN_RAMP Stahlbeton
+Ramp TWO_STRAIGHT_RUN_RAMP Beton
+Ramp TWO_STRAIGHT_RUN_RAMP Stahlbeton
+
+Tendon BAR Stahl
+Tendon BAR Vergütungsstahl
+Tendon COATED Stahl mit Korrosionsschutz
+Tendon COATED Vergütungsstahl beschichtet
+Tendon STRAND Litze
+Tendon STRAND Spannstahl
+Tendon WIRE Draht
+Tendon WIRE Spannstahl
+
+TendonConduit COUPLER Stahl
+TendonConduit COUPLER Vergütungsstahl
+TendonConduit COUPLER Kunststoff
+TendonConduit DIABOLO Stahl
+TendonConduit DIABOLO Vergütungsstahl
+TendonConduit DIABOLO Kunststoff
+TendonConduit DUCT Kunststoff
+TendonConduit DUCT Stahl
+TendonConduit GROUTING_DUCT Kunststoff
+TendonConduit GROUTING_DUCT Stahl
+TendonConduit TRUMPET Stahl
+TendonConduit TRUMPET Vergütungsstahl
+
+TrackElement BLOCKINGDEVICE Stahl
+TrackElement BLOCKINGDEVICE Aluminium
+TrackElement BLOCKINGDEVICE Stahlguss
+TrackElement DERAILER Stahl
+TrackElement DERAILER Aluminium
+TrackElement DERAILER Stahlguss
+TrackElement FROG Stahl
+TrackElement FROG Manganhartstahl
+TrackElement FROG Vergütungsstahl
+TrackElement HALF_SET_OF_BLADES Stahl
+TrackElement HALF_SET_OF_BLADES Vergütungsstahl
+TrackElement HALF_SET_OF_BLADES Manganhartstahl
+TrackElement SLEEPER Beton
+TrackElement SLEEPER Stahlbeton
+TrackElement SLEEPER Holz
+TrackElement SLEEPER Kunststoff
+TrackElement SPEEDREGULATOR Stahl
+TrackElement SPEEDREGULATOR Aluminium
+TrackElement SPEEDREGULATOR Stahlguss
+TrackElement TRACKENDOFALIGNMENT Stahl
+TrackElement TRACKENDOFALIGNMENT Aluminium
+TrackElement TRACKENDOFALIGNMENT Beton
+TrackElement VEHICLESTOP Stahl
+TrackElement VEHICLESTOP Beton
+TrackElement VEHICLESTOP Gummipuffer
+
+Wall PARAPET Beton
+Wall PARAPET Stahlbeton
+Wall POLYGONAL Beton
+Wall POLYGONAL Stahlbeton
+Wall RETAININGWALL Beton
+Wall RETAININGWALL Stahlbeton
+Wall RETAININGWALL Spritzbeton
+Wall SHEAR Stahlbeton
+Wall SHEAR Beton
+Wall SOLIDWALL Beton
+Wall SOLIDWALL Stahlbeton
+Wall STANDARD Beton
+Wall STANDARD Stahlbeton
+Wall WAVEWALL Beton
+Wall WAVEWALL Stahlbeton
+
+ReinforcingBar
+ReinforcingBar B500B
+ReinforcingBar B500B
+ReinforcingBar SHEAR B500B
+ReinforcingBar MAIN B500B
+ReinforcingBar B500B
+ReinforcingBar B500B
+ReinforcingBar MAIN B500B
+ReinforcingBar B500B
+ReinforcingBar B500B
+ReinforcingBar B500B
+ReinforcingBar B500B
+ReinforcingBar B500B
+
+Footing STRIP_FOOTING Beton NPK G
+Slab FLOOR Beton NPK D
+Wall RETAININGWALL Beton NPK G
+Wall RETAININGWALL Beton NPK G
+
+Pile BORED Beton
+Pile BORED Beton NPK F
+Pile BORED Beton
+Pile BORED Beton
+
+Footing STRIP_FOOTING Magerbeton
+
+Covering Flüssigkunststoff
+
+Wall RETAININGWALL None
+
+Wall RETAININGWALL None

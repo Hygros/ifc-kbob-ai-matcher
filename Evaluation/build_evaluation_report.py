@@ -19,8 +19,10 @@ class SummaryRow:
     cross_encoder_model: str
     cases: int
     hit1: float
-    hit5: float
     hit10: float
+    hit20: float
+    hit30: float
+    hit50: float
     mrr: float
     map10: float
     ndcg10: float
@@ -67,6 +69,29 @@ def resolve_query_label() -> str:
     return safe_name or "latest"
 
 
+def resolve_ce_label_from_env() -> str:
+    """Leitet den CE-Label aus der Umgebungsvariable SBERT_CROSS_ENCODER_MODEL ab."""
+    model_id = os.environ.get("SBERT_CROSS_ENCODER_MODEL", "").strip()
+    if not model_id:
+        return "no-reranker"
+    short = model_id.split("/")[-1]
+    safe = re.sub(r"[^A-Za-z0-9._-]", "_", short).strip("._-")
+    return safe or "reranker"
+
+
+def resolve_cross_encoder_label(summary_rows: List["SummaryRow"]) -> str:
+    """Leitet einen dateisicheren Kürzel aus dem verwendeten Cross-Encoder ab."""
+    reranked = [r for r in summary_rows if r.pipeline_variant == "reranked" and r.cross_encoder_model not in ("", "-")]
+    if not reranked:
+        # Kein Re-Ranking durchgeführt
+        return "no-reranker"
+    model_id = reranked[0].cross_encoder_model
+    # Nur den Modellnamen ohne Org-Prefix verwenden (z.B. "BAAI/bge-reranker-v2-m3" → "bge-reranker-v2-m3")
+    short = model_id.split("/")[-1]
+    safe = re.sub(r"[^A-Za-z0-9._-]", "_", short).strip("._-")
+    return safe or "reranker"
+
+
 def find_latest_pair(results_dir: Path) -> Tuple[Path, Path, str]:
     query_label = resolve_query_label()
     labeled_summary = results_dir / f"summary_{query_label}.csv"
@@ -101,8 +126,10 @@ def load_summary(summary_file: Path) -> List[SummaryRow]:
         reader = csv.DictReader(handle)
         for raw in reader:
             hit1 = parse_optional_float(raw.get("hit@1"), default=parse_optional_float(raw.get("top1_accuracy")))
-            hit5 = parse_optional_float(raw.get("hit@5"), default=parse_optional_float(raw.get("top5_accuracy", raw.get("topk_accuracy"))))
             hit10 = parse_optional_float(raw.get("hit@10"), default=parse_optional_float(raw.get("top10_accuracy")))
+            hit20 = parse_optional_float(raw.get("hit@20"))
+            hit30 = parse_optional_float(raw.get("hit@30"))
+            hit50 = parse_optional_float(raw.get("hit@50"))
             map10 = parse_optional_float(raw.get("map@10"), default=parse_optional_float(raw.get("map10")))
             ndcg10 = parse_optional_float(raw.get("ndcg@10"), default=parse_optional_float(raw.get("ndcg10")))
             recall10 = parse_optional_float(raw.get("recall@10"), default=parse_optional_float(raw.get("recall10")))
@@ -121,8 +148,10 @@ def load_summary(summary_file: Path) -> List[SummaryRow]:
                     cross_encoder_model=(raw.get("cross_encoder_model") or "-").strip() or "-",
                     cases=int(raw["cases"]),
                     hit1=hit1,
-                    hit5=hit5,
                     hit10=hit10,
+                    hit20=hit20,
+                    hit30=hit30,
+                    hit50=hit50,
                     mrr=float(raw["mrr"]),
                     map10=map10,
                     ndcg10=ndcg10,
@@ -147,7 +176,7 @@ def load_summary(summary_file: Path) -> List[SummaryRow]:
             -r.map10,
             -r.ndcg10,
             -r.recall10,
-            -r.hit5,
+            -r.hit50,
             -r.hit10,
             -r.avg_expected_score,
         ),
@@ -193,69 +222,155 @@ def to_percent(value: float) -> str:
     return f"{value * 100:.2f}%"
 
 
-def render_svg_chart(rows: List[SummaryRow], output_file: Path) -> None:
-    if not rows:
+def render_svg_chart(all_rows: List[SummaryRow], output_file: Path) -> None:
+    if not all_rows:
         return
 
-    line_height = 68
-    top_margin = 60
+    # Group rows by bi-encoder model into baseline and reranked buckets
+    baseline_by_model: Dict[str, SummaryRow] = {}
+    reranked_by_model: Dict[str, SummaryRow] = {}
+    model_order: List[str] = []
+    for row in all_rows:
+        model = row.model
+        if row.pipeline_variant == "reranked":
+            reranked_by_model[model] = row
+        else:
+            baseline_by_model[model] = row
+            if model not in model_order:
+                model_order.append(model)
+    for model in reranked_by_model:
+        if model not in model_order:
+            model_order.append(model)
+
+    # Sort by baseline Hit@1 descending
+    model_order.sort(
+        key=lambda m: -(
+            (baseline_by_model.get(m) or reranked_by_model[m]).hit1
+        )
+    )
+
+    has_reranked = bool(reranked_by_model)
+
+    # Layout constants
+    bar_h = 8
+    pair_gap = 3       # gap between baseline and reranked bar of the same metric
+    metric_gap = 10    # gap between metric groups
+    label_height = 16
+    bottom_pad = 14
+    pair_height = bar_h + pair_gap + bar_h  # 19 px per metric pair
+    model_content_height = pair_height * 3 + metric_gap * 2  # 77 px
+    line_height = label_height + model_content_height + bottom_pad  # 107 px
+
+    top_margin = 50
     chart_top = 60
-    left_margin = 290
-    chart_width = 800
-    width = left_margin + chart_width + 180
-    height = top_margin + len(rows) * line_height + 40
+    left_margin = 300
+    chart_width = 760
+    legend_height = 42
+    value_col_width = 50
+    width = left_margin + chart_width + value_col_width
+    height = top_margin + len(model_order) * line_height + legend_height + 16
 
     def bar_width(value: float) -> float:
         return max(0.0, min(1.0, value)) * chart_width
 
+    # Colour palette
+    C_HIT1_BASE  = "#1d4ed8"  # dark blue
+    C_HIT1_RE    = "#93c5fd"  # light blue
+    C_HIT10_BASE = "#6d28d9"  # dark purple
+    C_HIT10_RE   = "#c4b5fd"  # light purple
+    C_MRR_BASE   = "#b45309"  # dark amber
+    C_MRR_RE     = "#fcd34d"  # light amber
+
+    sep_y = height - legend_height - 8
+
     svg_lines = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
-        '<style>text { font-family: Arial, sans-serif; fill: #1f2937; } .label { font-size: 13px; } .title { font-size: 18px; font-weight: bold; } .axis { font-size: 12px; fill: #4b5563; } .value { font-size: 12px; font-weight: bold; }</style>',
-        '<text x="20" y="28" class="title">Model Comparison (Top1 / Top5 / Top10 / MRR)</text>',
+        '<style>'
+        'text { font-family: Arial, sans-serif; fill: #1f2937; } '
+        '.label { font-size: 13px; font-weight: bold; } '
+        '.title { font-size: 17px; font-weight: bold; } '
+        '.axis { font-size: 11px; fill: #4b5563; } '
+        '.value { font-size: 10px; font-weight: bold; } '
+        '.mlabel { font-size: 10px; fill: #6b7280; }'
+        '</style>',
+        '<text x="20" y="28" class="title">Model Comparison — Bi-Encoder vs. Cross-Encoder (Hit@1 / Hit@10 / MRR)</text>',
         f'<line x1="{left_margin}" y1="{chart_top}" x2="{left_margin + chart_width}" y2="{chart_top}" stroke="#d1d5db" stroke-width="1"/>',
-        f'<line x1="{left_margin}" y1="{height - 20}" x2="{left_margin + chart_width}" y2="{height - 20}" stroke="#d1d5db" stroke-width="1"/>',
+        f'<line x1="{left_margin}" y1="{sep_y}" x2="{left_margin + chart_width}" y2="{sep_y}" stroke="#d1d5db" stroke-width="1"/>',
     ]
 
     ticks = [0.0, 0.25, 0.5, 0.75, 1.0]
     for t in ticks:
         x = left_margin + bar_width(t)
-        svg_lines.append(f'<line x1="{x}" y1="{chart_top}" x2="{x}" y2="{height - 20}" stroke="#e5e7eb" stroke-width="1"/>')
+        svg_lines.append(f'<line x1="{x}" y1="{chart_top}" x2="{x}" y2="{sep_y}" stroke="#e5e7eb" stroke-width="1"/>')
         svg_lines.append(f'<text x="{x - 10}" y="{chart_top - 4}" class="axis">{int(t * 100)}%</text>')
 
-    legend_y = height - 4
-    svg_lines.append(f'<rect x="20" y="{legend_y - 12}" width="12" height="12" fill="#2563eb"/>')
-    svg_lines.append(f'<text x="38" y="{legend_y - 2}" class="axis">Top1</text>')
-    svg_lines.append(f'<rect x="90" y="{legend_y - 12}" width="12" height="12" fill="#059669"/>')
-    svg_lines.append(f'<text x="108" y="{legend_y - 2}" class="axis">Top5</text>')
-    svg_lines.append(f'<rect x="160" y="{legend_y - 12}" width="12" height="12" fill="#7c3aed"/>')
-    svg_lines.append(f'<text x="178" y="{legend_y - 2}" class="axis">Top10</text>')
-    svg_lines.append(f'<rect x="235" y="{legend_y - 12}" width="12" height="12" fill="#f59e0b"/>')
-    svg_lines.append(f'<text x="253" y="{legend_y - 2}" class="axis">MRR</text>')
+    # Per-model bars
+    for idx, model in enumerate(model_order):
+        base = baseline_by_model.get(model)
+        re = reranked_by_model.get(model)
+        y0 = top_margin + idx * line_height
 
-    for idx, row in enumerate(rows):
-        y_base = top_margin + idx * line_height
-        label = short_model_name(row.model)
-        svg_lines.append(f'<text x="20" y="{y_base + 18}" class="label">{label}</text>')
+        label = short_model_name(model)
+        svg_lines.append(f'<text x="20" y="{y0 + 12}" class="label">{label}</text>')
 
-        y1 = y_base + 6
-        y2 = y_base + 18
-        y3 = y_base + 30
-        y4 = y_base + 42
+        y_cursor = y0 + label_height
 
-        w_top1 = bar_width(row.hit1)
-        w_top5 = bar_width(row.hit5)
-        w_top10 = bar_width(row.hit10)
-        w_mrr = bar_width(row.mrr)
+        # Helper: render one metric pair (baseline + optional reranked)
+        def _pair(
+            y: int,
+            base_val: float,
+            re_val: float | None,
+            c_base: str,
+            c_re: str,
+            metric_name: str,
+        ) -> None:
+            def _label_x(val: float) -> float:
+                return left_margin + bar_width(val) + 4
 
-        svg_lines.append(f'<rect x="{left_margin}" y="{y1}" width="{w_top1}" height="8" fill="#2563eb" rx="2"/>')
-        svg_lines.append(f'<rect x="{left_margin}" y="{y2}" width="{w_top5}" height="8" fill="#059669" rx="2"/>')
-        svg_lines.append(f'<rect x="{left_margin}" y="{y3}" width="{w_top10}" height="8" fill="#7c3aed" rx="2"/>')
-        svg_lines.append(f'<rect x="{left_margin}" y="{y4}" width="{w_mrr}" height="8" fill="#f59e0b" rx="2"/>')
-        svg_lines.append(
-            f'<text x="{left_margin + chart_width + 8}" y="{y_base + 31}" class="value">'
-            f'{to_percent(row.hit1)} / {to_percent(row.hit5)} / {to_percent(row.hit10)} / {row.mrr:.3f}'
-            '</text>'
-        )
+            def _label_y(bar_y: int) -> int:
+                return bar_y + bar_h - 1
+
+            svg_lines.append(
+                f'<text x="{left_margin - 4}" y="{y + bar_h}" '
+                f'class="mlabel" text-anchor="end">{metric_name}</text>'
+            )
+            svg_lines.append(
+                f'<rect x="{left_margin}" y="{y}" width="{bar_width(base_val)}" '
+                f'height="{bar_h}" fill="{c_base}" rx="2"/>'
+            )
+            svg_lines.append(
+                f'<text x="{_label_x(base_val)}" y="{_label_y(y)}" class="value">{to_percent(base_val)}</text>'
+            )
+            if re_val is not None:
+                svg_lines.append(
+                    f'<rect x="{left_margin}" y="{y + bar_h + pair_gap}" '
+                    f'width="{bar_width(re_val)}" height="{bar_h}" fill="{c_re}" rx="2"/>'
+                )
+                svg_lines.append(
+                    f'<text x="{_label_x(re_val)}" y="{_label_y(y + bar_h + pair_gap)}" class="value">{to_percent(re_val)}</text>'
+                )
+
+        _pair(y_cursor, base.hit1 if base else 0.0,  re.hit1  if re else None, C_HIT1_BASE,  C_HIT1_RE,  "Hit@1")
+        y_cursor += pair_height + metric_gap
+        _pair(y_cursor, base.hit10 if base else 0.0, re.hit10 if re else None, C_HIT10_BASE, C_HIT10_RE, "Hit@10")
+        y_cursor += pair_height + metric_gap
+        _pair(y_cursor, base.mrr   if base else 0.0, re.mrr   if re else None, C_MRR_BASE,   C_MRR_RE,   "MRR")
+
+    # Legend
+    legend_entries = [
+        (C_HIT1_BASE,  "Hit@1 Bi-Enc"),
+        (C_HIT1_RE,    "Hit@1 Cross-Enc"),
+        (C_HIT10_BASE, "Hit@10 Bi-Enc"),
+        (C_HIT10_RE,   "Hit@10 Cross-Enc"),
+        (C_MRR_BASE,   "MRR Bi-Enc"),
+        (C_MRR_RE,     "MRR Cross-Enc"),
+    ]
+    legend_y = sep_y + 20
+    x_leg = 20
+    for color, leg_label in legend_entries:
+        svg_lines.append(f'<rect x="{x_leg}" y="{legend_y - 9}" width="12" height="9" fill="{color}" rx="2"/>')
+        svg_lines.append(f'<text x="{x_leg + 16}" y="{legend_y}" class="axis">{leg_label}</text>')
+        x_leg += 140
 
     svg_lines.append("</svg>")
     output_file.write_text("\n".join(svg_lines), encoding="utf-8")
@@ -273,11 +388,11 @@ def render_markdown_report(
     baseline_rows = [row for row in summary_rows if row.pipeline_variant == "baseline"]
     reranked_rows = [row for row in summary_rows if row.pipeline_variant == "reranked"]
     baseline_rows.sort(
-        key=lambda r: (r.hit1, r.mrr, r.map10, r.ndcg10, r.recall10, r.hit5, r.hit10, r.avg_expected_score),
+        key=lambda r: (r.hit1, r.mrr, r.map10, r.ndcg10, r.recall10, r.hit50, r.hit10, r.avg_expected_score),
         reverse=True,
     )
     reranked_rows.sort(
-        key=lambda r: (r.hit1, r.mrr, r.map10, r.ndcg10, r.recall10, r.hit5, r.hit10, r.avg_expected_score),
+        key=lambda r: (r.hit1, r.mrr, r.map10, r.ndcg10, r.recall10, r.hit50, r.hit10, r.avg_expected_score),
         reverse=True,
     )
     baseline_hard_queries = compute_hard_queries(details, pipeline_variant="baseline")
@@ -305,24 +420,24 @@ def render_markdown_report(
     lines.append("")
     lines.append("#### Baseline (Bi-Encoder)")
     lines.append("")
-    lines.append("| Rank | Model | Hit@1 | Hit@5 | Hit@10 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 | Avg expected score | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI | Top1 errors |")
-    lines.append("|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---:|")
+    lines.append("| Rank | Model | Hit@1 | Hit@10 | Hit@20 | Hit@30 | Hit@50 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 | Avg expected score | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI | Top1 errors |")
+    lines.append("|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---:|")
     for rank, row in enumerate(baseline_rows, start=1):
         lines.append(
             "| "
-            f"{rank} | {row.model} | {to_percent(row.hit1)} | {to_percent(row.hit5)} | {to_percent(row.hit10)} | {row.mrr:.3f} | {row.map10:.3f} | {row.ndcg10:.3f} | {row.recall10:.3f} | {row.avg_expected_score:.3f} | [{row.hit1_ci_low:.3f}, {row.hit1_ci_high:.3f}] | [{row.hit10_ci_low:.3f}, {row.hit10_ci_high:.3f}] | [{row.mrr10_ci_low:.3f}, {row.mrr10_ci_high:.3f}] | [{row.ndcg10_ci_low:.3f}, {row.ndcg10_ci_high:.3f}] | {error_stats.get((row.pipeline_variant, row.model), 0)}"
+            f"{rank} | {row.model} | {to_percent(row.hit1)} | {to_percent(row.hit10)} | {to_percent(row.hit20)} | {to_percent(row.hit30)} | {to_percent(row.hit50)} | {row.mrr:.3f} | {row.map10:.3f} | {row.ndcg10:.3f} | {row.recall10:.3f} | {row.avg_expected_score:.3f} | [{row.hit1_ci_low:.3f}, {row.hit1_ci_high:.3f}] | [{row.hit10_ci_low:.3f}, {row.hit10_ci_high:.3f}] | [{row.mrr10_ci_low:.3f}, {row.mrr10_ci_high:.3f}] | [{row.ndcg10_ci_low:.3f}, {row.ndcg10_ci_high:.3f}] | {error_stats.get((row.pipeline_variant, row.model), 0)}"
             " |"
         )
 
     lines.append("")
     lines.append("#### Reranked (Bi-Encoder + Cross-Encoder)")
     lines.append("")
-    lines.append("| Rank | Model | Cross-Encoder | Hit@1 | Hit@5 | Hit@10 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 | Avg expected score | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI | Top1 errors |")
-    lines.append("|---:|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---:|")
+    lines.append("| Rank | Model | Cross-Encoder | Hit@1 | Hit@10 | Hit@20 | Hit@30 | Hit@50 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 | Avg expected score | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI | Top1 errors |")
+    lines.append("|---:|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---:|")
     for rank, row in enumerate(reranked_rows, start=1):
         lines.append(
             "| "
-            f"{rank} | {row.model} | {row.cross_encoder_model} | {to_percent(row.hit1)} | {to_percent(row.hit5)} | {to_percent(row.hit10)} | {row.mrr:.3f} | {row.map10:.3f} | {row.ndcg10:.3f} | {row.recall10:.3f} | {row.avg_expected_score:.3f} | [{row.hit1_ci_low:.3f}, {row.hit1_ci_high:.3f}] | [{row.hit10_ci_low:.3f}, {row.hit10_ci_high:.3f}] | [{row.mrr10_ci_low:.3f}, {row.mrr10_ci_high:.3f}] | [{row.ndcg10_ci_low:.3f}, {row.ndcg10_ci_high:.3f}] | {error_stats.get((row.pipeline_variant, row.model), 0)}"
+            f"{rank} | {row.model} | {row.cross_encoder_model} | {to_percent(row.hit1)} | {to_percent(row.hit10)} | {to_percent(row.hit20)} | {to_percent(row.hit30)} | {to_percent(row.hit50)} | {row.mrr:.3f} | {row.map10:.3f} | {row.ndcg10:.3f} | {row.recall10:.3f} | {row.avg_expected_score:.3f} | [{row.hit1_ci_low:.3f}, {row.hit1_ci_high:.3f}] | [{row.hit10_ci_low:.3f}, {row.hit10_ci_high:.3f}] | [{row.mrr10_ci_low:.3f}, {row.mrr10_ci_high:.3f}] | [{row.ndcg10_ci_low:.3f}, {row.ndcg10_ci_high:.3f}] | {error_stats.get((row.pipeline_variant, row.model), 0)}"
             " |"
         )
 
@@ -349,21 +464,88 @@ def render_markdown_report(
     report_file.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def select_summary_file_interactively(results_dir: Path) -> Tuple[Path, Path, str]:
+    """Wählt summary/details-CSV aus.
+
+    Wenn SBERT_QUERY_FILE gesetzt ist (Aufruf aus Pipeline), wird automatisch
+    die passende Datei per Umgebungsvariablen abgeleitet, ohne zu fragen.
+    Sonst erscheint eine interaktive Auswahlliste.
+    """
+    # Auto-Auswahl wenn Env-Var gesetzt (Pipeline-Modus)
+    if os.environ.get("SBERT_QUERY_FILE", "").strip():
+        query_label = resolve_query_label()
+        ce_label = resolve_ce_label_from_env()
+        file_label = f"{query_label}_{ce_label}"
+        summary_file = results_dir / f"summary_{file_label}.csv"
+        details_file = results_dir / f"details_{file_label}.csv"
+        if summary_file.is_file() and details_file.is_file():
+            print(f"Verwende summary: {summary_file.name}")
+            return summary_file, details_file, file_label
+        # Fallback: summary.csv / details.csv
+        summary_file = results_dir / "summary.csv"
+        details_file = results_dir / "details.csv"
+        if summary_file.is_file() and details_file.is_file():
+            return summary_file, details_file, "latest"
+
+    # Interaktive Auswahl (standalone-Modus)
+    candidates = sorted(
+        [p for p in results_dir.glob("summary_*.csv") if not p.stem.endswith("_latest")],
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    plain = results_dir / "summary.csv"
+    if plain.is_file() and plain not in candidates:
+        candidates.insert(0, plain)
+
+    if not candidates:
+        raise FileNotFoundError(f"Keine summary-CSV-Dateien in {results_dir} gefunden.")
+
+    if len(candidates) == 1:
+        summary_file = candidates[0]
+        print(f"Verwende einzige verfügbare Datei: {summary_file.name}")
+    else:
+        print("\nVerfügbare summary-CSV-Dateien:")
+        for idx, path in enumerate(candidates, start=1):
+            print(f"  {idx:>3}: {path.name}")
+        while True:
+            user_input = input(f"Nummer wählen [Default: 1 · {candidates[0].name}]: ").strip()
+            if not user_input:
+                summary_file = candidates[0]
+                break
+            if user_input.isdigit() and 1 <= int(user_input) <= len(candidates):
+                summary_file = candidates[int(user_input) - 1]
+                break
+            print(f"  Bitte eine Nummer zwischen 1 und {len(candidates)} eingeben.")
+
+    stem = summary_file.stem
+    label = stem[len("summary_"):] if stem.startswith("summary_") else stem
+    details_file = results_dir / f"details_{label}.csv"
+    if not details_file.is_file():
+        details_file = results_dir / "details.csv"
+    if not details_file.is_file():
+        raise FileNotFoundError(f"Keine passende details-CSV für {summary_file.name} gefunden.")
+
+    return summary_file, details_file, label
+
+
 def main() -> None:
     if not RESULTS_DIR.exists():
         raise FileNotFoundError(f"Ordner nicht gefunden: {RESULTS_DIR}")
 
-    summary_file, details_file, query_label = find_latest_pair(RESULTS_DIR)
+    summary_file, details_file, query_label = select_summary_file_interactively(RESULTS_DIR)
     summary_rows = load_summary(summary_file)
     details_rows = load_details(details_file)
 
-    report_file = RESULTS_DIR / f"evaluation_report_{query_label}.md"
-    chart_file = RESULTS_DIR / f"overview_{query_label}.svg"
+    ce_label = resolve_cross_encoder_label(summary_rows)
+    ce_suffix = f"_{ce_label}" if ce_label else ""
+    final_label = query_label if ce_suffix and query_label.endswith(ce_suffix) else f"{query_label}{ce_suffix}"
+
+    report_file = RESULTS_DIR / f"evaluation_report_{final_label}.md"
+    chart_file = RESULTS_DIR / f"overview_{final_label}.svg"
     latest_report = RESULTS_DIR / "evaluation_report_latest.md"
     latest_chart = RESULTS_DIR / "overview_latest.svg"
 
-    chart_rows = [row for row in summary_rows if row.pipeline_variant == "reranked"] or summary_rows
-    render_svg_chart(chart_rows, chart_file)
+    render_svg_chart(summary_rows, chart_file)
     render_markdown_report(summary_rows, details_rows, summary_file, details_file, chart_file, report_file)
 
     latest_report.write_text(report_file.read_text(encoding="utf-8"), encoding="utf-8")
