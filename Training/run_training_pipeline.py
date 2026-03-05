@@ -38,6 +38,8 @@ run_training_pipeline.py: error: the following arguments are required: --query-f
 
 
 import argparse
+import hashlib
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -55,6 +57,32 @@ def run_command(command: list[str]) -> None:
     result = subprocess.run(command, cwd=str(PROJECT_ROOT))
     if result.returncode != 0:
         raise RuntimeError(f"Befehl fehlgeschlagen mit Exit-Code {result.returncode}: {' '.join(command)}")
+
+
+def safe_slug(value: str, max_len: int = 24) -> str:
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "_", value).strip("._-")
+    if not slug:
+        return "na"
+    return slug[:max_len]
+
+
+def build_run_id(args: argparse.Namespace) -> str:
+    query_label = safe_slug(Path(args.query_file).stem or "query")
+    expected_label = safe_slug(Path(args.expected_file).stem or "expected")
+    model_label = safe_slug(args.base_model.split("/")[-1], max_len=18)
+    dedup = "d1" if args.deduplicate else "d0"
+
+    signature = (
+        f"q={args.query_file}|e={args.expected_file}|m={args.base_model}|ep={args.epochs}|"
+        f"bs={args.batch_size}|lr={args.lr}|mx={args.max_length}|dv={args.dev_ratio}|"
+        f"sd={args.seed}|wu={args.warmup_ratio}|{dedup}|dev={args.device}|fp16={args.fp16}"
+    )
+    hash8 = hashlib.sha1(signature.encode("utf-8")).hexdigest()[:8]
+    return (
+        f"{query_label}-{expected_label}-{model_label}-"
+        f"e{args.epochs}-b{args.batch_size}-lr{str(args.lr).replace('.', 'p')}-"
+        f"d{str(args.dev_ratio).replace('.', 'p')}-s{args.seed}-{dedup}-{hash8}"
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -84,6 +112,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", default="auto", help="auto|cpu|cuda")
     parser.add_argument("--fp16", action="store_true", help="Mixed precision Training aktivieren.")
     parser.add_argument("--deduplicate", action="store_true", help="Identische query/positive-Paare entfernen.")
+    parser.add_argument(
+        "--run-id",
+        default="",
+        help="Deterministische Run-ID (optional). Wenn leer, wird automatisch eine erzeugt.",
+    )
+    parser.add_argument(
+        "--save-each-epoch",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Zusätzlich zum besten Modell einen Checkpoint je Epoche speichern.",
+    )
+    parser.add_argument(
+        "--checkpoints-dir",
+        default="",
+        help="Optionaler Ordner für Epochen-Checkpoints (Default: <output-dir>/epochs).",
+    )
     return parser.parse_args()
 
 
@@ -126,6 +170,9 @@ def main() -> None:
 
     run_command([sys.executable, str(VALIDATE_SCRIPT), "--pairs-file", str(pairs_out)])
 
+    resolved_run_id = args.run_id.strip() or build_run_id(args)
+    print(f"Run-ID: {resolved_run_id}")
+
     train_command = [
         sys.executable,
         str(TRAIN_SCRIPT),
@@ -151,7 +198,15 @@ def main() -> None:
         str(args.seed),
         "--device",
         args.device,
+        "--run-id",
+        resolved_run_id,
     ]
+    if args.save_each_epoch:
+        train_command.append("--save-each-epoch")
+    else:
+        train_command.append("--no-save-each-epoch")
+    if args.checkpoints_dir:
+        train_command.extend(["--checkpoints-dir", str(args.checkpoints_dir)])
     if args.fp16:
         train_command.append("--fp16")
 

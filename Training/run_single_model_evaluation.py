@@ -14,10 +14,10 @@ run_single_model_evaluation.py: error: the following arguments are required: --q
 
 
 import argparse
+import hashlib
 import importlib.util
 import sqlite3
 import sys
-from datetime import datetime
 from pathlib import Path
 from types import ModuleType
 
@@ -88,7 +88,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--no-timestamp",
         action="store_true",
-        help="Wenn gesetzt, wird kein Zeitstempel an den Dateinamen angehängt.",
+        help="Kompatibilitätsflag ohne Wirkung (Dateinamen sind deterministisch ohne Zeitstempel).",
     )
     return parser.parse_args()
 
@@ -99,6 +99,20 @@ def make_safe_label(value: str) -> str:
     if not safe:
         raise ValueError("--run-label enthält keine gültigen Zeichen.")
     return safe
+
+
+def compact_token(value: str, max_len: int = 24) -> str:
+    safe = make_safe_label(value)
+    short = safe[:max_len]
+    digest = hashlib.sha1(safe.encode("utf-8")).hexdigest()[:8]
+    return f"{short}-{digest}"
+
+
+def compact_model_label(model_value: str) -> str:
+    raw = str(model_value).strip().replace("\\", "/")
+    if "/" in raw:
+        raw = raw.split("/")[-1]
+    return compact_token(raw, max_len=28)
 
 
 def main() -> None:
@@ -182,13 +196,14 @@ def main() -> None:
             f"Recall@10: {float(summary['recall@10']):.4f}"
         )
 
-    query_label = eval_module.make_query_label(query_file)
-    ce_label = eval_module.make_cross_encoder_label(cross_encoder_model)
-    model_label = args.model.replace("/", "_")
+    query_label = compact_token(eval_module.make_query_label(query_file), max_len=20)
+    ce_label = compact_token(eval_module.make_cross_encoder_label(cross_encoder_model), max_len=20)
+    model_label = compact_model_label(args.model)
     run_label = make_safe_label(args.run_label)
 
-    summary_path = output_dir / f"summary_{run_label}_{model_label}_{query_label}_{ce_label}.csv"
-    details_path = output_dir / f"details_{run_label}_{model_label}_{query_label}_{ce_label}.csv"
+    file_stem = f"{run_label}_{model_label}_{query_label}_{ce_label}"
+    summary_path = output_dir / f"summary_{file_stem}.csv"
+    details_path = output_dir / f"details_{file_stem}.csv"
 
     summary_fieldnames = list(summary_rows[0].keys()) if summary_rows else []
     details_fieldnames = list(detail_rows[0].keys()) if detail_rows else []
@@ -199,13 +214,13 @@ def main() -> None:
     report_summary_rows = report_module.load_summary(summary_path)
     report_details_rows = report_module.load_details(details_path)
 
-    ce_label = report_module.resolve_cross_encoder_label(report_summary_rows)
+    ce_label = compact_token(report_module.resolve_cross_encoder_label(report_summary_rows), max_len=20)
     report_label = f"{run_label}_{model_label}_{query_label}_{ce_label}"
 
     chart_path = output_dir / f"overview_{report_label}.svg"
     report_path = output_dir / f"evaluation_report_{report_label}.md"
-    latest_chart = output_dir / "overview_latest.svg"
-    latest_report = output_dir / "evaluation_report_latest.md"
+    latest_chart = output_dir / "overview_single_latest.svg"
+    latest_report = output_dir / "evaluation_report_single_latest.md"
 
     report_module.render_svg_chart(report_summary_rows, chart_path)
     report_module.render_markdown_report(

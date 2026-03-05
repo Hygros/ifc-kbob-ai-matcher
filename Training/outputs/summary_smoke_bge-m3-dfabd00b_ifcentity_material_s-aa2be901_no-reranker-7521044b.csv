@@ -1,0 +1,2 @@
+model,pipeline_variant,cross_encoder_model,cases,hit@1,hit@10,hit@20,hit@30,hit@50,mrr,map@10,ndcg@10,recall@10,avg_expected_score,hit@1_ci_low,hit@1_ci_high,hit@10_ci_low,hit@10_ci_high,mrr@10_ci_low,mrr@10_ci_high,ndcg@10_ci_low,ndcg@10_ci_high
+BAAI/bge-m3,baseline,-,279,0.519713,0.810036,0.863799,0.899642,0.917563,0.616378,0.549287,0.613085,0.716701,0.528371,0.465950,0.580645,0.767025,0.862097,0.576837,0.666726,0.573521,0.662289

@@ -1,7 +1,10 @@
 import argparse
+import inspect
 import json
 import math
 import random
+import shutil
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
@@ -126,7 +129,48 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=42, help="Random Seed.")
     parser.add_argument("--device", default="auto", help="auto|cpu|cuda")
     parser.add_argument("--fp16", action="store_true", help="Mixed precision Training (use_amp).")
+    parser.add_argument(
+        "--run-id",
+        default="",
+        help="Deterministische Run-ID für nachvollziehbare Artefakte (wenn leer, wird ein Fallback verwendet).",
+    )
+    parser.add_argument(
+        "--save-each-epoch",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Speichert zusätzlich zu best-model den Zustand jeder Epoche.",
+    )
+    parser.add_argument(
+        "--checkpoints-dir",
+        default="",
+        help="Optionaler Ordner für Epochen-Checkpoints (Default: <output-dir>/epochs).",
+    )
     return parser.parse_args()
+
+
+def sanitize_label(value: str, fallback: str) -> str:
+    allowed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-"
+    safe = "".join(ch if ch in allowed else "_" for ch in value).strip("._-")
+    return safe or fallback
+
+
+def normalize_step_checkpoints_to_epochs(step_checkpoint_dir: Path, epoch_checkpoint_dir: Path) -> list[str]:
+    epoch_checkpoint_dir.mkdir(parents=True, exist_ok=True)
+    if not step_checkpoint_dir.is_dir():
+        return []
+
+    step_dirs = [path for path in step_checkpoint_dir.iterdir() if path.is_dir()]
+    step_dirs.sort(key=lambda item: item.stat().st_mtime)
+
+    saved_epoch_dirs: list[str] = []
+    for index, source_dir in enumerate(step_dirs, start=1):
+        target_dir = epoch_checkpoint_dir / f"epoch-{index:02d}"
+        if target_dir.exists():
+            shutil.rmtree(target_dir)
+        shutil.copytree(source_dir, target_dir)
+        saved_epoch_dirs.append(str(target_dir))
+
+    return saved_epoch_dirs
 
 
 def main() -> None:
@@ -153,6 +197,8 @@ def main() -> None:
     output_dir = Path(args.output_dir).expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    run_id = sanitize_label(args.run_id, fallback=f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
+
     all_pairs = read_pairs(train_path)
     train_pairs, dev_pairs = split_pairs(all_pairs, dev_ratio=args.dev_ratio, seed=args.seed)
 
@@ -178,19 +224,94 @@ def main() -> None:
     evaluator = build_ir_evaluator(dev_pairs)
     warmup_steps = math.ceil(len(train_dataloader) * args.epochs * args.warmup_ratio)
 
-    model.fit(
-        train_objectives=[(train_dataloader, train_loss)],
-        evaluator=evaluator,
-        epochs=args.epochs,
-        warmup_steps=warmup_steps,
-        optimizer_params={"lr": args.lr},
-        output_path=str(output_dir),
-        save_best_model=evaluator is not None,
-        use_amp=args.fp16,
-        show_progress_bar=True,
-    )
+    step_checkpoint_dir: Path | None = None
+    epoch_checkpoint_dir: Path | None = None
+    steps_per_epoch = max(1, len(train_dataloader))
+    checkpoint_args_enabled = False
+
+    if args.save_each_epoch:
+        if args.checkpoints_dir:
+            epoch_checkpoint_dir = Path(args.checkpoints_dir).expanduser().resolve()
+        else:
+            epoch_checkpoint_dir = output_dir / "epochs"
+        step_checkpoint_dir = output_dir / "_checkpoints_steps"
+
+        fit_params = inspect.signature(model.fit).parameters
+        supports_checkpoints = {"checkpoint_path", "checkpoint_save_steps", "checkpoint_save_total_limit"}.issubset(
+            set(fit_params.keys())
+        )
+        if supports_checkpoints:
+            checkpoint_args_enabled = True
+        else:
+            print(
+                "Warnung: Diese sentence-transformers-Version unterstützt keine Checkpoint-Argumente in model.fit; "
+                "Epochen-Checkpoints werden übersprungen."
+            )
+            step_checkpoint_dir = None
+            epoch_checkpoint_dir = None
+
+    if checkpoint_args_enabled and step_checkpoint_dir is not None:
+        model.fit(
+            train_objectives=[(train_dataloader, train_loss)],
+            evaluator=evaluator,
+            epochs=args.epochs,
+            warmup_steps=warmup_steps,
+            optimizer_params={"lr": args.lr},
+            output_path=str(output_dir),
+            save_best_model=evaluator is not None,
+            use_amp=args.fp16,
+            show_progress_bar=True,
+            checkpoint_path=str(step_checkpoint_dir),
+            checkpoint_save_steps=int(steps_per_epoch),
+            checkpoint_save_total_limit=int(args.epochs),
+        )
+    else:
+        model.fit(
+            train_objectives=[(train_dataloader, train_loss)],
+            evaluator=evaluator,
+            epochs=args.epochs,
+            warmup_steps=warmup_steps,
+            optimizer_params={"lr": args.lr},
+            output_path=str(output_dir),
+            save_best_model=evaluator is not None,
+            use_amp=args.fp16,
+            show_progress_bar=True,
+        )
+
+    epoch_checkpoint_paths: list[str] = []
+    if args.save_each_epoch and step_checkpoint_dir is not None and epoch_checkpoint_dir is not None:
+        epoch_checkpoint_paths = normalize_step_checkpoints_to_epochs(step_checkpoint_dir, epoch_checkpoint_dir)
+        if step_checkpoint_dir.exists():
+            shutil.rmtree(step_checkpoint_dir)
+
+    metadata = {
+        "run_id": run_id,
+        "train_file": str(train_path),
+        "base_model": args.base_model,
+        "output_dir": str(output_dir),
+        "device": device,
+        "epochs": int(args.epochs),
+        "batch_size": int(args.batch_size),
+        "learning_rate": float(args.lr),
+        "warmup_ratio": float(args.warmup_ratio),
+        "max_length": int(args.max_length),
+        "dev_ratio": float(args.dev_ratio),
+        "seed": int(args.seed),
+        "fp16": bool(args.fp16),
+        "save_each_epoch": bool(args.save_each_epoch),
+        "steps_per_epoch": int(steps_per_epoch),
+        "total_pairs": len(all_pairs),
+        "train_pairs": len(train_pairs),
+        "dev_pairs": len(dev_pairs),
+        "epoch_checkpoints": epoch_checkpoint_paths,
+    }
+    metadata_path = output_dir / "run_metadata.json"
+    metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
 
     print(f"Training abgeschlossen. Modell gespeichert unter: {output_dir}")
+    if epoch_checkpoint_paths:
+        print(f"Epochen-Checkpoints gespeichert unter: {epoch_checkpoint_dir}")
+    print(f"Run-Metadaten: {metadata_path}")
 
 
 if __name__ == "__main__":

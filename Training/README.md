@@ -32,6 +32,9 @@ python Training/run_training_pipeline.py `
   --deduplicate
 ```
 
+Das beste Modell (gemäss Dev-Evaluator) wird im `--output-dir` gespeichert.
+Zusätzlich werden standardmässig Epochen-Checkpoints unter `<output-dir>/epochs/epoch-01...` abgelegt.
+
 1) Einzelne Schritte manuell (optional):
 
 ```powershell
@@ -100,7 +103,7 @@ python Training/run_single_model_evaluation.py `
   --output-dir Training/outputs
 ```
 
-Die Ausgabe wird als `summary_single_finetuned_YYYYMMDD_HHMMSS_*.csv`, `details_single_finetuned_YYYYMMDD_HHMMSS_*.csv`, `overview_single_finetuned_YYYYMMDD_HHMMSS_*.svg` und `evaluation_report_single_finetuned_YYYYMMDD_HHMMSS_*.md` gespeichert.
+Die Ausgabe wird deterministisch gespeichert als `summary_<run-label>_<model>_<query>_<ce>.csv`, `details_<run-label>_<model>_<query>_<ce>.csv`, `overview_<run-label>_<model>_<query>_<ce>.svg` und `evaluation_report_<run-label>_<model>_<query>_<ce>.md`.
 
 Zusätzlich werden immer `overview_single_latest.svg` und `evaluation_report_single_latest.md` aktualisiert.
 
