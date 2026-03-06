@@ -1,0 +1,128 @@
+#Baugrubensicherung/Tiefgründung
+Baugrubensicherung Bohrpfahlwand gespriesst
+Baugrubensicherung Bohrpfahlwand unverankert
+Baugrubensicherung Bohrpfahlwand verankert
+Baugrubensicherung Nagelwand
+Baugrubensicherung Rühlwand auskragend
+Baugrubensicherung Rühlwand gespriesst
+Baugrubensicherung Rühlwand verankert
+Baugrubensicherung Schlitzwand 400
+Baugrubensicherung Schlitzwand 800
+Baugrubensicherung Spundwand auskragend
+Baugrubensicherung Spundwand gespriesst
+Baugrubensicherung Spundwand verankert
+Tiefgründung Mikrobohrpfahl
+Tiefgründung Ortbetonbohrpfahl 700
+Tiefgründung Ortbetonbohrpfahl 900
+Tiefgründung Ortbetonbohrpfahl 1200
+Tiefgründung Ortbetonverdrängungspfahl 560/480
+Tiefgründung Ortbetonverdrängungspfahl 660/580
+Tiefgründung Rüttelstopfsäule
+Tiefgründung Vorgefertigter Betonpfahl
+
+#Beton
+Magerbeton
+Tiefbaubeton
+Bohrpfahlbeton
+Betonfertigteil hochfest
+Betonfertigteil normalfest
+Hartbeton einschichtig
+Hartbeton zweischichtig
+Kunststeinplatte zementgebunden
+Glasfaserbeton
+
+#Erdmaterial
+Kies gebrochen
+Rundkies
+Sand
+
+#Holz
+3- und 5-Schicht Massivholzplatte
+Balkenschichtholz
+Brettschichtholz
+Brettsperrholz
+Furniersperrholz
+Hartfaserplatte
+Holzwolle-Leichtbauplatte zementgebunden
+Konstruktionsvollholz
+Massivholz Buche Eiche kammergetrocknet gehobelt
+Massivholz Buche Eiche kammergetrocknet rau
+Massivholz Buche Eiche luftgetrocknet rau
+Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt
+Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt
+Massivholz Fichte Tanne Lärche luftgetrocknet rau
+Mitteldichte Faserplatte MDF Harnstoff-Formaldehyd-gebunden
+OSB Platte Phenol-Formaldehyd-gebunden Feuchtbereich
+Spanplatte Phenol-Formaldehyd-gebunden Feuchtbereich
+Spanplatte Harnstoff-Formaldehyd-gebunden beschichtet Trockenbereich
+Spanplatte Harnstoff-Formaldehyd-gebunden Trockenbereich
+Sperrholz Multiplex Phenol-Formaldehyd-gebunden Feuchtbereich
+Sperrholz Multiplex Harnstoff-Formaldehyd-gebunden Trockenbereich
+
+#Metall
+Aluminiumblech blank
+Aluminiumprofil blank
+Armierungsstahl
+Blei
+Chromnickelstahlblech blank
+Chromnickelstahlblech verzinnt
+Chromstahlblech blank
+Chromstahlblech verzinnt
+Kupferblech blank
+Messing-/Baubronzeblech
+Stahlblech blank
+Stahlblech verzinkt
+Stahlprofil blank
+Gusseisen
+
+#Asphalt/Dichtung
+Heissbitumen
+Kautschukdichtungsmasse
+Polysulfiddichtungsmasse
+Silicon-Fugenmasse
+Dichtungsbahn bituminös
+Dichtungsbahn Gummi EPDM
+Dichtungsbahn Polyolefin FPO
+Kraftpapier
+Polyethylenfolie PE
+Polyethylenvlies PE
+2K-Fliessbelag Epoxidharz
+Gussasphalt
+Bitumenemulsion
+Phenolharz PF
+
+#Mörtel
+Baukleber Einbettmörtel mineralisch
+Baukleber Einbettmörtel organisch
+
+#Kunststoff
+Polystyrol expandiert EPS
+Polystyrol extrudiert XPS
+Acrylnitril-Butadien-Styrol ABS
+Polyurethan PUR PIR
+Polyethylen PE
+Polypropylen PP
+Polyvinylchlorid PVC
+Plexiglas PMMA Acrylglas
+Polyamid PA glasfaserverstärkt
+Polycarbonat PC
+Polyester UP glasfaserverstärkt
+Polystyrol PS
+2-Komponenten Klebstoff
+
+#Naturstein
+Kalksandstein
+Hartsandsteinplatte
+Kalksteinplatte
+Natursteinplatte geschliffen
+Natursteinplatte geschnitten
+Natursteinplatte poliert
+
+#Mauerwerk
+Backstein
+Betonziegel
+
+#Gipswerkstoffe
+Faserzementplatte
+Gipsfaserplatte
+Gipskartonplatte

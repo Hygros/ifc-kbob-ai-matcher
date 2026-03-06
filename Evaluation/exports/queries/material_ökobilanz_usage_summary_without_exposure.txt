@@ -1,0 +1,108 @@
+material	count
+Baugrubensicherung Bohrpfahlwand gespriesst	0
+Baugrubensicherung Bohrpfahlwand unverankert	0
+Baugrubensicherung Bohrpfahlwand verankert	0
+Baugrubensicherung Nagelwand	0
+Baugrubensicherung Rühlwand auskragend	0
+Baugrubensicherung Rühlwand gespriesst	0
+Baugrubensicherung Rühlwand verankert	0
+Baugrubensicherung Schlitzwand 400	0
+Baugrubensicherung Schlitzwand 800	0
+Baugrubensicherung Spundwand auskragend	0
+Baugrubensicherung Spundwand gespriesst	0
+Baugrubensicherung Spundwand verankert	0
+Tiefgründung Mikrobohrpfahl	80
+Tiefgründung Ortbetonbohrpfahl 700	280
+Tiefgründung Ortbetonbohrpfahl 900	80
+Tiefgründung Ortbetonbohrpfahl 1200	40
+Tiefgründung Ortbetonverdrängungspfahl 560/480	0
+Tiefgründung Ortbetonverdrängungspfahl 660/580	0
+Tiefgründung Rüttelstopfsäule	0
+Tiefgründung Vorgefertigter Betonpfahl	80
+Magerbeton	0
+Tiefbaubeton	816
+Bohrpfahlbeton	400
+Betonfertigteil hochfest	736
+Betonfertigteil normalfest	736
+Hartbeton einschichtig	0
+Hartbeton zweischichtig	0
+Kunststeinplatte zementgebunden	0
+Glasfaserbeton	0
+Kies gebrochen	0
+Rundkies	0
+Sand	0
+3- und 5-Schicht Massivholzplatte	0
+Balkenschichtholz	22
+Brettschichtholz	22
+Brettsperrholz	22
+Furniersperrholz	0
+Hartfaserplatte	0
+Holzwolle-Leichtbauplatte zementgebunden	0
+Konstruktionsvollholz	22
+Massivholz Buche Eiche kammergetrocknet gehobelt	0
+Massivholz Buche Eiche kammergetrocknet rau	0
+Massivholz Buche Eiche luftgetrocknet rau	0
+Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt	0
+Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt	0
+Massivholz Fichte Tanne Lärche luftgetrocknet rau	0
+Mitteldichte Faserplatte MDF Harnstoff-Formaldehyd-gebunden	0
+OSB Platte Phenol-Formaldehyd-gebunden Feuchtbereich	0
+Spanplatte Phenol-Formaldehyd-gebunden Feuchtbereich	0
+Spanplatte Harnstoff-Formaldehyd-gebunden beschichtet Trockenbereich	0
+Spanplatte Harnstoff-Formaldehyd-gebunden Trockenbereich	0
+Sperrholz Multiplex Phenol-Formaldehyd-gebunden Feuchtbereich	0
+Sperrholz Multiplex Harnstoff-Formaldehyd-gebunden Trockenbereich	0
+Aluminiumblech blank	14
+Aluminiumprofil blank	14
+Armierungsstahl	40
+Blei	0
+Chromnickelstahlblech blank	0
+Chromnickelstahlblech verzinnt	0
+Chromstahlblech blank	0
+Chromstahlblech verzinnt	0
+Kupferblech blank	0
+Messing-/Baubronzeblech	0
+Stahlblech blank	297
+Stahlblech verzinkt	0
+Stahlprofil blank	297
+Gusseisen	0
+Heissbitumen	4
+Kautschukdichtungsmasse	0
+Polysulfiddichtungsmasse	0
+Silicon-Fugenmasse	0
+Dichtungsbahn bituminös	4
+Dichtungsbahn Gummi EPDM	0
+Dichtungsbahn Polyolefin FPO	0
+Kraftpapier	0
+Polyethylenfolie PE	0
+Polyethylenvlies PE	0
+2K-Fliessbelag Epoxidharz	0
+Gussasphalt	7
+Bitumenemulsion	4
+Phenolharz PF	0
+Baukleber Einbettmörtel mineralisch	0
+Baukleber Einbettmörtel organisch	0
+Polystyrol expandiert EPS	0
+Polystyrol extrudiert XPS	0
+Acrylnitril-Butadien-Styrol ABS	30
+Polyurethan PUR PIR	0
+Polyethylen PE	30
+Polypropylen PP	30
+Polyvinylchlorid PVC	30
+Plexiglas PMMA Acrylglas	0
+Polyamid PA glasfaserverstärkt	0
+Polycarbonat PC	0
+Polyester UP glasfaserverstärkt	0
+Polystyrol PS	0
+2-Komponenten Klebstoff	0
+Kalksandstein	7
+Hartsandsteinplatte	0
+Kalksteinplatte	0
+Natursteinplatte geschliffen	11
+Natursteinplatte geschnitten	11
+Natursteinplatte poliert	11
+Backstein	7
+Betonziegel	7
+Faserzementplatte	0
+Gipsfaserplatte	0
+Gipskartonplatte	0

@@ -1,0 +1,200 @@
+# Format:  Entity PredefinedType: Material1 Material2
+#          Entity: Material1 Material2              (Default fuer alle PredefinedTypes)
+
+# IfcBeam
+IfcBeam BEAM: Beton Stahlbeton Stahl Holz
+IfcBeam CORNICE: Beton Stahlbeton 
+IfcBeam DIAPHRAGM: Beton Stahlbeton Stahl
+IfcBeam EDGEBEAM: Beton Stahlbeton
+IfcBeam GIRDER_SEGMENT: Beton Stahlbeton Stahl
+IfcBeam HATSTONE: Beton Stahlbeton
+IfcBeam HOLLOWCORE: Beton Stahlbeton
+IfcBeam JOIST: Stahl Holz
+IfcBeam PIERCAP: Beton Stahlbeton
+IfcBeam SPANDREL: Beton Stahlbeton
+IfcBeam T_BEAM: Beton Stahlbeton
+
+# IfcBearing
+IfcBearing CYLINDRICAL: Stahl
+IfcBearing DISK: Stahl Kunststoff
+IfcBearing ELASTOMERIC: Kunststoff
+IfcBearing GUIDE: Stahl
+IfcBearing POT: Stahl Kunststoff
+IfcBearing ROCKER: Stahl
+IfcBearing ROLLER: Stahl
+IfcBearing SPHERICAL: Stahl
+
+# IfcBuiltElement (nur NOTDEFINED)
+IfcBuiltElement: Beton Stahlbeton Stahl Aluminium Holz Kunststoff Mauerwerk Asphalt Bitumen
+
+# IfcBuildingElementProxy (nur NOTDEFINED)
+IfcBuildingElementProxy: Beton Stahlbeton Stahl Aluminium Holz Kunststoff Mauerwerk Asphalt Bitumen
+
+# IfcCaissonFoundation
+IfcCaissonFoundation CAISSON: Beton Stahlbeton Stahl
+IfcCaissonFoundation WELL: Beton Stahlbeton
+
+# IfcColumn
+IfcColumn COLUMN: Beton Stahlbeton Stahl
+IfcColumn PIERSTEM: Beton Stahlbeton
+IfcColumn PIERSTEM_SEGMENT: Beton Stahlbeton
+IfcColumn PILASTER: Beton Stahlbeton
+IfcColumn STANDCOLUMN: Stahl
+
+# IfcCourse
+IfcCourse ARMOUR: Naturstein Beton Stahlbeton
+IfcCourse BALLASTBED: Naturstein
+IfcCourse CORE: Beton Stahlbeton Mauerwerk
+IfcCourse FILTER: Naturstein
+IfcCourse PAVEMENT: Asphalt Beton Stahlbeton
+IfcCourse PROTECTION: Beton Stahlbeton Naturstein
+
+# IfcCovering
+IfcCovering CLADDING: Holz Aluminium Naturstein Kunststoff
+IfcCovering COPING: Aluminium Naturstein
+IfcCovering MEMBRANE: Bitumen Kunststoff
+IfcCovering MOLDING: Holz Kunststoff Aluminium
+
+# IfcDiscreteAccessory
+IfcDiscreteAccessory ANCHORPLATE: Stahl
+IfcDiscreteAccessory BIRDPROTECTION: Kunststoff
+IfcDiscreteAccessory BRACKET: Stahl Aluminium
+IfcDiscreteAccessory CABLEARRANGER: Stahl Kunststoff
+IfcDiscreteAccessory ELASTIC_CUSHION: Kunststoff
+IfcDiscreteAccessory EXPANSION_JOINT_DEVICE: Stahl Kunststoff
+IfcDiscreteAccessory FILLER: Kunststoff
+IfcDiscreteAccessory FLASHING: Stahl Aluminium
+IfcDiscreteAccessory INSULATOR: Kunststoff
+IfcDiscreteAccessory LOCK: Stahl
+IfcDiscreteAccessory PANEL_STRENGTHENING: Stahl
+IfcDiscreteAccessory RAILBRACE: Stahl
+IfcDiscreteAccessory RAILPAD: Kunststoff
+IfcDiscreteAccessory RAIL_LUBRICATION: Stahl
+IfcDiscreteAccessory RAIL_MECHANICAL_EQUIPMENT: Stahl
+IfcDiscreteAccessory SHOE: Stahl
+IfcDiscreteAccessory SLIDINGCHAIR: Stahl
+IfcDiscreteAccessory SOUNDABSORPTION: Kunststoff Aluminium
+IfcDiscreteAccessory TENSIONINGEQUIPMENT: Stahl
+
+# IfcCableSegment (alle Typen gleich)
+IfcCableSegment: Stahl
+
+# IfcFooting
+IfcFooting CAISSON_FOUNDATION: Beton Stahlbeton Stahl
+IfcFooting FOOTING_BEAM: Beton Stahlbeton
+IfcFooting PAD_FOOTING: Beton Stahlbeton
+IfcFooting PILE_CAP: Beton Stahlbeton
+IfcFooting STRIP_FOOTING: Beton Stahlbeton
+
+# IfcKerb (nur NOTDEFINED)
+IfcKerb: Beton Stahlbeton Naturstein
+
+# IfcMember
+IfcMember ARCH_SEGMENT: Beton Stahlbeton Stahl
+IfcMember BRACE: Stahl Holz
+IfcMember CHORD: Stahl Holz
+IfcMember MEMBER: Stahl Beton Stahlbeton Holz
+IfcMember PLATE: Stahl
+IfcMember POST: Stahl Holz
+IfcMember PURLIN: Stahl Holz
+IfcMember RAFTER: Stahl Holz
+IfcMember STAY_CABLE: Stahl
+IfcMember STIFFENING_RIB: Stahl Beton Stahlbeton
+IfcMember STRINGER: Stahl Beton Stahlbeton Holz
+IfcMember STRUCTURALCABLE: Stahl
+IfcMember STRUT: Stahl Holz
+IfcMember STUD: Stahl
+IfcMember SUSPENDER: Stahl
+IfcMember SUSPENSION_CABLE: Stahl
+IfcMember TIEBAR: Stahl
+
+# IfcPavement
+IfcPavement FLEXIBLE: Asphalt Bitumen
+IfcPavement RIGID: Beton Stahlbeton
+
+# IfcPipeFitting (alle Typen gleich)
+IfcPipeFitting: Kunststoff Stahl
+
+# IfcPipeSegment (alle Typen gleich)
+IfcPipeSegment: Kunststoff
+
+# IfcPile
+IfcPile BORED: Beton Stahlbeton
+IfcPile COHESION: Beton Stahlbeton
+IfcPile DRIVEN: Beton Stahlbeton Stahl
+IfcPile FRICTION: Beton Stahlbeton
+IfcPile JETGROUTING: Beton Stahlbeton
+IfcPile SUPPORT: Beton Stahlbeton Stahl
+
+# IfcPlate
+IfcPlate BASE_PLATE: Stahl
+IfcPlate COVER_PLATE: Stahl Aluminium
+IfcPlate FLANGE_PLATE: Stahl
+IfcPlate GUSSET_PLATE: Stahl
+IfcPlate SHEET: Stahl Aluminium
+IfcPlate SPLICE_PLATE: Stahl
+IfcPlate STIFFENER_PLATE: Stahl
+IfcPlate WEB_PLATE: Stahl
+
+# IfcRail
+IfcRail BLADE: Stahl
+IfcRail CHECKRAIL: Stahl
+IfcRail GUARDRAIL: Stahl Beton Stahlbeton
+IfcRail RACKRAIL: Stahl
+IfcRail RAIL: Stahl
+IfcRail STOCKRAIL: Stahl
+
+# IfcRailing
+IfcRailing BALUSTRADE: Stahl Aluminium Holz
+IfcRailing FENCE: Stahl Aluminium Holz
+IfcRailing GUARDRAIL: Stahl Aluminium Beton Stahlbeton
+IfcRailing HANDRAIL: Stahl Aluminium Holz
+
+# IfcReinforcingBar (alle Typen gleich)
+IfcReinforcingBar: Betonstahl
+
+# IfcReinforcingMesh (nur NOTDEFINED)
+IfcReinforcingMesh: Betonstahl
+
+# IfcSlab
+IfcSlab APPROACH_SLAB: Beton Stahlbeton
+IfcSlab BASESLAB: Beton Stahlbeton
+IfcSlab FLOOR: Beton Stahlbeton Holz
+IfcSlab LANDING: Beton Stahlbeton
+IfcSlab PAVING: Beton Stahlbeton Asphalt
+IfcSlab ROOF: Beton Stahlbeton Holz
+IfcSlab SIDEWALK: Beton Stahlbeton Asphalt
+IfcSlab TRACKSLAB: Beton Stahlbeton
+IfcSlab WEARING: Asphalt Beton Stahlbeton
+
+# IfcTendon (alle Typen gleich)
+IfcTendon: Stahl
+
+# IfcTendonAnchor (alle Typen gleich)
+IfcTendonAnchor: Stahl
+
+# IfcTendonConduit
+IfcTendonConduit COUPLER: Stahl
+IfcTendonConduit DIABOLO: Stahl
+IfcTendonConduit DUCT: Stahl Kunststoff
+IfcTendonConduit GROUTING_DUCT: Kunststoff
+IfcTendonConduit TRUMPET: Stahl
+
+# IfcTrackElement
+IfcTrackElement BLOCKINGDEVICE: Stahl
+IfcTrackElement DERAILER: Stahl
+IfcTrackElement FROG: Stahl
+IfcTrackElement HALF_SET_OF_BLADES: Stahl
+IfcTrackElement SLEEPER: Beton Stahlbeton Holz
+IfcTrackElement SPEEDREGULATOR: Stahl
+IfcTrackElement TRACKENDOFALIGNMENT: Stahl Beton Stahlbeton
+IfcTrackElement VEHICLESTOP: Stahl
+
+# IfcWall
+IfcWall PARAPET: Beton Stahlbeton Mauerwerk Naturstein
+IfcWall POLYGONAL: Beton Stahlbeton Mauerwerk Naturstein
+IfcWall RETAININGWALL: Beton Stahlbeton Naturstein
+IfcWall SHEAR: Beton Stahlbeton
+IfcWall SOLIDWALL: Beton Stahlbeton Mauerwerk Holz Naturstein
+IfcWall STANDARD: Beton Stahlbeton Mauerwerk Holz
+IfcWall WAVEWALL: Beton Stahlbeton

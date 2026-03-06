@@ -1,0 +1,24 @@
+query_lines=1984
+old_map_lines=2223
+new_map_lines=1984
+consumed_old_map=2224
+remaining_old_map=-1
+--- PREVIEW 723-740 ---
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700 | Tiefgründung Mikrobohrpfahl
+Betonfertigteil normalfest | Betonfertigteil hochfest
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700 | Tiefgründung Mikrobohrpfahl
+Betonfertigteil normalfest | Betonfertigteil hochfest
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700
+Betonfertigteil normalfest | Betonfertigteil hochfest
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700
+Betonfertigteil normalfest | Betonfertigteil hochfest
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 900
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 900
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 1200
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700 | Tiefgründung Mikrobohrpfahl
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700 | Tiefgründung Mikrobohrpfahl
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700
+Bohrpfahlbeton | Tiefgründung Ortbetonbohrpfahl 700
