@@ -258,6 +258,19 @@ def _lookup_materials(
     return entity_material.get((entity, ""), [])
 
 
+def _lookup_entity_materials_any_predefined(
+    entity: str,
+    entity_material: dict[tuple[str, str], list[str]],
+) -> list[str]:
+    """Collect all materials configured for an entity across predefined variants."""
+    collected = []
+    for (mapped_entity, _mapped_predefined_type), materials in entity_material.items():
+        if mapped_entity != entity:
+            continue
+        collected.extend(materials)
+    return unique_preserve_order(collected)
+
+
 def _is_concrete_family(material: str) -> bool:
     """Return True for Beton and aliases that map to Beton."""
     resolved = MATERIAL_ALIAS.get(material, material)
@@ -294,13 +307,17 @@ def generate_queries(
     materials_without_strength = 0
 
     for entity, predefined_types in entity_predefined.items():
-        predefined_values = predefined_types if predefined_types else [""]
+        # Always include a variant without predefined type for each entity.
+        predefined_values = unique_preserve_order([*(predefined_types or []), DEFAULT_VALUE])
         entity_diam = entity_diameters.get(entity, [""])
         if not entity_diam:
             entity_diam = [""]
 
         for predefined_type in predefined_values:
             materials = _lookup_materials(entity, predefined_type, entity_material)
+            if not materials and predefined_type == DEFAULT_VALUE:
+                # If no explicit default exists, fallback to the union of all entity materials.
+                materials = _lookup_entity_materials_any_predefined(entity, entity_material)
             if not materials:
                 skipped_without_material += 1
                 continue

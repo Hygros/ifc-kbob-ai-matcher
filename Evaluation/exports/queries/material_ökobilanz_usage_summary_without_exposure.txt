@@ -1,8 +1,8 @@
 material	count
-Baugrubensicherung Bohrpfahlwand gespriesst	4
-Baugrubensicherung Bohrpfahlwand unverankert	4
-Baugrubensicherung Bohrpfahlwand verankert	4
-Baugrubensicherung Nagelwand	3
+Baugrubensicherung Bohrpfahlwand gespriesst	8
+Baugrubensicherung Bohrpfahlwand unverankert	8
+Baugrubensicherung Bohrpfahlwand verankert	8
+Baugrubensicherung Nagelwand	8
 Baugrubensicherung Rühlwand auskragend	3
 Baugrubensicherung Rühlwand gespriesst	3
 Baugrubensicherung Rühlwand verankert	3
@@ -11,34 +11,34 @@ Baugrubensicherung Schlitzwand 800	8
 Baugrubensicherung Spundwand auskragend	3
 Baugrubensicherung Spundwand gespriesst	3
 Baugrubensicherung Spundwand verankert	3
-Tiefgründung Mikrobohrpfahl	67
-Tiefgründung Ortbetonbohrpfahl 700	224
-Tiefgründung Ortbetonbohrpfahl 900	64
-Tiefgründung Ortbetonbohrpfahl 1200	32
+Tiefgründung Mikrobohrpfahl	123
+Tiefgründung Ortbetonbohrpfahl 700	160
+Tiefgründung Ortbetonbohrpfahl 900	80
+Tiefgründung Ortbetonbohrpfahl 1200	40
 Tiefgründung Ortbetonverdrängungspfahl 560/480	40
 Tiefgründung Ortbetonverdrängungspfahl 660/580	40
-Tiefgründung Rüttelstopfsäule	0
-Tiefgründung Vorgefertigter Betonpfahl	320
+Tiefgründung Rüttelstopfsäule	1
+Tiefgründung Vorgefertigter Betonpfahl	400
 Magerbeton	8
-Tiefbaubeton	816
-Bohrpfahlbeton	320
-Betonfertigteil hochfest	496
-Betonfertigteil normalfest	496
+Tiefbaubeton	584
+Bohrpfahlbeton	400
+Betonfertigteil hochfest	292
+Betonfertigteil normalfest	292
 Hartbeton einschichtig	4
 Hartbeton zweischichtig	4
-Kunststeinplatte zementgebunden	0
+Kunststeinplatte zementgebunden	10
 Glasfaserbeton	0
-Kies gebrochen	4
-Rundkies	4
+Kies gebrochen	5
+Rundkies	5
 Sand	1
-3- und 5-Schicht Massivholzplatte	4
-Balkenschichtholz	19
-Brettschichtholz	14
-Brettsperrholz	16
+3- und 5-Schicht Massivholzplatte	3
+Balkenschichtholz	25
+Brettschichtholz	20
+Brettsperrholz	22
 Furniersperrholz	1
 Hartfaserplatte	0
 Holzwolle-Leichtbauplatte zementgebunden	1
-Konstruktionsvollholz	18
+Konstruktionsvollholz	25
 Massivholz Buche Eiche kammergetrocknet gehobelt	4
 Massivholz Buche Eiche kammergetrocknet rau	2
 Massivholz Buche Eiche luftgetrocknet rau	2
@@ -52,57 +52,57 @@ Spanplatte Harnstoff-Formaldehyd-gebunden beschichtet Trockenbereich	0
 Spanplatte Harnstoff-Formaldehyd-gebunden Trockenbereich	0
 Sperrholz Multiplex Phenol-Formaldehyd-gebunden Feuchtbereich	0
 Sperrholz Multiplex Harnstoff-Formaldehyd-gebunden Trockenbereich	0
-Aluminiumblech blank	14
-Aluminiumprofil blank	14
-Armierungsstahl	40
-Blei	0
-Chromnickelstahlblech blank	0
-Chromnickelstahlblech verzinnt	0
-Chromstahlblech blank	0
-Chromstahlblech verzinnt	0
-Kupferblech blank	1
-Messing-/Baubronzeblech	0
-Stahlblech blank	297
-Stahlblech verzinkt	6
-Stahlprofil blank	294
-Gusseisen	21
-Heissbitumen	8
+Aluminiumblech blank	18
+Aluminiumprofil blank	18
+Armierungsstahl	59
+Blei	2
+Chromnickelstahlblech blank	2
+Chromnickelstahlblech verzinnt	2
+Chromstahlblech blank	2
+Chromstahlblech verzinnt	2
+Kupferblech blank	3
+Messing-/Baubronzeblech	2
+Stahlblech blank	333
+Stahlblech verzinkt	18
+Stahlprofil blank	330
+Gusseisen	26
+Heissbitumen	16
 Kautschukdichtungsmasse	1
 Polysulfiddichtungsmasse	1
 Silicon-Fugenmasse	1
-Dichtungsbahn bituminös	4
+Dichtungsbahn bituminös	6
 Dichtungsbahn Gummi EPDM	1
 Dichtungsbahn Polyolefin FPO	1
 Kraftpapier	0
 Polyethylenfolie PE	1
 Polyethylenvlies PE	1
-2K-Fliessbelag Epoxidharz	2
-Gussasphalt	7
-Bitumenemulsion	5
+2K-Fliessbelag Epoxidharz	4
+Gussasphalt	10
+Bitumenemulsion	7
 Phenolharz PF	0
 Baukleber Einbettmörtel mineralisch	0
 Baukleber Einbettmörtel organisch	0
 Polystyrol expandiert EPS	3
 Polystyrol extrudiert XPS	1
-Acrylnitril-Butadien-Styrol ABS	5
-Polyurethan PUR PIR	7
-Polyethylen PE	22
-Polypropylen PP	24
-Polyvinylchlorid PVC	19
+Acrylnitril-Butadien-Styrol ABS	4
+Polyurethan PUR PIR	12
+Polyethylen PE	28
+Polypropylen PP	30
+Polyvinylchlorid PVC	25
 Plexiglas PMMA Acrylglas	1
 Polyamid PA glasfaserverstärkt	3
 Polycarbonat PC	2
 Polyester UP glasfaserverstärkt	0
 Polystyrol PS	0
 2-Komponenten Klebstoff	0
-Kalksandstein	8
-Hartsandsteinplatte	7
-Kalksteinplatte	7
-Natursteinplatte geschliffen	4
-Natursteinplatte geschnitten	8
+Kalksandstein	10
+Hartsandsteinplatte	10
+Kalksteinplatte	10
+Natursteinplatte geschliffen	7
+Natursteinplatte geschnitten	11
 Natursteinplatte poliert	1
-Backstein	7
-Betonziegel	7
+Backstein	9
+Betonziegel	9
 Faserzementplatte	0
 Gipsfaserplatte	0
 Gipskartonplatte	0

@@ -1,3 +1,23 @@
+IfcBeam Beton C25/30 INSITU
+IfcBeam Beton C25/30 PRECAST
+IfcBeam Beton C30/37 INSITU
+IfcBeam Beton C30/37 PRECAST
+IfcBeam Beton C35/45 INSITU
+IfcBeam Beton C35/45 PRECAST
+IfcBeam Beton C40/50 INSITU
+IfcBeam Beton C40/50 PRECAST
+IfcBeam Holz
+IfcBeam Stahl S235
+IfcBeam Stahl S355
+IfcBeam Stahl S460
+IfcBeam Stahlbeton C25/30 INSITU
+IfcBeam Stahlbeton C25/30 PRECAST
+IfcBeam Stahlbeton C30/37 INSITU
+IfcBeam Stahlbeton C30/37 PRECAST
+IfcBeam Stahlbeton C35/45 INSITU
+IfcBeam Stahlbeton C35/45 PRECAST
+IfcBeam Stahlbeton C40/50 INSITU
+IfcBeam Stahlbeton C40/50 PRECAST
 IfcBeam BEAM Beton C25/30 INSITU
 IfcBeam BEAM Beton C25/30 PRECAST
 IfcBeam BEAM Beton C30/37 INSITU
@@ -156,6 +176,10 @@ IfcBeam T_BEAM Stahlbeton C35/45 INSITU
 IfcBeam T_BEAM Stahlbeton C35/45 PRECAST
 IfcBeam T_BEAM Stahlbeton C40/50 INSITU
 IfcBeam T_BEAM Stahlbeton C40/50 PRECAST
+IfcBearing Kunststoff
+IfcBearing Stahl S235
+IfcBearing Stahl S355
+IfcBearing Stahl S460
 IfcBearing CYLINDRICAL Stahl S235
 IfcBearing CYLINDRICAL Stahl S355
 IfcBearing CYLINDRICAL Stahl S460
@@ -230,6 +254,9 @@ IfcBuiltElement Stahlbeton C35/45 INSITU
 IfcBuiltElement Stahlbeton C35/45 PRECAST
 IfcBuiltElement Stahlbeton C40/50 INSITU
 IfcBuiltElement Stahlbeton C40/50 PRECAST
+IfcCableSegment Stahl S235
+IfcCableSegment Stahl S355
+IfcCableSegment Stahl S460
 IfcCableSegment BUSBARSEGMENT Stahl S235
 IfcCableSegment BUSBARSEGMENT Stahl S355
 IfcCableSegment BUSBARSEGMENT Stahl S460
@@ -251,6 +278,25 @@ IfcCableSegment FIBERSEGMENT Stahl S460
 IfcCableSegment FIBERTUBE Stahl S235
 IfcCableSegment FIBERTUBE Stahl S355
 IfcCableSegment FIBERTUBE Stahl S460
+IfcCaissonFoundation Beton C25/30 INSITU
+IfcCaissonFoundation Beton C25/30 PRECAST
+IfcCaissonFoundation Beton C30/37 INSITU
+IfcCaissonFoundation Beton C30/37 PRECAST
+IfcCaissonFoundation Beton C35/45 INSITU
+IfcCaissonFoundation Beton C35/45 PRECAST
+IfcCaissonFoundation Beton C40/50 INSITU
+IfcCaissonFoundation Beton C40/50 PRECAST
+IfcCaissonFoundation Stahl S235
+IfcCaissonFoundation Stahl S355
+IfcCaissonFoundation Stahl S460
+IfcCaissonFoundation Stahlbeton C25/30 INSITU
+IfcCaissonFoundation Stahlbeton C25/30 PRECAST
+IfcCaissonFoundation Stahlbeton C30/37 INSITU
+IfcCaissonFoundation Stahlbeton C30/37 PRECAST
+IfcCaissonFoundation Stahlbeton C35/45 INSITU
+IfcCaissonFoundation Stahlbeton C35/45 PRECAST
+IfcCaissonFoundation Stahlbeton C40/50 INSITU
+IfcCaissonFoundation Stahlbeton C40/50 PRECAST
 IfcCaissonFoundation CAISSON Beton C25/30 INSITU
 IfcCaissonFoundation CAISSON Beton C25/30 PRECAST
 IfcCaissonFoundation CAISSON Beton C30/37 INSITU
@@ -286,6 +332,25 @@ IfcCaissonFoundation WELL Stahlbeton C35/45 INSITU
 IfcCaissonFoundation WELL Stahlbeton C35/45 PRECAST
 IfcCaissonFoundation WELL Stahlbeton C40/50 INSITU
 IfcCaissonFoundation WELL Stahlbeton C40/50 PRECAST
+IfcColumn Beton C25/30 INSITU
+IfcColumn Beton C25/30 PRECAST
+IfcColumn Beton C30/37 INSITU
+IfcColumn Beton C30/37 PRECAST
+IfcColumn Beton C35/45 INSITU
+IfcColumn Beton C35/45 PRECAST
+IfcColumn Beton C40/50 INSITU
+IfcColumn Beton C40/50 PRECAST
+IfcColumn Stahl S235
+IfcColumn Stahl S355
+IfcColumn Stahl S460
+IfcColumn Stahlbeton C25/30 INSITU
+IfcColumn Stahlbeton C25/30 PRECAST
+IfcColumn Stahlbeton C30/37 INSITU
+IfcColumn Stahlbeton C30/37 PRECAST
+IfcColumn Stahlbeton C35/45 INSITU
+IfcColumn Stahlbeton C35/45 PRECAST
+IfcColumn Stahlbeton C40/50 INSITU
+IfcColumn Stahlbeton C40/50 PRECAST
 IfcColumn COLUMN Beton C25/30 INSITU
 IfcColumn COLUMN Beton C25/30 PRECAST
 IfcColumn COLUMN Beton C30/37 INSITU
@@ -356,6 +421,25 @@ IfcColumn PILASTER Stahlbeton C40/50 PRECAST
 IfcColumn STANDCOLUMN Stahl S235
 IfcColumn STANDCOLUMN Stahl S355
 IfcColumn STANDCOLUMN Stahl S460
+IfcCourse Asphalt
+IfcCourse Beton C25/30 INSITU
+IfcCourse Beton C25/30 PRECAST
+IfcCourse Beton C30/37 INSITU
+IfcCourse Beton C30/37 PRECAST
+IfcCourse Beton C35/45 INSITU
+IfcCourse Beton C35/45 PRECAST
+IfcCourse Beton C40/50 INSITU
+IfcCourse Beton C40/50 PRECAST
+IfcCourse Mauerwerk
+IfcCourse Naturstein
+IfcCourse Stahlbeton C25/30 INSITU
+IfcCourse Stahlbeton C25/30 PRECAST
+IfcCourse Stahlbeton C30/37 INSITU
+IfcCourse Stahlbeton C30/37 PRECAST
+IfcCourse Stahlbeton C35/45 INSITU
+IfcCourse Stahlbeton C35/45 PRECAST
+IfcCourse Stahlbeton C40/50 INSITU
+IfcCourse Stahlbeton C40/50 PRECAST
 IfcCourse ARMOUR Beton C25/30 INSITU
 IfcCourse ARMOUR Beton C25/30 PRECAST
 IfcCourse ARMOUR Beton C30/37 INSITU
@@ -426,17 +510,29 @@ IfcCourse PROTECTION Stahlbeton C35/45 INSITU
 IfcCourse PROTECTION Stahlbeton C35/45 PRECAST
 IfcCourse PROTECTION Stahlbeton C40/50 INSITU
 IfcCourse PROTECTION Stahlbeton C40/50 PRECAST
+IfcCovering Aluminium
+IfcCovering Bitumen
+IfcCovering Holz
+IfcCovering Kunststoff
+IfcCovering Metall
+IfcCovering Naturstein
 IfcCovering CLADDING Aluminium
 IfcCovering CLADDING Holz
 IfcCovering CLADDING Kunststoff
 IfcCovering CLADDING Naturstein
 IfcCovering COPING Aluminium
+IfcCovering COPING Metall
 IfcCovering COPING Naturstein
 IfcCovering MEMBRANE Bitumen
 IfcCovering MEMBRANE Kunststoff
 IfcCovering MOLDING Aluminium
 IfcCovering MOLDING Holz
 IfcCovering MOLDING Kunststoff
+IfcDiscreteAccessory Aluminium
+IfcDiscreteAccessory Kunststoff
+IfcDiscreteAccessory Stahl S235
+IfcDiscreteAccessory Stahl S355
+IfcDiscreteAccessory Stahl S460
 IfcDiscreteAccessory ANCHORPLATE Stahl S235
 IfcDiscreteAccessory ANCHORPLATE Stahl S355
 IfcDiscreteAccessory ANCHORPLATE Stahl S460
@@ -487,6 +583,25 @@ IfcDiscreteAccessory SOUNDABSORPTION Kunststoff
 IfcDiscreteAccessory TENSIONINGEQUIPMENT Stahl S235
 IfcDiscreteAccessory TENSIONINGEQUIPMENT Stahl S355
 IfcDiscreteAccessory TENSIONINGEQUIPMENT Stahl S460
+IfcFooting Beton C25/30 INSITU
+IfcFooting Beton C25/30 PRECAST
+IfcFooting Beton C30/37 INSITU
+IfcFooting Beton C30/37 PRECAST
+IfcFooting Beton C35/45 INSITU
+IfcFooting Beton C35/45 PRECAST
+IfcFooting Beton C40/50 INSITU
+IfcFooting Beton C40/50 PRECAST
+IfcFooting Stahl S235
+IfcFooting Stahl S355
+IfcFooting Stahl S460
+IfcFooting Stahlbeton C25/30 INSITU
+IfcFooting Stahlbeton C25/30 PRECAST
+IfcFooting Stahlbeton C30/37 INSITU
+IfcFooting Stahlbeton C30/37 PRECAST
+IfcFooting Stahlbeton C35/45 INSITU
+IfcFooting Stahlbeton C35/45 PRECAST
+IfcFooting Stahlbeton C40/50 INSITU
+IfcFooting Stahlbeton C40/50 PRECAST
 IfcFooting CAISSON_FOUNDATION Beton C25/30 INSITU
 IfcFooting CAISSON_FOUNDATION Beton C25/30 PRECAST
 IfcFooting CAISSON_FOUNDATION Beton C30/37 INSITU
@@ -587,6 +702,26 @@ IfcKerb Stahlbeton C35/45 INSITU
 IfcKerb Stahlbeton C35/45 PRECAST
 IfcKerb Stahlbeton C40/50 INSITU
 IfcKerb Stahlbeton C40/50 PRECAST
+IfcMember Beton C25/30 INSITU
+IfcMember Beton C25/30 PRECAST
+IfcMember Beton C30/37 INSITU
+IfcMember Beton C30/37 PRECAST
+IfcMember Beton C35/45 INSITU
+IfcMember Beton C35/45 PRECAST
+IfcMember Beton C40/50 INSITU
+IfcMember Beton C40/50 PRECAST
+IfcMember Holz
+IfcMember Stahl S235
+IfcMember Stahl S355
+IfcMember Stahl S460
+IfcMember Stahlbeton C25/30 INSITU
+IfcMember Stahlbeton C25/30 PRECAST
+IfcMember Stahlbeton C30/37 INSITU
+IfcMember Stahlbeton C30/37 PRECAST
+IfcMember Stahlbeton C35/45 INSITU
+IfcMember Stahlbeton C35/45 PRECAST
+IfcMember Stahlbeton C40/50 INSITU
+IfcMember Stahlbeton C40/50 PRECAST
 IfcMember ARCH_SEGMENT Beton C25/30 INSITU
 IfcMember ARCH_SEGMENT Beton C25/30 PRECAST
 IfcMember ARCH_SEGMENT Beton C30/37 INSITU
@@ -710,6 +845,24 @@ IfcMember SUSPENSION_CABLE Stahl S460
 IfcMember TIEBAR Stahl S235
 IfcMember TIEBAR Stahl S355
 IfcMember TIEBAR Stahl S460
+IfcPavement Asphalt
+IfcPavement Beton C25/30 INSITU
+IfcPavement Beton C25/30 PRECAST
+IfcPavement Beton C30/37 INSITU
+IfcPavement Beton C30/37 PRECAST
+IfcPavement Beton C35/45 INSITU
+IfcPavement Beton C35/45 PRECAST
+IfcPavement Beton C40/50 INSITU
+IfcPavement Beton C40/50 PRECAST
+IfcPavement Bitumen
+IfcPavement Stahlbeton C25/30 INSITU
+IfcPavement Stahlbeton C25/30 PRECAST
+IfcPavement Stahlbeton C30/37 INSITU
+IfcPavement Stahlbeton C30/37 PRECAST
+IfcPavement Stahlbeton C35/45 INSITU
+IfcPavement Stahlbeton C35/45 PRECAST
+IfcPavement Stahlbeton C40/50 INSITU
+IfcPavement Stahlbeton C40/50 PRECAST
 IfcPavement FLEXIBLE Asphalt
 IfcPavement FLEXIBLE Bitumen
 IfcPavement RIGID Beton C25/30 INSITU
@@ -728,6 +881,170 @@ IfcPavement RIGID Stahlbeton C35/45 INSITU
 IfcPavement RIGID Stahlbeton C35/45 PRECAST
 IfcPavement RIGID Stahlbeton C40/50 INSITU
 IfcPavement RIGID Stahlbeton C40/50 PRECAST
+IfcPile Beton C25/30 100 INSITU
+IfcPile Beton C25/30 100 PRECAST
+IfcPile Beton C25/30 200 INSITU
+IfcPile Beton C25/30 200 PRECAST
+IfcPile Beton C25/30 300 INSITU
+IfcPile Beton C25/30 300 PRECAST
+IfcPile Beton C25/30 400 INSITU
+IfcPile Beton C25/30 400 PRECAST
+IfcPile Beton C25/30 500 INSITU
+IfcPile Beton C25/30 500 PRECAST
+IfcPile Beton C25/30 600 INSITU
+IfcPile Beton C25/30 600 PRECAST
+IfcPile Beton C25/30 700 INSITU
+IfcPile Beton C25/30 700 PRECAST
+IfcPile Beton C25/30 800 INSITU
+IfcPile Beton C25/30 800 PRECAST
+IfcPile Beton C25/30 900 INSITU
+IfcPile Beton C25/30 900 PRECAST
+IfcPile Beton C25/30 1000 INSITU
+IfcPile Beton C25/30 1000 PRECAST
+IfcPile Beton C30/37 100 INSITU
+IfcPile Beton C30/37 100 PRECAST
+IfcPile Beton C30/37 200 INSITU
+IfcPile Beton C30/37 200 PRECAST
+IfcPile Beton C30/37 300 INSITU
+IfcPile Beton C30/37 300 PRECAST
+IfcPile Beton C30/37 400 INSITU
+IfcPile Beton C30/37 400 PRECAST
+IfcPile Beton C30/37 500 INSITU
+IfcPile Beton C30/37 500 PRECAST
+IfcPile Beton C30/37 600 INSITU
+IfcPile Beton C30/37 600 PRECAST
+IfcPile Beton C30/37 700 INSITU
+IfcPile Beton C30/37 700 PRECAST
+IfcPile Beton C30/37 800 INSITU
+IfcPile Beton C30/37 800 PRECAST
+IfcPile Beton C30/37 900 INSITU
+IfcPile Beton C30/37 900 PRECAST
+IfcPile Beton C30/37 1000 INSITU
+IfcPile Beton C30/37 1000 PRECAST
+IfcPile Beton C35/45 100 INSITU
+IfcPile Beton C35/45 100 PRECAST
+IfcPile Beton C35/45 200 INSITU
+IfcPile Beton C35/45 200 PRECAST
+IfcPile Beton C35/45 300 INSITU
+IfcPile Beton C35/45 300 PRECAST
+IfcPile Beton C35/45 400 INSITU
+IfcPile Beton C35/45 400 PRECAST
+IfcPile Beton C35/45 500 INSITU
+IfcPile Beton C35/45 500 PRECAST
+IfcPile Beton C35/45 600 INSITU
+IfcPile Beton C35/45 600 PRECAST
+IfcPile Beton C35/45 700 INSITU
+IfcPile Beton C35/45 700 PRECAST
+IfcPile Beton C35/45 800 INSITU
+IfcPile Beton C35/45 800 PRECAST
+IfcPile Beton C35/45 900 INSITU
+IfcPile Beton C35/45 900 PRECAST
+IfcPile Beton C35/45 1000 INSITU
+IfcPile Beton C35/45 1000 PRECAST
+IfcPile Beton C40/50 100 INSITU
+IfcPile Beton C40/50 100 PRECAST
+IfcPile Beton C40/50 200 INSITU
+IfcPile Beton C40/50 200 PRECAST
+IfcPile Beton C40/50 300 INSITU
+IfcPile Beton C40/50 300 PRECAST
+IfcPile Beton C40/50 400 INSITU
+IfcPile Beton C40/50 400 PRECAST
+IfcPile Beton C40/50 500 INSITU
+IfcPile Beton C40/50 500 PRECAST
+IfcPile Beton C40/50 600 INSITU
+IfcPile Beton C40/50 600 PRECAST
+IfcPile Beton C40/50 700 INSITU
+IfcPile Beton C40/50 700 PRECAST
+IfcPile Beton C40/50 800 INSITU
+IfcPile Beton C40/50 800 PRECAST
+IfcPile Beton C40/50 900 INSITU
+IfcPile Beton C40/50 900 PRECAST
+IfcPile Beton C40/50 1000 INSITU
+IfcPile Beton C40/50 1000 PRECAST
+IfcPile Kies
+IfcPile Stahl S235
+IfcPile Stahl S355
+IfcPile Stahl S460
+IfcPile Stahlbeton C25/30 100 INSITU
+IfcPile Stahlbeton C25/30 100 PRECAST
+IfcPile Stahlbeton C25/30 200 INSITU
+IfcPile Stahlbeton C25/30 200 PRECAST
+IfcPile Stahlbeton C25/30 300 INSITU
+IfcPile Stahlbeton C25/30 300 PRECAST
+IfcPile Stahlbeton C25/30 400 INSITU
+IfcPile Stahlbeton C25/30 400 PRECAST
+IfcPile Stahlbeton C25/30 500 INSITU
+IfcPile Stahlbeton C25/30 500 PRECAST
+IfcPile Stahlbeton C25/30 600 INSITU
+IfcPile Stahlbeton C25/30 600 PRECAST
+IfcPile Stahlbeton C25/30 700 INSITU
+IfcPile Stahlbeton C25/30 700 PRECAST
+IfcPile Stahlbeton C25/30 800 INSITU
+IfcPile Stahlbeton C25/30 800 PRECAST
+IfcPile Stahlbeton C25/30 900 INSITU
+IfcPile Stahlbeton C25/30 900 PRECAST
+IfcPile Stahlbeton C25/30 1000 INSITU
+IfcPile Stahlbeton C25/30 1000 PRECAST
+IfcPile Stahlbeton C30/37 100 INSITU
+IfcPile Stahlbeton C30/37 100 PRECAST
+IfcPile Stahlbeton C30/37 200 INSITU
+IfcPile Stahlbeton C30/37 200 PRECAST
+IfcPile Stahlbeton C30/37 300 INSITU
+IfcPile Stahlbeton C30/37 300 PRECAST
+IfcPile Stahlbeton C30/37 400 INSITU
+IfcPile Stahlbeton C30/37 400 PRECAST
+IfcPile Stahlbeton C30/37 500 INSITU
+IfcPile Stahlbeton C30/37 500 PRECAST
+IfcPile Stahlbeton C30/37 600 INSITU
+IfcPile Stahlbeton C30/37 600 PRECAST
+IfcPile Stahlbeton C30/37 700 INSITU
+IfcPile Stahlbeton C30/37 700 PRECAST
+IfcPile Stahlbeton C30/37 800 INSITU
+IfcPile Stahlbeton C30/37 800 PRECAST
+IfcPile Stahlbeton C30/37 900 INSITU
+IfcPile Stahlbeton C30/37 900 PRECAST
+IfcPile Stahlbeton C30/37 1000 INSITU
+IfcPile Stahlbeton C30/37 1000 PRECAST
+IfcPile Stahlbeton C35/45 100 INSITU
+IfcPile Stahlbeton C35/45 100 PRECAST
+IfcPile Stahlbeton C35/45 200 INSITU
+IfcPile Stahlbeton C35/45 200 PRECAST
+IfcPile Stahlbeton C35/45 300 INSITU
+IfcPile Stahlbeton C35/45 300 PRECAST
+IfcPile Stahlbeton C35/45 400 INSITU
+IfcPile Stahlbeton C35/45 400 PRECAST
+IfcPile Stahlbeton C35/45 500 INSITU
+IfcPile Stahlbeton C35/45 500 PRECAST
+IfcPile Stahlbeton C35/45 600 INSITU
+IfcPile Stahlbeton C35/45 600 PRECAST
+IfcPile Stahlbeton C35/45 700 INSITU
+IfcPile Stahlbeton C35/45 700 PRECAST
+IfcPile Stahlbeton C35/45 800 INSITU
+IfcPile Stahlbeton C35/45 800 PRECAST
+IfcPile Stahlbeton C35/45 900 INSITU
+IfcPile Stahlbeton C35/45 900 PRECAST
+IfcPile Stahlbeton C35/45 1000 INSITU
+IfcPile Stahlbeton C35/45 1000 PRECAST
+IfcPile Stahlbeton C40/50 100 INSITU
+IfcPile Stahlbeton C40/50 100 PRECAST
+IfcPile Stahlbeton C40/50 200 INSITU
+IfcPile Stahlbeton C40/50 200 PRECAST
+IfcPile Stahlbeton C40/50 300 INSITU
+IfcPile Stahlbeton C40/50 300 PRECAST
+IfcPile Stahlbeton C40/50 400 INSITU
+IfcPile Stahlbeton C40/50 400 PRECAST
+IfcPile Stahlbeton C40/50 500 INSITU
+IfcPile Stahlbeton C40/50 500 PRECAST
+IfcPile Stahlbeton C40/50 600 INSITU
+IfcPile Stahlbeton C40/50 600 PRECAST
+IfcPile Stahlbeton C40/50 700 INSITU
+IfcPile Stahlbeton C40/50 700 PRECAST
+IfcPile Stahlbeton C40/50 800 INSITU
+IfcPile Stahlbeton C40/50 800 PRECAST
+IfcPile Stahlbeton C40/50 900 INSITU
+IfcPile Stahlbeton C40/50 900 PRECAST
+IfcPile Stahlbeton C40/50 1000 INSITU
+IfcPile Stahlbeton C40/50 1000 PRECAST
 IfcPile BORED Beton C25/30 100 INSITU
 IfcPile BORED Beton C25/30 200 INSITU
 IfcPile BORED Beton C25/30 300 INSITU
@@ -1371,6 +1688,7 @@ IfcPile SUPPORT Beton C40/50 900 INSITU
 IfcPile SUPPORT Beton C40/50 900 PRECAST
 IfcPile SUPPORT Beton C40/50 1000 INSITU
 IfcPile SUPPORT Beton C40/50 1000 PRECAST
+IfcPile SUPPORT Kies
 IfcPile SUPPORT Stahl S235
 IfcPile SUPPORT Stahl S355
 IfcPile SUPPORT Stahl S460
@@ -1454,6 +1772,10 @@ IfcPile SUPPORT Stahlbeton C40/50 900 INSITU
 IfcPile SUPPORT Stahlbeton C40/50 900 PRECAST
 IfcPile SUPPORT Stahlbeton C40/50 1000 INSITU
 IfcPile SUPPORT Stahlbeton C40/50 1000 PRECAST
+IfcPipeFitting Kunststoff
+IfcPipeFitting Stahl S235
+IfcPipeFitting Stahl S355
+IfcPipeFitting Stahl S460
 IfcPipeFitting BEND Kunststoff
 IfcPipeFitting BEND Stahl S235
 IfcPipeFitting BEND Stahl S355
@@ -1482,11 +1804,16 @@ IfcPipeFitting TRANSITION Kunststoff
 IfcPipeFitting TRANSITION Stahl S235
 IfcPipeFitting TRANSITION Stahl S355
 IfcPipeFitting TRANSITION Stahl S460
+IfcPipeSegment Kunststoff
 IfcPipeSegment CULVERT Kunststoff
 IfcPipeSegment FLEXIBLESEGMENT Kunststoff
 IfcPipeSegment GUTTER Kunststoff
 IfcPipeSegment RIGIDSEGMENT Kunststoff
 IfcPipeSegment SPOOL Kunststoff
+IfcPlate Aluminium
+IfcPlate Stahl S235
+IfcPlate Stahl S355
+IfcPlate Stahl S460
 IfcPlate BASE_PLATE Stahl S235
 IfcPlate BASE_PLATE Stahl S355
 IfcPlate BASE_PLATE Stahl S460
@@ -1513,6 +1840,25 @@ IfcPlate STIFFENER_PLATE Stahl S460
 IfcPlate WEB_PLATE Stahl S235
 IfcPlate WEB_PLATE Stahl S355
 IfcPlate WEB_PLATE Stahl S460
+IfcRail Beton C25/30 INSITU
+IfcRail Beton C25/30 PRECAST
+IfcRail Beton C30/37 INSITU
+IfcRail Beton C30/37 PRECAST
+IfcRail Beton C35/45 INSITU
+IfcRail Beton C35/45 PRECAST
+IfcRail Beton C40/50 INSITU
+IfcRail Beton C40/50 PRECAST
+IfcRail Stahl S235
+IfcRail Stahl S355
+IfcRail Stahl S460
+IfcRail Stahlbeton C25/30 INSITU
+IfcRail Stahlbeton C25/30 PRECAST
+IfcRail Stahlbeton C30/37 INSITU
+IfcRail Stahlbeton C30/37 PRECAST
+IfcRail Stahlbeton C35/45 INSITU
+IfcRail Stahlbeton C35/45 PRECAST
+IfcRail Stahlbeton C40/50 INSITU
+IfcRail Stahlbeton C40/50 PRECAST
 IfcRail BLADE Stahl S235
 IfcRail BLADE Stahl S355
 IfcRail BLADE Stahl S460
@@ -1547,6 +1893,27 @@ IfcRail RAIL Stahl S460
 IfcRail STOCKRAIL Stahl S235
 IfcRail STOCKRAIL Stahl S355
 IfcRail STOCKRAIL Stahl S460
+IfcRailing Aluminium
+IfcRailing Beton C25/30 INSITU
+IfcRailing Beton C25/30 PRECAST
+IfcRailing Beton C30/37 INSITU
+IfcRailing Beton C30/37 PRECAST
+IfcRailing Beton C35/45 INSITU
+IfcRailing Beton C35/45 PRECAST
+IfcRailing Beton C40/50 INSITU
+IfcRailing Beton C40/50 PRECAST
+IfcRailing Holz
+IfcRailing Stahl S235
+IfcRailing Stahl S355
+IfcRailing Stahl S460
+IfcRailing Stahlbeton C25/30 INSITU
+IfcRailing Stahlbeton C25/30 PRECAST
+IfcRailing Stahlbeton C30/37 INSITU
+IfcRailing Stahlbeton C30/37 PRECAST
+IfcRailing Stahlbeton C35/45 INSITU
+IfcRailing Stahlbeton C35/45 PRECAST
+IfcRailing Stahlbeton C40/50 INSITU
+IfcRailing Stahlbeton C40/50 PRECAST
 IfcRailing BALUSTRADE Aluminium
 IfcRailing BALUSTRADE Holz
 IfcRailing BALUSTRADE Stahl S235
@@ -1582,6 +1949,10 @@ IfcRailing HANDRAIL Holz
 IfcRailing HANDRAIL Stahl S235
 IfcRailing HANDRAIL Stahl S355
 IfcRailing HANDRAIL Stahl S460
+IfcReinforcingBar Betonstahl B500A
+IfcReinforcingBar Betonstahl B500B
+IfcReinforcingBar Betonstahl B500C
+IfcReinforcingBar Betonstahl B700B
 IfcReinforcingBar ANCHORING Betonstahl B500A
 IfcReinforcingBar ANCHORING Betonstahl B500B
 IfcReinforcingBar ANCHORING Betonstahl B500C
@@ -1622,6 +1993,24 @@ IfcReinforcingMesh Betonstahl B500A
 IfcReinforcingMesh Betonstahl B500B
 IfcReinforcingMesh Betonstahl B500C
 IfcReinforcingMesh Betonstahl B700B
+IfcSlab Asphalt
+IfcSlab Beton C25/30 INSITU
+IfcSlab Beton C25/30 PRECAST
+IfcSlab Beton C30/37 INSITU
+IfcSlab Beton C30/37 PRECAST
+IfcSlab Beton C35/45 INSITU
+IfcSlab Beton C35/45 PRECAST
+IfcSlab Beton C40/50 INSITU
+IfcSlab Beton C40/50 PRECAST
+IfcSlab Holz
+IfcSlab Stahlbeton C25/30 INSITU
+IfcSlab Stahlbeton C25/30 PRECAST
+IfcSlab Stahlbeton C30/37 INSITU
+IfcSlab Stahlbeton C30/37 PRECAST
+IfcSlab Stahlbeton C35/45 INSITU
+IfcSlab Stahlbeton C35/45 PRECAST
+IfcSlab Stahlbeton C40/50 INSITU
+IfcSlab Stahlbeton C40/50 PRECAST
 IfcSlab APPROACH_SLAB Beton C25/30 INSITU
 IfcSlab APPROACH_SLAB Beton C25/30 PRECAST
 IfcSlab APPROACH_SLAB Beton C30/37 INSITU
@@ -1704,23 +2093,6 @@ IfcSlab PAVING Stahlbeton C35/45 INSITU
 IfcSlab PAVING Stahlbeton C35/45 PRECAST
 IfcSlab PAVING Stahlbeton C40/50 INSITU
 IfcSlab PAVING Stahlbeton C40/50 PRECAST
-IfcSlab ROOF Beton C25/30 INSITU
-IfcSlab ROOF Beton C25/30 PRECAST
-IfcSlab ROOF Beton C30/37 INSITU
-IfcSlab ROOF Beton C30/37 PRECAST
-IfcSlab ROOF Beton C35/45 INSITU
-IfcSlab ROOF Beton C35/45 PRECAST
-IfcSlab ROOF Beton C40/50 INSITU
-IfcSlab ROOF Beton C40/50 PRECAST
-IfcSlab ROOF Holz
-IfcSlab ROOF Stahlbeton C25/30 INSITU
-IfcSlab ROOF Stahlbeton C25/30 PRECAST
-IfcSlab ROOF Stahlbeton C30/37 INSITU
-IfcSlab ROOF Stahlbeton C30/37 PRECAST
-IfcSlab ROOF Stahlbeton C35/45 INSITU
-IfcSlab ROOF Stahlbeton C35/45 PRECAST
-IfcSlab ROOF Stahlbeton C40/50 INSITU
-IfcSlab ROOF Stahlbeton C40/50 PRECAST
 IfcSlab SIDEWALK Asphalt
 IfcSlab SIDEWALK Beton C25/30 INSITU
 IfcSlab SIDEWALK Beton C25/30 PRECAST
@@ -1771,6 +2143,9 @@ IfcSlab WEARING Stahlbeton C35/45 INSITU
 IfcSlab WEARING Stahlbeton C35/45 PRECAST
 IfcSlab WEARING Stahlbeton C40/50 INSITU
 IfcSlab WEARING Stahlbeton C40/50 PRECAST
+IfcTendon Stahl S235
+IfcTendon Stahl S355
+IfcTendon Stahl S460
 IfcTendon BAR Stahl S235
 IfcTendon BAR Stahl S355
 IfcTendon BAR Stahl S460
@@ -1783,6 +2158,9 @@ IfcTendon STRAND Stahl S460
 IfcTendon WIRE Stahl S235
 IfcTendon WIRE Stahl S355
 IfcTendon WIRE Stahl S460
+IfcTendonAnchor Stahl S235
+IfcTendonAnchor Stahl S355
+IfcTendonAnchor Stahl S460
 IfcTendonAnchor COUPLER Stahl S235
 IfcTendonAnchor COUPLER Stahl S355
 IfcTendonAnchor COUPLER Stahl S460
@@ -1792,6 +2170,10 @@ IfcTendonAnchor FIXED_END Stahl S460
 IfcTendonAnchor TENSIONING_END Stahl S235
 IfcTendonAnchor TENSIONING_END Stahl S355
 IfcTendonAnchor TENSIONING_END Stahl S460
+IfcTendonConduit Kunststoff
+IfcTendonConduit Stahl S235
+IfcTendonConduit Stahl S355
+IfcTendonConduit Stahl S460
 IfcTendonConduit COUPLER Stahl S235
 IfcTendonConduit COUPLER Stahl S355
 IfcTendonConduit COUPLER Stahl S460
@@ -1806,6 +2188,26 @@ IfcTendonConduit GROUTING_DUCT Kunststoff
 IfcTendonConduit TRUMPET Stahl S235
 IfcTendonConduit TRUMPET Stahl S355
 IfcTendonConduit TRUMPET Stahl S460
+IfcTrackElement Beton C25/30 INSITU
+IfcTrackElement Beton C25/30 PRECAST
+IfcTrackElement Beton C30/37 INSITU
+IfcTrackElement Beton C30/37 PRECAST
+IfcTrackElement Beton C35/45 INSITU
+IfcTrackElement Beton C35/45 PRECAST
+IfcTrackElement Beton C40/50 INSITU
+IfcTrackElement Beton C40/50 PRECAST
+IfcTrackElement Holz
+IfcTrackElement Stahl S235
+IfcTrackElement Stahl S355
+IfcTrackElement Stahl S460
+IfcTrackElement Stahlbeton C25/30 INSITU
+IfcTrackElement Stahlbeton C25/30 PRECAST
+IfcTrackElement Stahlbeton C30/37 INSITU
+IfcTrackElement Stahlbeton C30/37 PRECAST
+IfcTrackElement Stahlbeton C35/45 INSITU
+IfcTrackElement Stahlbeton C35/45 PRECAST
+IfcTrackElement Stahlbeton C40/50 INSITU
+IfcTrackElement Stahlbeton C40/50 PRECAST
 IfcTrackElement BLOCKINGDEVICE Stahl S235
 IfcTrackElement BLOCKINGDEVICE Stahl S355
 IfcTrackElement BLOCKINGDEVICE Stahl S460
@@ -1860,6 +2262,25 @@ IfcTrackElement TRACKENDOFALIGNMENT Stahlbeton C40/50 PRECAST
 IfcTrackElement VEHICLESTOP Stahl S235
 IfcTrackElement VEHICLESTOP Stahl S355
 IfcTrackElement VEHICLESTOP Stahl S460
+IfcWall Beton C25/30 INSITU
+IfcWall Beton C25/30 PRECAST
+IfcWall Beton C30/37 INSITU
+IfcWall Beton C30/37 PRECAST
+IfcWall Beton C35/45 INSITU
+IfcWall Beton C35/45 PRECAST
+IfcWall Beton C40/50 INSITU
+IfcWall Beton C40/50 PRECAST
+IfcWall Holz
+IfcWall Mauerwerk
+IfcWall Naturstein
+IfcWall Stahlbeton C25/30 INSITU
+IfcWall Stahlbeton C25/30 PRECAST
+IfcWall Stahlbeton C30/37 INSITU
+IfcWall Stahlbeton C30/37 PRECAST
+IfcWall Stahlbeton C35/45 INSITU
+IfcWall Stahlbeton C35/45 PRECAST
+IfcWall Stahlbeton C40/50 INSITU
+IfcWall Stahlbeton C40/50 PRECAST
 IfcWall PARAPET Beton C25/30 INSITU
 IfcWall PARAPET Beton C25/30 PRECAST
 IfcWall PARAPET Beton C30/37 INSITU

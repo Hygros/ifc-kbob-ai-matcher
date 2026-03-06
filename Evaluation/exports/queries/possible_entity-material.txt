@@ -51,7 +51,7 @@ IfcCourse PROTECTION: Beton Stahlbeton Naturstein
 
 # IfcCovering
 IfcCovering CLADDING: Holz Aluminium Naturstein Kunststoff
-IfcCovering COPING: Aluminium Naturstein
+IfcCovering COPING: Aluminium Naturstein Metall
 IfcCovering MEMBRANE: Bitumen Kunststoff
 IfcCovering MOLDING: Holz Kunststoff Aluminium
 
@@ -124,7 +124,7 @@ IfcPile COHESION: Beton Stahlbeton
 IfcPile DRIVEN: Beton Stahlbeton Stahl
 IfcPile FRICTION: Beton Stahlbeton
 IfcPile JETGROUTING: Beton Stahlbeton
-IfcPile SUPPORT: Beton Stahlbeton Stahl
+IfcPile SUPPORT: Beton Stahlbeton Stahl Kies
 
 # IfcPlate
 IfcPlate BASE_PLATE: Stahl
