@@ -21,7 +21,7 @@ def get_diameter(parts: list[str]) -> int | None:
     return None
 
 
-def pile_beton_insitu(diameter: int | None, add_arma: bool, displacement: bool = False) -> str:
+def pile_beton_insitu(diameter: int | None, displacement: bool = False) -> str:
     """Build INSITU pile concrete mapping based on diameter and type."""
     if displacement:
         base = "Tiefbaubeton"
@@ -29,10 +29,7 @@ def pile_beton_insitu(diameter: int | None, add_arma: bool, displacement: bool =
             deep = "Tiefgründung Ortbetonverdrängungspfahl 660/580"
         else:
             deep = "Tiefgründung Ortbetonverdrängungspfahl 560/480"
-        result = f"{base} | {deep}"
-        if add_arma:
-            result += " | Armierungsstahl"
-        return result
+        return f"{base} | {deep}"
 
     base = "Tiefbaubeton | Bohrpfahlbeton"
     if diameter is not None:
@@ -44,12 +41,8 @@ def pile_beton_insitu(diameter: int | None, add_arma: bool, displacement: bool =
             deep = "Tiefgründung Ortbetonbohrpfahl 900"
         else:
             deep = "Tiefgründung Ortbetonbohrpfahl 1200"
-        result = f"{base} | {deep}"
-    else:
-        result = f"{base} | Tiefgründung Ortbetonbohrpfahl 700"
-    if add_arma:
-        result += " | Armierungsstahl"
-    return result
+        return f"{base} | {deep}"
+    return f"{base} | Tiefgründung Ortbetonbohrpfahl 700"
 
 
 def get_mapping(query: str, original: str) -> str:
@@ -73,15 +66,11 @@ def get_mapping(query: str, original: str) -> str:
     has_mauerwerk = "Mauerwerk" in query
     has_asphalt = "Asphalt" in query
     has_bitumen = "Bitumen" in query
-    has_betonstahl = "Betonstahl" in query
     has_high_strength = "C35/45" in query or "C40/50" in query
     diameter = get_diameter(parts)
 
     # ── IfcPile ──────────────────────────────────────────────────────
     if entity == "IfcPile":
-        if has_betonstahl:
-            return "Armierungsstahl"
-
         if predefined == "DRIVEN":
             if has_stahl:
                 return (
@@ -91,8 +80,7 @@ def get_mapping(query: str, original: str) -> str:
                     "Stahlblech blank | Stahlprofil blank"
                 )
             if has_precast:
-                base = "Betonfertigteil normalfest | Betonfertigteil hochfest | Tiefgründung Vorgefertigter Betonpfahl"
-                return base + " | Armierungsstahl" if has_stahlbeton else base
+                return "Betonfertigteil normalfest | Betonfertigteil hochfest | Tiefgründung Vorgefertigter Betonpfahl"
 
         if predefined == "SUPPORT":
             if has_stahl:
@@ -105,24 +93,21 @@ def get_mapping(query: str, original: str) -> str:
                     "Stahlblech blank | Stahlprofil blank"
                 )
             if has_insitu:
-                return pile_beton_insitu(diameter, has_stahlbeton)
+                return pile_beton_insitu(diameter)
             if has_precast:
-                base = "Tiefgründung Vorgefertigter Betonpfahl"
-                return base + " | Armierungsstahl" if has_stahlbeton else base
+                return "Tiefgründung Vorgefertigter Betonpfahl"
 
         if predefined == "FRICTION":
             if has_insitu:
-                return pile_beton_insitu(diameter, has_stahlbeton, displacement=True)
+                return pile_beton_insitu(diameter, displacement=True)
             if has_precast:
-                base = "Tiefgründung Vorgefertigter Betonpfahl"
-                return base + " | Armierungsstahl" if has_stahlbeton else base
+                return "Tiefgründung Vorgefertigter Betonpfahl"
 
         # BORED, COHESION, JETGROUTING, etc.
         if has_insitu:
-            return pile_beton_insitu(diameter, has_stahlbeton)
+            return pile_beton_insitu(diameter)
         if has_precast:
-            base = "Tiefgründung Vorgefertigter Betonpfahl"
-            return base + " | Armierungsstahl" if has_stahlbeton else base
+            return "Tiefgründung Vorgefertigter Betonpfahl"
 
     # ── IfcReinforcingBar / IfcReinforcingMesh ───────────────────────
     if entity in ("IfcReinforcingBar", "IfcReinforcingMesh"):
@@ -131,7 +116,7 @@ def get_mapping(query: str, original: str) -> str:
     # ── IfcTendon / IfcTendonAnchor ──────────────────────────────────
     if entity in ("IfcTendon", "IfcTendonAnchor"):
         if has_stahl:
-            return "Armierungsstahl"
+            return "Stahlblech blank | Stahlprofil blank"
 
     # ── IfcTendonConduit ─────────────────────────────────────────────
     if entity == "IfcTendonConduit":
@@ -139,9 +124,9 @@ def get_mapping(query: str, original: str) -> str:
             if has_kunststoff:
                 return "Polyethylen PE | Polypropylen PP | Polyvinylchlorid PVC"
             if has_stahl:
-                return "Armierungsstahl | Stahlblech blank | Stahlprofil blank"
+                return "Stahlblech blank | Stahlprofil blank"
         elif has_stahl:
-            return "Armierungsstahl | Stahlblech blank | Stahlprofil blank"
+            return "Stahlblech blank | Stahlprofil blank"
 
     # ── IfcBearing ───────────────────────────────────────────────────
     if entity == "IfcBearing":
@@ -266,7 +251,7 @@ def get_mapping(query: str, original: str) -> str:
             if has_insitu:
                 if has_stahlbeton:
                     return (
-                        "Tiefbaubeton | Armierungsstahl | "
+                        "Tiefbaubeton | "
                         "Baugrubensicherung Schlitzwand 400 | Baugrubensicherung Schlitzwand 800 | "
                         "Baugrubensicherung Bohrpfahlwand verankert | "
                         "Baugrubensicherung Bohrpfahlwand unverankert | "
@@ -293,9 +278,9 @@ def get_mapping(query: str, original: str) -> str:
             if has_mauerwerk:
                 return "Backstein | Kalksandstein | Betonziegel"
         if has_stahlbeton and has_insitu:
-            return "Tiefbaubeton | Armierungsstahl"
+            return "Tiefbaubeton"
         if has_stahlbeton and has_precast:
-            return "Betonfertigteil normalfest | Betonfertigteil hochfest | Armierungsstahl"
+            return "Betonfertigteil normalfest | Betonfertigteil hochfest"
 
     # ── IfcSlab ──────────────────────────────────────────────────────
     if entity == "IfcSlab":
@@ -310,22 +295,19 @@ def get_mapping(query: str, original: str) -> str:
                         "2K-Fliessbelag Epoxidharz"
                     )
                 if has_high_strength and has_stahlbeton:
-                    return (
-                        "Tiefbaubeton | Armierungsstahl | "
-                        "Hartbeton einschichtig | Hartbeton zweischichtig"
-                    )
+                    return "Tiefbaubeton | Hartbeton einschichtig | Hartbeton zweischichtig"
         if predefined == "BASESLAB":
             if has_beton and has_insitu:
                 return "Tiefbaubeton | Magerbeton"
             if has_stahlbeton and has_insitu:
-                return "Tiefbaubeton | Magerbeton | Armierungsstahl"
+                return "Tiefbaubeton | Magerbeton"
         if predefined in ("PAVING", "SIDEWALK", "WEARING"):
             if has_asphalt:
                 return "Gussasphalt | Heissbitumen"
         if has_stahlbeton and has_insitu:
-            return "Tiefbaubeton | Armierungsstahl"
+            return "Tiefbaubeton"
         if has_stahlbeton and has_precast:
-            return "Betonfertigteil normalfest | Betonfertigteil hochfest | Armierungsstahl"
+            return "Betonfertigteil normalfest | Betonfertigteil hochfest"
 
     # ── IfcTrackElement ──────────────────────────────────────────────
     if entity == "IfcTrackElement":
@@ -368,9 +350,9 @@ def get_mapping(query: str, original: str) -> str:
 
     # ── Generic fallback rules for Stahlbeton ────────────────────────
     if has_stahlbeton and has_insitu:
-        return "Tiefbaubeton | Armierungsstahl"
+        return "Tiefbaubeton"
     if has_stahlbeton and has_precast:
-        return "Betonfertigteil normalfest | Betonfertigteil hochfest | Armierungsstahl"
+        return "Betonfertigteil normalfest | Betonfertigteil hochfest"
 
     return original
 

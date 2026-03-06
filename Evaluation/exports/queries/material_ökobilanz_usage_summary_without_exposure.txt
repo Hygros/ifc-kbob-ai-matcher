@@ -54,7 +54,7 @@ Sperrholz Multiplex Phenol-Formaldehyd-gebunden Feuchtbereich	0
 Sperrholz Multiplex Harnstoff-Formaldehyd-gebunden Trockenbereich	0
 Aluminiumblech blank	14
 Aluminiumprofil blank	14
-Armierungsstahl	849
+Armierungsstahl	40
 Blei	0
 Chromnickelstahlblech blank	0
 Chromnickelstahlblech verzinnt	0
@@ -62,9 +62,9 @@ Chromstahlblech blank	0
 Chromstahlblech verzinnt	0
 Kupferblech blank	1
 Messing-/Baubronzeblech	0
-Stahlblech blank	276
+Stahlblech blank	297
 Stahlblech verzinkt	6
-Stahlprofil blank	273
+Stahlprofil blank	294
 Gusseisen	21
 Heissbitumen	8
 Kautschukdichtungsmasse	1
