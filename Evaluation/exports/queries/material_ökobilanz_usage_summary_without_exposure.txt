@@ -17,7 +17,7 @@ Tiefgründung Ortbetonbohrpfahl 900	80
 Tiefgründung Ortbetonbohrpfahl 1200	40
 Tiefgründung Ortbetonverdrängungspfahl 560/480	40
 Tiefgründung Ortbetonverdrängungspfahl 660/580	40
-Tiefgründung Rüttelstopfsäule	1
+Tiefgründung Rüttelstopfsäule	2
 Tiefgründung Vorgefertigter Betonpfahl	400
 Magerbeton	8
 Tiefbaubeton	584
@@ -28,8 +28,8 @@ Hartbeton einschichtig	4
 Hartbeton zweischichtig	4
 Kunststeinplatte zementgebunden	10
 Glasfaserbeton	0
-Kies gebrochen	5
-Rundkies	5
+Kies gebrochen	4
+Rundkies	4
 Sand	1
 3- und 5-Schicht Massivholzplatte	3
 Balkenschichtholz	25

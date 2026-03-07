@@ -1,5 +1,6 @@
 import argparse
 import json
+import random
 import re
 from pathlib import Path
 
@@ -66,6 +67,18 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Dedupliziert identische (query, positive)-Paare.",
     )
+    parser.add_argument(
+        "--max-per-positive",
+        type=int,
+        default=0,
+        help="Maximale Anzahl Paare pro unique Positive (0 = unbegrenzt). Reduziert Überrepräsentation.",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random Seed für reproduzierbares Sampling bei --max-per-positive.",
+    )
     return parser.parse_args()
 
 
@@ -108,6 +121,27 @@ def main() -> None:
             if weight is not None:
                 record["weight"] = weight
             records.append(record)
+
+    if args.max_per_positive > 0:
+        by_positive: dict[str, list[dict[str, object]]] = {}
+        for record in records:
+            key = str(record["positive"]).casefold()
+            by_positive.setdefault(key, []).append(record)
+
+        capped_count = 0
+        balanced: list[dict[str, object]] = []
+        rng = random.Random(args.seed)
+        for group in by_positive.values():
+            if len(group) > args.max_per_positive:
+                rng.shuffle(group)
+                balanced.extend(group[: args.max_per_positive])
+                capped_count += len(group) - args.max_per_positive
+            else:
+                balanced.extend(group)
+
+        records = balanced
+        if capped_count:
+            print(f"Balancing: {capped_count} Paare entfernt (max {args.max_per_positive} pro Positive)")
 
     if not records:
         raise ValueError("Keine Trainingspaare erzeugt. Bitte Eingabedateien prüfen.")

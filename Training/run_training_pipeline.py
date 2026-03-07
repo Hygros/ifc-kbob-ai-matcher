@@ -1,7 +1,13 @@
 """
 Für kleine Datensätze (bis ca. 5000 unique-Paare):
 
-Training/run_training_pipeline.py --query-file Evaluation/exports/queries/ifcentity_material_strength.txt --expected-file Evaluation/expected_material/expected.txt --base-model BAAI/bge-m3 --output-dir Training/artifacts/models/bge-m3-finetuned-ifcentity-material-strength-3-epochs --epochs 3 --batch-size 8 --lr 2e-5 --max-length 512 --dev-ratio 0.15 --device auto --deduplicate
+python Training/run_training_pipeline.py `
+  --query-file Evaluation/exports/queries/generated_queries_without_exposure.txt `
+  --expected-file Evaluation/exports/queries/mapping_generated_queries_without_exposure.txt `
+  --base-model BAAI/bge-m3 `
+  --output-dir Training/artifacts/models/bge-m3-finetuned-generated_queries_without_exposure `
+  --deduplicate --max-per-positive 30 `
+  --epochs 5
 
 epochs 2:
      #Anzahl Trainingsdurchläufe über den Trainingssplit.
@@ -15,6 +21,8 @@ device auto:
     cuda wenn verfügbar, sonst cpu
 deduplicate:
     Entfernt identische (query, positive)-Paare, damit doppelte Beispiele das Training nicht verzerren.
+max-per-postive n:
+    Cap pro unique Positive (z.B. 30-50), überzählige Paare zufällig entfernen.
 
 Weitere (default):    
 warmup-ratio 0.1:
@@ -75,7 +83,8 @@ def build_run_id(args: argparse.Namespace) -> str:
     signature = (
         f"q={args.query_file}|e={args.expected_file}|m={args.base_model}|ep={args.epochs}|"
         f"bs={args.batch_size}|lr={args.lr}|mx={args.max_length}|dv={args.dev_ratio}|"
-        f"sd={args.seed}|wu={args.warmup_ratio}|{dedup}|dev={args.device}|fp16={args.fp16}"
+        f"sd={args.seed}|wu={args.warmup_ratio}|{dedup}|dev={args.device}|fp16={args.fp16}|"
+        f"mpp={args.max_per_positive}"
     )
     hash8 = hashlib.sha1(signature.encode("utf-8")).hexdigest()[:8]
     return (
@@ -112,6 +121,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", default="auto", help="auto|cpu|cuda")
     parser.add_argument("--fp16", action="store_true", help="Mixed precision Training aktivieren.")
     parser.add_argument("--deduplicate", action="store_true", help="Identische query/positive-Paare entfernen.")
+    parser.add_argument(
+        "--max-per-positive",
+        type=int,
+        default=0,
+        help="Maximale Anzahl Paare pro unique Positive (0 = unbegrenzt).",
+    )
     parser.add_argument(
         "--run-id",
         default="",
@@ -166,6 +181,8 @@ def main() -> None:
     ]
     if args.deduplicate:
         prepare_command.append("--deduplicate")
+    if args.max_per_positive > 0:
+        prepare_command.extend(["--max-per-positive", str(args.max_per_positive), "--seed", str(args.seed)])
     run_command(prepare_command)
 
     run_command([sys.executable, str(VALIDATE_SCRIPT), "--pairs-file", str(pairs_out)])

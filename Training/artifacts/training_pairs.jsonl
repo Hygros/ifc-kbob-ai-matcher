@@ -1,77 +1,183 @@
 {"query": "IfcBeam Beton NPK G C30/37", "positive": "Tiefbaubeton", "query_index": 0}
 {"query": "IfcBeam Beton C30/37", "positive": "Tiefbaubeton", "query_index": 3}
+{"query": "IfcCaissonFoundation Beton C20/25", "positive": "Tiefbaubeton", "query_index": 29}
+{"query": "IfcCaissonFoundation Stahlbeton C20/25", "positive": "Tiefbaubeton", "query_index": 30}
+{"query": "IfcColumn Beton C30/37", "positive": "Tiefbaubeton", "query_index": 33}
+{"query": "IfcColumn Stahlbeton C30/37", "positive": "Tiefbaubeton", "query_index": 34}
+{"query": "IfcCourse Beton C30/37", "positive": "Tiefbaubeton", "query_index": 57}
+{"query": "IfcFooting Beton C30/37", "positive": "Tiefbaubeton", "query_index": 68}
+{"query": "IfcFooting Stahlbeton C30/37", "positive": "Tiefbaubeton", "query_index": 72}
+{"query": "IfcMember Beton C30/37", "positive": "Tiefbaubeton", "query_index": 79}
+{"query": "IfcPile Beton C20/25", "positive": "Tiefbaubeton", "query_index": 129}
+{"query": "IfcPile Zementsuspension", "positive": "Tiefbaubeton", "query_index": 130}
+{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefbaubeton", "query_index": 134}
+{"query": "IfcPile Mörtel", "positive": "Tiefbaubeton", "query_index": 136}
+{"query": "IfcPile Zementmörtel", "positive": "Tiefbaubeton", "query_index": 137}
+{"query": "IfcPile Spezialmörtel", "positive": "Tiefbaubeton", "query_index": 138}
+{"query": "IfcRamp Beton C30/37", "positive": "Tiefbaubeton", "query_index": 182}
+{"query": "IfcRamp Stahlbeton C30/37", "positive": "Tiefbaubeton", "query_index": 183}
+{"query": "IfcTrackElement Beton C50/60", "positive": "Tiefbaubeton", "query_index": 226}
+{"query": "IfcTrackElement Stahlbeton C50/60", "positive": "Tiefbaubeton", "query_index": 227}
+{"query": "IfcWall Beton C30/37", "positive": "Tiefbaubeton", "query_index": 239}
+{"query": "IfcWall Stahlbeton C30/37", "positive": "Tiefbaubeton", "query_index": 240}
+{"query": "IfcWall Spritzbeton C12/15", "positive": "Tiefbaubeton", "query_index": 245}
+{"query": "IfcFooting Beton NPK G C30/37", "positive": "Tiefbaubeton", "query_index": 267}
+{"query": "IfcSlab Beton NPK D C20/25", "positive": "Tiefbaubeton", "query_index": 268}
+{"query": "IfcWall Beton NPK G C30/37", "positive": "Tiefbaubeton", "query_index": 269}
 {"query": "IfcBeam Beton C30/37", "positive": "Betonfertigteil normalfest", "query_index": 4}
+{"query": "IfcCovering Beton C30/37", "positive": "Betonfertigteil normalfest", "query_index": 62}
+{"query": "IfcPavement UHPC", "positive": "Betonfertigteil normalfest", "query_index": 123}
+{"query": "IfcPile Beton C20/25", "positive": "Betonfertigteil normalfest", "query_index": 132}
+{"query": "IfcPile Stahlbeton C20/25", "positive": "Betonfertigteil normalfest", "query_index": 134}
+{"query": "IfcTrackElement Beton C50/60", "positive": "Betonfertigteil normalfest", "query_index": 226}
+{"query": "IfcTrackElement Stahlbeton C50/60", "positive": "Betonfertigteil normalfest", "query_index": 227}
+{"query": "IfcWall Beton C30/37", "positive": "Betonfertigteil normalfest", "query_index": 239}
+{"query": "IfcWall Stahlbeton C30/37", "positive": "Betonfertigteil normalfest", "query_index": 240}
 {"query": "IfcBearing S235JR", "positive": "Stahlblech verzinkt", "query_index": 14}
 {"query": "IfcBearing Stahl", "positive": "Stahlblech verzinkt", "query_index": 15}
+{"query": "IfcColumn S235JR", "positive": "Stahlblech verzinkt", "query_index": 35, "weight": 1.3}
+{"query": "IfcCovering Metall", "positive": "Stahlblech verzinkt", "query_index": 60}
+{"query": "IfcFooting Stahl", "positive": "Stahlblech verzinkt", "query_index": 69}
+{"query": "IfcFooting S235JR", "positive": "Stahlblech verzinkt", "query_index": 70}
+{"query": "IfcMember Stahl", "positive": "Stahlblech verzinkt", "query_index": 80}
+{"query": "IfcPlate Stahl", "positive": "Stahlblech verzinkt", "query_index": 141}
+{"query": "IfcPlate Stahlguss", "positive": "Stahlblech verzinkt", "query_index": 142}
+{"query": "IfcPlate Hochfester Stahl", "positive": "Stahlblech verzinkt", "query_index": 144}
+{"query": "IfcPlate Stahlblech", "positive": "Stahlblech verzinkt", "query_index": 149}
+{"query": "IfcRailing Stahl", "positive": "Stahlblech verzinkt", "query_index": 169}
+{"query": "IfcTendonConduit Stahl", "positive": "Stahlblech verzinkt", "query_index": 202}
+{"query": "IfcTendonConduit Vergütungsstahl", "positive": "Stahlblech verzinkt", "query_index": 203}
+{"query": "IfcTrackElement Stahl", "positive": "Stahlblech verzinkt", "query_index": 214}
+{"query": "IfcTrackElement Stahlguss", "positive": "Stahlblech verzinkt", "query_index": 216}
+{"query": "IfcTrackElement Manganhartstahl", "positive": "Stahlblech verzinkt", "query_index": 221}
+{"query": "IfcTrackElement Vergütungsstahl", "positive": "Stahlblech verzinkt", "query_index": 222}
 {"query": "IfcBearing Elastomer", "positive": "Dichtungsbahn Gummi EPDM", "query_index": 16}
+{"query": "IfcCovering Abdichtung", "positive": "Dichtungsbahn Gummi EPDM", "query_index": 64}
+{"query": "IfcTrackElement Gummipuffer", "positive": "Dichtungsbahn Gummi EPDM", "query_index": 238}
 {"query": "IfcBearing PTFE", "positive": "Polyethylen PE", "query_index": 18}
 {"query": "IfcBearing Polytetrafluoroethylene", "positive": "Polyethylen PE", "query_index": 19}
 {"query": "IfcBearing Teflon", "positive": "Polyethylen PE", "query_index": 20}
-{"query": "IfcCaissonFoundation Beton C20/25", "positive": "Tiefbaubeton", "query_index": 29}
+{"query": "IfcCovering Kunststoff", "positive": "Polyethylen PE", "query_index": 67}
+{"query": "IfcRailing Kunststoff", "positive": "Polyethylen PE", "query_index": 175}
+{"query": "IfcTendonConduit Kunststoff", "positive": "Polyethylen PE", "query_index": 204}
+{"query": "IfcTrackElement Kunststoff", "positive": "Polyethylen PE", "query_index": 229}
 {"query": "IfcCaissonFoundation Beton C20/25", "positive": "Bohrpfahlbeton", "query_index": 29, "weight": 0.7}
-{"query": "IfcCaissonFoundation Stahlbeton C20/25", "positive": "Tiefbaubeton", "query_index": 30}
 {"query": "IfcCaissonFoundation Stahlbeton C20/25", "positive": "Bohrpfahlbeton", "query_index": 30, "weight": 0.7}
-{"query": "IfcColumn Beton C30/37", "positive": "Tiefbaubeton", "query_index": 33}
-{"query": "IfcColumn Stahlbeton C30/37", "positive": "Tiefbaubeton", "query_index": 34}
+{"query": "IfcPile Beton C20/25", "positive": "Bohrpfahlbeton", "query_index": 126}
+{"query": "IfcPile Stahlbeton C20/25", "positive": "Bohrpfahlbeton", "query_index": 127}
+{"query": "IfcPile Zementsuspension", "positive": "Bohrpfahlbeton", "query_index": 130}
+{"query": "IfcPile Mörtel", "positive": "Bohrpfahlbeton", "query_index": 136}
+{"query": "IfcPile Zementmörtel", "positive": "Bohrpfahlbeton", "query_index": 137}
+{"query": "IfcPile Spezialmörtel", "positive": "Bohrpfahlbeton", "query_index": 138}
 {"query": "IfcColumn S235JR", "positive": "Stahlprofil blank", "query_index": 35}
-{"query": "IfcColumn S235JR", "positive": "Stahlblech verzinkt", "query_index": 35, "weight": 1.3}
+{"query": "IfcFooting Stahl", "positive": "Stahlprofil blank", "query_index": 69}
+{"query": "IfcFooting S235JR", "positive": "Stahlprofil blank", "query_index": 70}
+{"query": "IfcMember Stahl", "positive": "Stahlprofil blank", "query_index": 80}
+{"query": "IfcMember Litze", "positive": "Stahlprofil blank", "query_index": 102}
+{"query": "IfcPile Stahl", "positive": "Stahlprofil blank", "query_index": 128}
+{"query": "IfcRail Stahl", "positive": "Stahlprofil blank", "query_index": 157}
+{"query": "IfcRail Vergütungsstahl", "positive": "Stahlprofil blank", "query_index": 158}
+{"query": "IfcRail Hochfester Stahl", "positive": "Stahlprofil blank", "query_index": 160}
+{"query": "IfcRailing Stahl", "positive": "Stahlprofil blank", "query_index": 169}
+{"query": "IfcTendonConduit Stahl", "positive": "Stahlprofil blank", "query_index": 202}
+{"query": "IfcTendonConduit Vergütungsstahl", "positive": "Stahlprofil blank", "query_index": 203}
+{"query": "IfcTrackElement Stahl", "positive": "Stahlprofil blank", "query_index": 214}
+{"query": "IfcTrackElement Stahlguss", "positive": "Stahlprofil blank", "query_index": 216}
+{"query": "IfcTrackElement Manganhartstahl", "positive": "Stahlprofil blank", "query_index": 221}
+{"query": "IfcTrackElement Vergütungsstahl", "positive": "Stahlprofil blank", "query_index": 222}
 {"query": "IfcCourse Gestein", "positive": "Kalksteinplatte", "query_index": 48}
+{"query": "IfcCovering Naturstein", "positive": "Kalksteinplatte", "query_index": 63}
+{"query": "IfcMember Naturstein", "positive": "Kalksteinplatte", "query_index": 81}
 {"query": "IfcCourse Gestein", "positive": "Hartsandsteinplatte", "query_index": 48}
+{"query": "IfcCovering Naturstein", "positive": "Hartsandsteinplatte", "query_index": 63}
 {"query": "IfcCourse Gestein", "positive": "Kies gebrochen", "query_index": 48, "weight": 0.7}
 {"query": "IfcCourse Schotter", "positive": "Kies gebrochen", "query_index": 49}
-{"query": "IfcCourse Kies", "positive": "Rundkies", "query_index": 51}
-{"query": "IfcCourse Erdmaterial", "positive": "Sand", "query_index": 53}
 {"query": "IfcCourse Mineralischer Filter", "positive": "Kies gebrochen", "query_index": 54}
-{"query": "IfcCourse Mineralischer Filter", "positive": "Sand", "query_index": 54}
+{"query": "IfcPavement Ungebundene Tragschicht", "positive": "Kies gebrochen", "query_index": 119}
+{"query": "IfcCourse Kies", "positive": "Rundkies", "query_index": 51}
 {"query": "IfcCourse Kies-Sand-Gemisch", "positive": "Rundkies", "query_index": 55}
+{"query": "IfcCourse Gestein", "positive": "Rundkies", "query_index": 58}
+{"query": "IfcCourse Erdmaterial", "positive": "Sand", "query_index": 53}
+{"query": "IfcCourse Mineralischer Filter", "positive": "Sand", "query_index": 54}
 {"query": "IfcCourse Kies-Sand-Gemisch", "positive": "Sand", "query_index": 55}
 {"query": "IfcCourse Asphalt", "positive": "Gussasphalt", "query_index": 56}
+{"query": "IfcPavement Asphalt", "positive": "Gussasphalt", "query_index": 112}
+{"query": "IfcPavement Walzasphalt", "positive": "Gussasphalt", "query_index": 113}
+{"query": "IfcPavement Splittmastixasphalt", "positive": "Gussasphalt", "query_index": 114}
+{"query": "IfcPavement Offenporiger Asphalt", "positive": "Gussasphalt", "query_index": 115}
+{"query": "IfcPavement Bitumenmischgut", "positive": "Gussasphalt", "query_index": 116}
+{"query": "IfcPavement Polymermodifiziertes Bitumen", "positive": "Gussasphalt", "query_index": 117}
 {"query": "IfcCourse Beton C30/37", "positive": "Hartbeton einschichtig", "query_index": 57}
+{"query": "IfcPavement Hydraulisch gebundene Tragschicht", "positive": "Hartbeton einschichtig", "query_index": 118}
+{"query": "IfcPavement Beton C30/37", "positive": "Hartbeton einschichtig", "query_index": 120}
+{"query": "IfcPavement Stahlbeton C30/37", "positive": "Hartbeton einschichtig", "query_index": 121}
+{"query": "IfcPavement Faserbeton C30/37", "positive": "Hartbeton einschichtig", "query_index": 122}
+{"query": "IfcPavement UHPC", "positive": "Hartbeton einschichtig", "query_index": 123}
+{"query": "IfcPavement Hydraulisch gebundenes Fundament", "positive": "Hartbeton einschichtig", "query_index": 124}
 {"query": "IfcCourse Beton C30/37", "positive": "Hartbeton zweischichtig", "query_index": 57}
-{"query": "IfcCourse Beton C30/37", "positive": "Tiefbaubeton", "query_index": 57}
-{"query": "IfcCourse Gestein", "positive": "Rundkies", "query_index": 58}
+{"query": "IfcPavement Hydraulisch gebundene Tragschicht", "positive": "Hartbeton zweischichtig", "query_index": 118}
+{"query": "IfcPavement Beton C30/37", "positive": "Hartbeton zweischichtig", "query_index": 120}
+{"query": "IfcPavement Stahlbeton C30/37", "positive": "Hartbeton zweischichtig", "query_index": 121}
+{"query": "IfcPavement Faserbeton C30/37", "positive": "Hartbeton zweischichtig", "query_index": 122}
+{"query": "IfcPavement UHPC", "positive": "Hartbeton zweischichtig", "query_index": 123}
+{"query": "IfcPavement Hydraulisch gebundenes Fundament", "positive": "Hartbeton zweischichtig", "query_index": 124}
 {"query": "IfcCovering Metall", "positive": "Stahlblech blank", "query_index": 60}
-{"query": "IfcCovering Metall", "positive": "Stahlblech verzinkt", "query_index": 60}
+{"query": "IfcFooting Stahl", "positive": "Stahlblech blank", "query_index": 69}
+{"query": "IfcFooting S235JR", "positive": "Stahlblech blank", "query_index": 70}
+{"query": "IfcMember Stahl", "positive": "Stahlblech blank", "query_index": 80}
+{"query": "IfcPile Stahl", "positive": "Stahlblech blank", "query_index": 128}
+{"query": "IfcPlate Stahl", "positive": "Stahlblech blank", "query_index": 141}
+{"query": "IfcPlate Stahlguss", "positive": "Stahlblech blank", "query_index": 142}
+{"query": "IfcPlate Hochfester Stahl", "positive": "Stahlblech blank", "query_index": 144}
+{"query": "IfcPlate Stahlblech", "positive": "Stahlblech blank", "query_index": 149}
+{"query": "IfcRailing Stahl", "positive": "Stahlblech blank", "query_index": 169}
+{"query": "IfcTendonConduit Stahl", "positive": "Stahlblech blank", "query_index": 202}
+{"query": "IfcTendonConduit Vergütungsstahl", "positive": "Stahlblech blank", "query_index": 203}
+{"query": "IfcTrackElement Stahl", "positive": "Stahlblech blank", "query_index": 214}
+{"query": "IfcTrackElement Stahlguss", "positive": "Stahlblech blank", "query_index": 216}
+{"query": "IfcTrackElement Manganhartstahl", "positive": "Stahlblech blank", "query_index": 221}
+{"query": "IfcTrackElement Vergütungsstahl", "positive": "Stahlblech blank", "query_index": 222}
 {"query": "IfcCovering Faserzement", "positive": "Faserzementplatte", "query_index": 61}
-{"query": "IfcCovering Beton C30/37", "positive": "Betonfertigteil normalfest", "query_index": 62}
-{"query": "IfcCovering Naturstein", "positive": "Kalksteinplatte", "query_index": 63}
-{"query": "IfcCovering Naturstein", "positive": "Hartsandsteinplatte", "query_index": 63}
 {"query": "IfcCovering Naturstein", "positive": "Natursteinplatte geschliffen", "query_index": 63}
 {"query": "IfcCovering Abdichtung", "positive": "Dichtungsbahn bituminös", "query_index": 64}
+{"query": "IfcCovering Bitumenbahn", "positive": "Dichtungsbahn bituminös", "query_index": 65}
 {"query": "IfcCovering Abdichtung", "positive": "Polyethylenfolie PE", "query_index": 64}
+{"query": "IfcCovering Kunststoff", "positive": "Polyethylenfolie PE", "query_index": 67}
 {"query": "IfcCovering Abdichtung", "positive": "Heissbitumen", "query_index": 64}
-{"query": "IfcCovering Abdichtung", "positive": "Dichtungsbahn Gummi EPDM", "query_index": 64}
+{"query": "IfcCovering Bitumenbahn", "positive": "Heissbitumen", "query_index": 65}
 {"query": "IfcCovering Abdichtung", "positive": "Dichtungsbahn Polyolefin FPO", "query_index": 64}
 {"query": "IfcCovering Abdichtung", "positive": "2K-Fliessbelag Epoxidharz", "query_index": 64}
+{"query": "IfcCovering Flüssigkunststoff", "positive": "2K-Fliessbelag Epoxidharz", "query_index": 276}
 {"query": "IfcCovering Abdichtung", "positive": "Bitumenemulsion", "query_index": 64}
-{"query": "IfcCovering Bitumenbahn", "positive": "Dichtungsbahn bituminös", "query_index": 65}
-{"query": "IfcCovering Bitumenbahn", "positive": "Heissbitumen", "query_index": 65}
 {"query": "IfcCovering Bitumenbahn", "positive": "Bitumenemulsion", "query_index": 65}
 {"query": "IfcCovering Feinmörtel", "positive": "Baukleber Einbettmörtel mineralisch", "query_index": 66}
-{"query": "IfcCovering Kunststoff", "positive": "Polyethylenfolie PE", "query_index": 67}
+{"query": "IfcPile Zementsuspension", "positive": "Baukleber Einbettmörtel mineralisch", "query_index": 130}
+{"query": "IfcPile Mörtel", "positive": "Baukleber Einbettmörtel mineralisch", "query_index": 136}
+{"query": "IfcPile Zementmörtel", "positive": "Baukleber Einbettmörtel mineralisch", "query_index": 137}
+{"query": "IfcPile Spezialmörtel", "positive": "Baukleber Einbettmörtel mineralisch", "query_index": 138}
 {"query": "IfcCovering Kunststoff", "positive": "Polyethylenvlies PE", "query_index": 67}
-{"query": "IfcCovering Kunststoff", "positive": "Polyethylen PE", "query_index": 67}
-{"query": "IfcFooting Beton C30/37", "positive": "Tiefbaubeton", "query_index": 68}
-{"query": "IfcFooting Stahl", "positive": "Stahlprofil blank", "query_index": 69}
-{"query": "IfcFooting Stahl", "positive": "Stahlblech blank", "query_index": 69}
-{"query": "IfcFooting Stahl", "positive": "Stahlblech verzinkt", "query_index": 69}
-{"query": "IfcFooting S235JR", "positive": "Stahlprofil blank", "query_index": 70}
-{"query": "IfcFooting S235JR", "positive": "Stahlblech blank", "query_index": 70}
-{"query": "IfcFooting S235JR", "positive": "Stahlblech verzinkt", "query_index": 70}
-{"query": "IfcFooting Stahlbeton C30/37", "positive": "Tiefbaubeton", "query_index": 72}
-{"query": "IfcMember Beton C30/37", "positive": "Tiefbaubeton", "query_index": 79}
-{"query": "IfcMember Stahl", "positive": "Stahlprofil blank", "query_index": 80}
-{"query": "IfcMember Stahl", "positive": "Stahlblech blank", "query_index": 80}
-{"query": "IfcMember Stahl", "positive": "Stahlblech verzinkt", "query_index": 80}
 {"query": "IfcMember Naturstein", "positive": "Kalksandstein", "query_index": 81}
-{"query": "IfcMember Naturstein", "positive": "Kalksteinplatte", "query_index": 81}
 {"query": "IfcMember Holz", "positive": "Konstruktionsvollholz", "query_index": 83}
+{"query": "IfcRailing Holz", "positive": "Konstruktionsvollholz", "query_index": 171}
+{"query": "IfcTrackElement Holz", "positive": "Konstruktionsvollholz", "query_index": 228}
 {"query": "IfcMember Holz", "positive": "Massivholz Buche Eiche kammergetrocknet gehobelt", "query_index": 83}
+{"query": "IfcRailing Holz", "positive": "Massivholz Buche Eiche kammergetrocknet gehobelt", "query_index": 171}
+{"query": "IfcTrackElement Holz", "positive": "Massivholz Buche Eiche kammergetrocknet gehobelt", "query_index": 228}
 {"query": "IfcMember Holz", "positive": "Massivholz Buche Eiche kammergetrocknet rau", "query_index": 83}
+{"query": "IfcRailing Holz", "positive": "Massivholz Buche Eiche kammergetrocknet rau", "query_index": 171}
+{"query": "IfcTrackElement Holz", "positive": "Massivholz Buche Eiche kammergetrocknet rau", "query_index": 228}
 {"query": "IfcMember Holz", "positive": "Massivholz Buche Eiche luftgetrocknet rau", "query_index": 83}
+{"query": "IfcRailing Holz", "positive": "Massivholz Buche Eiche luftgetrocknet rau", "query_index": 171}
+{"query": "IfcTrackElement Holz", "positive": "Massivholz Buche Eiche luftgetrocknet rau", "query_index": 228}
 {"query": "IfcMember Holz", "positive": "Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt", "query_index": 83}
+{"query": "IfcRailing Holz", "positive": "Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt", "query_index": 171}
+{"query": "IfcTrackElement Holz", "positive": "Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt", "query_index": 228}
 {"query": "IfcMember Holz", "positive": "Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt", "query_index": 83}
+{"query": "IfcRailing Holz", "positive": "Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt", "query_index": 171}
+{"query": "IfcTrackElement Holz", "positive": "Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt", "query_index": 228}
 {"query": "IfcMember Holz", "positive": "Massivholz Fichte Tanne Lärche luftgetrocknet rau", "query_index": 83}
+{"query": "IfcRailing Holz", "positive": "Massivholz Fichte Tanne Lärche luftgetrocknet rau", "query_index": 171}
+{"query": "IfcTrackElement Holz", "positive": "Massivholz Fichte Tanne Lärche luftgetrocknet rau", "query_index": 228}
 {"query": "IfcMember Brettschichtholz", "positive": "3- und 5-Schicht Massivholzplatte", "query_index": 89}
 {"query": "IfcMember Brettschichtholz", "positive": "Balkenschichtholz", "query_index": 89}
 {"query": "IfcMember Brettschichtholz", "positive": "Brettschichtholz", "query_index": 89}
@@ -80,91 +186,6 @@
 {"query": "IfcMember Brettschichtholz", "positive": "Sperrholz Multiplex Harnstoff-Formaldehyd-gebunden Trockenbereich", "query_index": 89}
 {"query": "IfcMember Stahl", "positive": "Armierungsstahl", "query_index": 96}
 {"query": "IfcMember Litze", "positive": "Armierungsstahl", "query_index": 97}
-{"query": "IfcMember Litze", "positive": "Stahlprofil blank", "query_index": 102}
-{"query": "IfcMember Aluminium", "positive": "Aluminiumblech blank", "query_index": 111}
-{"query": "IfcMember Aluminium", "positive": "Aluminiumprofil blank", "query_index": 111}
-{"query": "IfcPavement Asphalt", "positive": "Gussasphalt", "query_index": 112}
-{"query": "IfcPavement Walzasphalt", "positive": "Gussasphalt", "query_index": 113}
-{"query": "IfcPavement Splittmastixasphalt", "positive": "Gussasphalt", "query_index": 114}
-{"query": "IfcPavement Offenporiger Asphalt", "positive": "Gussasphalt", "query_index": 115}
-{"query": "IfcPavement Bitumenmischgut", "positive": "Gussasphalt", "query_index": 116}
-{"query": "IfcPavement Polymermodifiziertes Bitumen", "positive": "Gussasphalt", "query_index": 117}
-{"query": "IfcPavement Hydraulisch gebundene Tragschicht", "positive": "Hartbeton einschichtig", "query_index": 118}
-{"query": "IfcPavement Hydraulisch gebundene Tragschicht", "positive": "Hartbeton zweischichtig", "query_index": 118}
-{"query": "IfcPavement Ungebundene Tragschicht", "positive": "Kies gebrochen", "query_index": 119}
-{"query": "IfcPavement Beton C30/37", "positive": "Hartbeton einschichtig", "query_index": 120}
-{"query": "IfcPavement Beton C30/37", "positive": "Hartbeton zweischichtig", "query_index": 120}
-{"query": "IfcPavement Stahlbeton C30/37", "positive": "Hartbeton einschichtig", "query_index": 121}
-{"query": "IfcPavement Stahlbeton C30/37", "positive": "Hartbeton zweischichtig", "query_index": 121}
-{"query": "IfcPavement Faserbeton C30/37", "positive": "Hartbeton einschichtig", "query_index": 122}
-{"query": "IfcPavement Faserbeton C30/37", "positive": "Hartbeton zweischichtig", "query_index": 122}
-{"query": "IfcPavement Faserbeton C30/37", "positive": "Glasfaserbeton", "query_index": 122}
-{"query": "IfcPavement UHPC", "positive": "Hartbeton einschichtig", "query_index": 123}
-{"query": "IfcPavement UHPC", "positive": "Hartbeton zweischichtig", "query_index": 123}
-{"query": "IfcPavement UHPC", "positive": "Betonfertigteil hochfest", "query_index": 123}
-{"query": "IfcPavement UHPC", "positive": "Betonfertigteil normalfest", "query_index": 123}
-{"query": "IfcPavement Hydraulisch gebundenes Fundament", "positive": "Hartbeton einschichtig", "query_index": 124}
-{"query": "IfcPavement Hydraulisch gebundenes Fundament", "positive": "Hartbeton zweischichtig", "query_index": 124}
-{"query": "IfcPile Beton C20/25", "positive": "Bohrpfahlbeton", "query_index": 126}
-{"query": "IfcPile Beton C20/25", "positive": "Tiefgründung Mikrobohrpfahl", "query_index": 126}
-{"query": "IfcPile Beton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 700", "query_index": 126}
-{"query": "IfcPile Beton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 900", "query_index": 126}
-{"query": "IfcPile Beton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 1200", "query_index": 126}
-{"query": "IfcPile Stahlbeton C20/25", "positive": "Bohrpfahlbeton", "query_index": 127}
-{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefgründung Mikrobohrpfahl", "query_index": 127}
-{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 700", "query_index": 127}
-{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 900", "query_index": 127}
-{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 1200", "query_index": 127}
-{"query": "IfcPile Stahl", "positive": "Stahlprofil blank", "query_index": 128}
-{"query": "IfcPile Stahl", "positive": "Stahlblech blank", "query_index": 128}
-{"query": "IfcPile Beton C20/25", "positive": "Tiefbaubeton", "query_index": 129}
-{"query": "IfcPile Zementsuspension", "positive": "Tiefbaubeton", "query_index": 130}
-{"query": "IfcPile Zementsuspension", "positive": "Bohrpfahlbeton", "query_index": 130}
-{"query": "IfcPile Zementsuspension", "positive": "Baukleber Einbettmörtel mineralisch", "query_index": 130}
-{"query": "IfcPile Beton C20/25", "positive": "Tiefgründung Vorgefertigter Betonpfahl", "query_index": 132}
-{"query": "IfcPile Beton C20/25", "positive": "Betonfertigteil hochfest", "query_index": 132}
-{"query": "IfcPile Beton C20/25", "positive": "Betonfertigteil normalfest", "query_index": 132}
-{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefgründung Vorgefertigter Betonpfahl", "query_index": 134}
-{"query": "IfcPile Stahlbeton C20/25", "positive": "Betonfertigteil hochfest", "query_index": 134}
-{"query": "IfcPile Stahlbeton C20/25", "positive": "Betonfertigteil normalfest", "query_index": 134}
-{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefbaubeton", "query_index": 134}
-{"query": "IfcPile Mörtel", "positive": "Baukleber Einbettmörtel mineralisch", "query_index": 136}
-{"query": "IfcPile Mörtel", "positive": "Tiefbaubeton", "query_index": 136}
-{"query": "IfcPile Mörtel", "positive": "Bohrpfahlbeton", "query_index": 136}
-{"query": "IfcPile Zementmörtel", "positive": "Baukleber Einbettmörtel mineralisch", "query_index": 137}
-{"query": "IfcPile Zementmörtel", "positive": "Tiefbaubeton", "query_index": 137}
-{"query": "IfcPile Zementmörtel", "positive": "Bohrpfahlbeton", "query_index": 137}
-{"query": "IfcPile Spezialmörtel", "positive": "Baukleber Einbettmörtel mineralisch", "query_index": 138}
-{"query": "IfcPile Spezialmörtel", "positive": "Tiefbaubeton", "query_index": 138}
-{"query": "IfcPile Spezialmörtel", "positive": "Bohrpfahlbeton", "query_index": 138}
-{"query": "IfcPlate Stahl", "positive": "Stahlblech blank", "query_index": 141}
-{"query": "IfcPlate Stahl", "positive": "Stahlblech verzinkt", "query_index": 141}
-{"query": "IfcPlate Stahlguss", "positive": "Stahlblech blank", "query_index": 142}
-{"query": "IfcPlate Stahlguss", "positive": "Stahlblech verzinkt", "query_index": 142}
-{"query": "IfcPlate Hochfester Stahl", "positive": "Stahlblech blank", "query_index": 144}
-{"query": "IfcPlate Hochfester Stahl", "positive": "Stahlblech verzinkt", "query_index": 144}
-{"query": "IfcPlate Stahlblech", "positive": "Stahlblech blank", "query_index": 149}
-{"query": "IfcPlate Stahlblech", "positive": "Stahlblech verzinkt", "query_index": 149}
-{"query": "IfcPlate Aluminiumblech", "positive": "Aluminiumblech blank", "query_index": 150}
-{"query": "IfcRail Stahl", "positive": "Stahlprofil blank", "query_index": 157}
-{"query": "IfcRail Vergütungsstahl", "positive": "Stahlprofil blank", "query_index": 158}
-{"query": "IfcRail Hochfester Stahl", "positive": "Stahlprofil blank", "query_index": 160}
-{"query": "IfcRailing Stahl", "positive": "Stahlblech verzinkt", "query_index": 169}
-{"query": "IfcRailing Stahl", "positive": "Stahlprofil blank", "query_index": 169}
-{"query": "IfcRailing Stahl", "positive": "Stahlblech blank", "query_index": 169}
-{"query": "IfcRailing Aluminium", "positive": "Aluminiumblech blank", "query_index": 170}
-{"query": "IfcRailing Holz", "positive": "Konstruktionsvollholz", "query_index": 171}
-{"query": "IfcRailing Holz", "positive": "Massivholz Buche Eiche kammergetrocknet gehobelt", "query_index": 171}
-{"query": "IfcRailing Holz", "positive": "Massivholz Buche Eiche kammergetrocknet rau", "query_index": 171}
-{"query": "IfcRailing Holz", "positive": "Massivholz Buche Eiche luftgetrocknet rau", "query_index": 171}
-{"query": "IfcRailing Holz", "positive": "Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt", "query_index": 171}
-{"query": "IfcRailing Holz", "positive": "Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt", "query_index": 171}
-{"query": "IfcRailing Holz", "positive": "Massivholz Fichte Tanne Lärche luftgetrocknet rau", "query_index": 171}
-{"query": "IfcRailing Kunststoff", "positive": "Polyethylen PE", "query_index": 175}
-{"query": "IfcRailing Kunststoff", "positive": "Polypropylen PP", "query_index": 175}
-{"query": "IfcRailing Kunststoff", "positive": "Polyvinylchlorid PVC", "query_index": 175}
-{"query": "IfcRamp Beton C30/37", "positive": "Tiefbaubeton", "query_index": 182}
-{"query": "IfcRamp Stahlbeton C30/37", "positive": "Tiefbaubeton", "query_index": 183}
 {"query": "IfcTendon Stahl", "positive": "Armierungsstahl", "query_index": 194}
 {"query": "IfcTendon Vergütungsstahl", "positive": "Armierungsstahl", "query_index": 195}
 {"query": "IfcTendon Stahl mit Korrosionsschutz", "positive": "Armierungsstahl", "query_index": 196}
@@ -172,76 +193,55 @@
 {"query": "IfcTendon Litze", "positive": "Armierungsstahl", "query_index": 198}
 {"query": "IfcTendon Spannstahl", "positive": "Armierungsstahl", "query_index": 199}
 {"query": "IfcTendon Draht", "positive": "Armierungsstahl", "query_index": 200}
-{"query": "IfcTendonConduit Stahl", "positive": "Stahlblech blank", "query_index": 202}
-{"query": "IfcTendonConduit Stahl", "positive": "Stahlblech verzinkt", "query_index": 202}
-{"query": "IfcTendonConduit Stahl", "positive": "Stahlprofil blank", "query_index": 202}
-{"query": "IfcTendonConduit Vergütungsstahl", "positive": "Stahlblech blank", "query_index": 203}
-{"query": "IfcTendonConduit Vergütungsstahl", "positive": "Stahlblech verzinkt", "query_index": 203}
-{"query": "IfcTendonConduit Vergütungsstahl", "positive": "Stahlprofil blank", "query_index": 203}
-{"query": "IfcTendonConduit Kunststoff", "positive": "Polyethylen PE", "query_index": 204}
-{"query": "IfcTendonConduit Kunststoff", "positive": "Polypropylen PP", "query_index": 204}
-{"query": "IfcTendonConduit Kunststoff", "positive": "Polycarbonat PC", "query_index": 204}
-{"query": "IfcTendonConduit Kunststoff", "positive": "Polyvinylchlorid PVC", "query_index": 204}
-{"query": "IfcTendonConduit Kunststoff", "positive": "Polyamid PA glasfaserverstärkt", "query_index": 204}
-{"query": "IfcTendonConduit Kunststoff", "positive": "Polyester UP glasfaserverstärkt", "query_index": 204}
-{"query": "IfcTrackElement Stahl", "positive": "Stahlblech blank", "query_index": 214}
-{"query": "IfcTrackElement Stahl", "positive": "Stahlblech verzinkt", "query_index": 214}
-{"query": "IfcTrackElement Stahl", "positive": "Stahlprofil blank", "query_index": 214}
-{"query": "IfcTrackElement Aluminium", "positive": "Aluminiumprofil blank", "query_index": 215}
-{"query": "IfcTrackElement Stahlguss", "positive": "Stahlblech blank", "query_index": 216}
-{"query": "IfcTrackElement Stahlguss", "positive": "Stahlblech verzinkt", "query_index": 216}
-{"query": "IfcTrackElement Stahlguss", "positive": "Stahlprofil blank", "query_index": 216}
-{"query": "IfcTrackElement Manganhartstahl", "positive": "Stahlblech blank", "query_index": 221}
-{"query": "IfcTrackElement Manganhartstahl", "positive": "Stahlblech verzinkt", "query_index": 221}
-{"query": "IfcTrackElement Manganhartstahl", "positive": "Stahlprofil blank", "query_index": 221}
-{"query": "IfcTrackElement Vergütungsstahl", "positive": "Stahlblech blank", "query_index": 222}
-{"query": "IfcTrackElement Vergütungsstahl", "positive": "Stahlblech verzinkt", "query_index": 222}
-{"query": "IfcTrackElement Vergütungsstahl", "positive": "Stahlprofil blank", "query_index": 222}
-{"query": "IfcTrackElement Beton C50/60", "positive": "Tiefbaubeton", "query_index": 226}
-{"query": "IfcTrackElement Beton C50/60", "positive": "Betonfertigteil normalfest", "query_index": 226}
-{"query": "IfcTrackElement Beton C50/60", "positive": "Betonfertigteil hochfest", "query_index": 226}
-{"query": "IfcTrackElement Stahlbeton C50/60", "positive": "Tiefbaubeton", "query_index": 227}
-{"query": "IfcTrackElement Stahlbeton C50/60", "positive": "Betonfertigteil normalfest", "query_index": 227}
-{"query": "IfcTrackElement Stahlbeton C50/60", "positive": "Betonfertigteil hochfest", "query_index": 227}
-{"query": "IfcTrackElement Holz", "positive": "Konstruktionsvollholz", "query_index": 228}
-{"query": "IfcTrackElement Holz", "positive": "Massivholz Buche Eiche kammergetrocknet gehobelt", "query_index": 228}
-{"query": "IfcTrackElement Holz", "positive": "Massivholz Buche Eiche kammergetrocknet rau", "query_index": 228}
-{"query": "IfcTrackElement Holz", "positive": "Massivholz Buche Eiche luftgetrocknet rau", "query_index": 228}
-{"query": "IfcTrackElement Holz", "positive": "Massivholz Fichte Tanne Lärche kammergetrocknet gehobelt", "query_index": 228}
-{"query": "IfcTrackElement Holz", "positive": "Massivholz Fichte Tanne Lärche luftgetrocknet gehobelt", "query_index": 228}
-{"query": "IfcTrackElement Holz", "positive": "Massivholz Fichte Tanne Lärche luftgetrocknet rau", "query_index": 228}
-{"query": "IfcTrackElement Kunststoff", "positive": "Polyethylen PE", "query_index": 229}
-{"query": "IfcTrackElement Kunststoff", "positive": "Polypropylen PP", "query_index": 229}
-{"query": "IfcTrackElement Kunststoff", "positive": "Polycarbonat PC", "query_index": 229}
-{"query": "IfcTrackElement Kunststoff", "positive": "Polyvinylchlorid PVC", "query_index": 229}
-{"query": "IfcTrackElement Kunststoff", "positive": "Polyamid PA glasfaserverstärkt", "query_index": 229}
-{"query": "IfcTrackElement Kunststoff", "positive": "Polyester UP glasfaserverstärkt", "query_index": 229}
-{"query": "IfcTrackElement Gummipuffer", "positive": "Dichtungsbahn Gummi EPDM", "query_index": 238}
-{"query": "IfcWall Beton C30/37", "positive": "Tiefbaubeton", "query_index": 239}
-{"query": "IfcWall Beton C30/37", "positive": "Betonfertigteil hochfest", "query_index": 239}
-{"query": "IfcWall Beton C30/37", "positive": "Betonfertigteil normalfest", "query_index": 239}
-{"query": "IfcWall Stahlbeton C30/37", "positive": "Tiefbaubeton", "query_index": 240}
-{"query": "IfcWall Stahlbeton C30/37", "positive": "Betonfertigteil hochfest", "query_index": 240}
-{"query": "IfcWall Stahlbeton C30/37", "positive": "Betonfertigteil normalfest", "query_index": 240}
-{"query": "IfcWall Beton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand gespriesst", "query_index": 243}
-{"query": "IfcWall Beton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand unverankert", "query_index": 243}
-{"query": "IfcWall Beton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand verankert", "query_index": 243}
-{"query": "IfcWall Stahlbeton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand gespriesst", "query_index": 244}
-{"query": "IfcWall Stahlbeton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand unverankert", "query_index": 244}
-{"query": "IfcWall Stahlbeton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand verankert", "query_index": 244}
-{"query": "IfcWall Spritzbeton C12/15", "positive": "Tiefbaubeton", "query_index": 245}
-{"query": "IfcWall Spritzbeton C12/15", "positive": "Baugrubensicherung Nagelwand", "query_index": 245}
 {"query": "IfcReinforcingBar Stahl", "positive": "Armierungsstahl", "query_index": 254}
 {"query": "IfcReinforcingBar Stahl B500B", "positive": "Armierungsstahl", "query_index": 255}
-{"query": "IfcFooting Beton NPK G C30/37", "positive": "Tiefbaubeton", "query_index": 267}
-{"query": "IfcSlab Beton NPK D C20/25", "positive": "Tiefbaubeton", "query_index": 268}
-{"query": "IfcWall Beton NPK G C30/37", "positive": "Tiefbaubeton", "query_index": 269}
+{"query": "IfcMember Aluminium", "positive": "Aluminiumblech blank", "query_index": 111}
+{"query": "IfcPlate Aluminiumblech", "positive": "Aluminiumblech blank", "query_index": 150}
+{"query": "IfcRailing Aluminium", "positive": "Aluminiumblech blank", "query_index": 170}
+{"query": "IfcMember Aluminium", "positive": "Aluminiumprofil blank", "query_index": 111}
+{"query": "IfcTrackElement Aluminium", "positive": "Aluminiumprofil blank", "query_index": 215}
+{"query": "IfcPavement Faserbeton C30/37", "positive": "Glasfaserbeton", "query_index": 122}
+{"query": "IfcPavement UHPC", "positive": "Betonfertigteil hochfest", "query_index": 123}
+{"query": "IfcPile Beton C20/25", "positive": "Betonfertigteil hochfest", "query_index": 132}
+{"query": "IfcPile Stahlbeton C20/25", "positive": "Betonfertigteil hochfest", "query_index": 134}
+{"query": "IfcTrackElement Beton C50/60", "positive": "Betonfertigteil hochfest", "query_index": 226}
+{"query": "IfcTrackElement Stahlbeton C50/60", "positive": "Betonfertigteil hochfest", "query_index": 227}
+{"query": "IfcWall Beton C30/37", "positive": "Betonfertigteil hochfest", "query_index": 239}
+{"query": "IfcWall Stahlbeton C30/37", "positive": "Betonfertigteil hochfest", "query_index": 240}
+{"query": "IfcPile Beton C20/25", "positive": "Tiefgründung Mikrobohrpfahl", "query_index": 126}
+{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefgründung Mikrobohrpfahl", "query_index": 127}
+{"query": "IfcPile Beton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 700", "query_index": 126}
+{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 700", "query_index": 127}
+{"query": "IfcPile Beton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 900", "query_index": 126}
+{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 900", "query_index": 127}
 {"query": "IfcPile Beton NPK F C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 900", "query_index": 272}
+{"query": "IfcPile Beton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 1200", "query_index": 126}
+{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefgründung Ortbetonbohrpfahl 1200", "query_index": 127}
+{"query": "IfcPile Beton C20/25", "positive": "Tiefgründung Vorgefertigter Betonpfahl", "query_index": 132}
+{"query": "IfcPile Stahlbeton C20/25", "positive": "Tiefgründung Vorgefertigter Betonpfahl", "query_index": 134}
+{"query": "IfcRailing Kunststoff", "positive": "Polypropylen PP", "query_index": 175}
+{"query": "IfcTendonConduit Kunststoff", "positive": "Polypropylen PP", "query_index": 204}
+{"query": "IfcTrackElement Kunststoff", "positive": "Polypropylen PP", "query_index": 229}
+{"query": "IfcRailing Kunststoff", "positive": "Polyvinylchlorid PVC", "query_index": 175}
+{"query": "IfcTendonConduit Kunststoff", "positive": "Polyvinylchlorid PVC", "query_index": 204}
+{"query": "IfcTrackElement Kunststoff", "positive": "Polyvinylchlorid PVC", "query_index": 229}
+{"query": "IfcTendonConduit Kunststoff", "positive": "Polycarbonat PC", "query_index": 204}
+{"query": "IfcTrackElement Kunststoff", "positive": "Polycarbonat PC", "query_index": 229}
+{"query": "IfcTendonConduit Kunststoff", "positive": "Polyamid PA glasfaserverstärkt", "query_index": 204}
+{"query": "IfcTrackElement Kunststoff", "positive": "Polyamid PA glasfaserverstärkt", "query_index": 229}
+{"query": "IfcTendonConduit Kunststoff", "positive": "Polyester UP glasfaserverstärkt", "query_index": 204}
+{"query": "IfcTrackElement Kunststoff", "positive": "Polyester UP glasfaserverstärkt", "query_index": 229}
+{"query": "IfcWall Beton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand gespriesst", "query_index": 243}
+{"query": "IfcWall Stahlbeton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand gespriesst", "query_index": 244}
+{"query": "IfcWall None", "positive": "Baugrubensicherung Bohrpfahlwand gespriesst", "query_index": 278, "weight": 1.0}
+{"query": "IfcWall Beton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand unverankert", "query_index": 243}
+{"query": "IfcWall Stahlbeton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand unverankert", "query_index": 244}
+{"query": "IfcWall None", "positive": "Baugrubensicherung Bohrpfahlwand unverankert", "query_index": 278, "weight": 0.9}
+{"query": "IfcWall Beton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand verankert", "query_index": 243}
+{"query": "IfcWall Stahlbeton C30/37", "positive": "Baugrubensicherung Bohrpfahlwand verankert", "query_index": 244}
+{"query": "IfcWall None", "positive": "Baugrubensicherung Bohrpfahlwand verankert", "query_index": 278, "weight": 0.8}
+{"query": "IfcWall Spritzbeton C12/15", "positive": "Baugrubensicherung Nagelwand", "query_index": 245}
 {"query": "IfcFooting Magerbeton C15/20", "positive": "Magerbeton", "query_index": 275}
-{"query": "IfcCovering Flüssigkunststoff", "positive": "2K-Fliessbelag Epoxidharz", "query_index": 276}
 {"query": "IfcWall None", "positive": "Baugrubensicherung Rühlwand auskragend", "query_index": 277, "weight": 1.0}
 {"query": "IfcWall None", "positive": "Baugrubensicherung Rühlwand gespriesst", "query_index": 277, "weight": 0.9}
 {"query": "IfcWall None", "positive": "Baugrubensicherung Rühlwand verankert", "query_index": 277, "weight": 0.8}
-{"query": "IfcWall None", "positive": "Baugrubensicherung Bohrpfahlwand gespriesst", "query_index": 278, "weight": 1.0}
-{"query": "IfcWall None", "positive": "Baugrubensicherung Bohrpfahlwand unverankert", "query_index": 278, "weight": 0.9}
-{"query": "IfcWall None", "positive": "Baugrubensicherung Bohrpfahlwand verankert", "query_index": 278, "weight": 0.8}

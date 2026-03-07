@@ -13,22 +13,16 @@
 <text x="860.0" y="56" class="axis">75%</text>
 <line x1="1060.0" y1="60" x2="1060.0" y2="165" stroke="#e5e7eb" stroke-width="1"/>
 <text x="1050.0" y="56" class="axis">100%</text>
-<text x="20" y="62" class="label">epoch-04</text>
+<text x="20" y="62" class="label">epoch-01</text>
 <text x="296" y="74" class="mlabel" text-anchor="end">Hit@1</text>
-<rect x="300" y="66" width="503.94231999999994" height="8" fill="#1d4ed8" rx="2"/>
-<text x="807.9423199999999" y="73" class="value">66.31%</text>
-<rect x="300" y="77" width="187.95712" height="8" fill="#93c5fd" rx="2"/>
-<text x="491.95712000000003" y="84" class="value">24.73%</text>
+<rect x="300" y="66" width="433.11791999999997" height="8" fill="#1d4ed8" rx="2"/>
+<text x="737.1179199999999" y="73" class="value">56.99%</text>
 <text x="296" y="103" class="mlabel" text-anchor="end">Hit@10</text>
-<rect x="300" y="95" width="702.79556" height="8" fill="#6d28d9" rx="2"/>
-<text x="1006.79556" y="102" class="value">92.47%</text>
-<rect x="300" y="106" width="623.79964" height="8" fill="#c4b5fd" rx="2"/>
-<text x="927.79964" y="113" class="value">82.08%</text>
+<rect x="300" y="95" width="689.1756" height="8" fill="#6d28d9" rx="2"/>
+<text x="993.1756" y="102" class="value">90.68%</text>
 <text x="296" y="132" class="mlabel" text-anchor="end">MRR</text>
-<rect x="300" y="124" width="566.47512" height="8" fill="#b45309" rx="2"/>
-<text x="870.47512" y="131" class="value">74.54%</text>
-<rect x="300" y="135" width="326.60924" height="8" fill="#fcd34d" rx="2"/>
-<text x="630.60924" y="142" class="value">42.97%</text>
+<rect x="300" y="124" width="514.1384800000001" height="8" fill="#b45309" rx="2"/>
+<text x="818.1384800000001" y="131" class="value">67.65%</text>
 <rect x="20" y="176" width="12" height="9" fill="#1d4ed8" rx="2"/>
 <text x="36" y="185" class="axis">Hit@1 Bi-Enc</text>
 <rect x="160" y="176" width="12" height="9" fill="#93c5fd" rx="2"/>

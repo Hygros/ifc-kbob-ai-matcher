@@ -4,6 +4,8 @@ import json
 import math
 import random
 import shutil
+from collections import defaultdict
+from collections.abc import Iterator
 from datetime import datetime
 from pathlib import Path
 
@@ -23,6 +25,67 @@ class InputExampleDataset(Dataset[InputExample]):
 
     def __getitem__(self, index: int) -> InputExample:
         return self._examples[index]
+
+
+class UniquePositiveBatchSampler:
+    """BatchSampler ensuring no positive text appears more than once per batch.
+
+    Prevents false negatives in MultipleNegativesRankingLoss by guaranteeing
+    that each in-batch negative is a genuinely different document.
+    """
+
+    def __init__(self, examples: list[InputExample], batch_size: int, seed: int) -> None:
+        self._batch_size = batch_size
+        self._seed = seed
+        self._epoch = 0
+
+        pos_to_indices: dict[str, list[int]] = defaultdict(list)
+        for idx, ex in enumerate(examples):
+            positive = ex.texts[1] if ex.texts else ""
+            pos_to_indices[positive].append(idx)
+
+        self._pos_to_indices = dict(pos_to_indices)
+        self._total = len(examples)
+        self._unique_positives = len(self._pos_to_indices)
+
+    def __iter__(self) -> Iterator[list[int]]:
+        rng = random.Random(self._seed + self._epoch)
+        self._epoch += 1
+
+        group_queues: dict[str, list[int]] = {}
+        for pos, indices in self._pos_to_indices.items():
+            shuffled = list(indices)
+            rng.shuffle(shuffled)
+            group_queues[pos] = shuffled
+
+        batches: list[list[int]] = []
+
+        while group_queues:
+            keys = list(group_queues.keys())
+            rng.shuffle(keys)
+
+            batch: list[int] = []
+            exhausted: list[str] = []
+
+            for key in keys:
+                batch.append(group_queues[key].pop())
+                if not group_queues[key]:
+                    exhausted.append(key)
+                if len(batch) == self._batch_size:
+                    batches.append(batch)
+                    batch = []
+
+            for key in exhausted:
+                del group_queues[key]
+
+            if batch:
+                batches.append(batch)
+
+        rng.shuffle(batches)
+        yield from batches
+
+    def __len__(self) -> int:
+        return math.ceil(self._total / self._batch_size)
 
 
 def read_pairs(path: Path) -> list[tuple[str, str]]:
@@ -54,19 +117,35 @@ def split_pairs(
     dev_ratio: float,
     seed: int,
 ) -> tuple[list[tuple[str, str]], list[tuple[str, str]]]:
+    """Split on query level: all pairs of a query stay together in train or dev."""
     if not 0 <= dev_ratio < 1:
         raise ValueError("--dev-ratio muss im Bereich [0, 1) liegen.")
 
-    shuffled = list(pairs)
+    if dev_ratio == 0:
+        return list(pairs), []
+
+    query_to_pairs: dict[str, list[tuple[str, str]]] = {}
+    for query, positive in pairs:
+        query_to_pairs.setdefault(query, []).append((query, positive))
+
+    unique_queries = list(query_to_pairs.keys())
     rng = random.Random(seed)
-    rng.shuffle(shuffled)
+    rng.shuffle(unique_queries)
 
-    dev_size = int(len(shuffled) * dev_ratio)
-    if dev_ratio > 0 and dev_size == 0 and len(shuffled) > 5:
-        dev_size = 1
+    dev_query_count = int(len(unique_queries) * dev_ratio)
+    if dev_query_count == 0 and len(unique_queries) > 5:
+        dev_query_count = 1
 
-    dev_pairs = shuffled[:dev_size]
-    train_pairs = shuffled[dev_size:]
+    dev_queries = set(unique_queries[:dev_query_count])
+
+    dev_pairs: list[tuple[str, str]] = []
+    train_pairs: list[tuple[str, str]] = []
+    for query, positive in pairs:
+        if query in dev_queries:
+            dev_pairs.append((query, positive))
+        else:
+            train_pairs.append((query, positive))
+
     if not train_pairs:
         raise ValueError("Nach dem Split sind keine Trainingsdaten übrig. --dev-ratio verringern.")
     return train_pairs, dev_pairs
@@ -205,20 +284,29 @@ def main() -> None:
     device = choose_device(args.device)
     print(f"Device: {device}")
     print(f"Base model: {args.base_model}")
-    print(f"Gesamtpaare: {len(all_pairs)} | Train: {len(train_pairs)} | Dev: {len(dev_pairs)}")
+    train_queries = len({q for q, _ in train_pairs})
+    dev_queries = len({q for q, _ in dev_pairs})
+    print(
+        f"Gesamtpaare: {len(all_pairs)} | Train: {len(train_pairs)} ({train_queries} Queries) | "
+        f"Dev: {len(dev_pairs)} ({dev_queries} Queries)"
+    )
 
     model = SentenceTransformer(args.base_model, device=device)
     model.max_seq_length = args.max_length
 
     train_examples = [InputExample(texts=[query, positive]) for query, positive in train_pairs]
     train_dataset = InputExampleDataset(train_examples)
+    batch_sampler = UniquePositiveBatchSampler(train_examples, batch_size=args.batch_size, seed=args.seed)
     train_dataloader = DataLoader(
         train_dataset,
-        shuffle=True,
-        batch_size=args.batch_size,
+        batch_sampler=batch_sampler,
         num_workers=0,
         pin_memory=device == "cuda",
     )
+    # sentence-transformers model.fit() reads dataloader.batch_size internally;
+    # PyTorch sets it to None when batch_sampler is used, so patch it back.
+    object.__setattr__(train_dataloader, "batch_size", args.batch_size)
+    print(f"UniquePositiveBatchSampler: {batch_sampler._unique_positives} unique Positives, batch_size={args.batch_size}")
     train_loss = losses.MultipleNegativesRankingLoss(model=model)
 
     evaluator = build_ir_evaluator(dev_pairs)
