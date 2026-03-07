@@ -7,7 +7,7 @@ python Training/run_training_pipeline.py `
   --base-model BAAI/bge-m3 `
   --output-dir Training/artifacts/models/bge-m3-finetuned-generated_queries_without_exposure `
   --deduplicate --max-per-positive 30 `
-  --epochs 5
+  --epochs 4
 
 epochs 2:
      #Anzahl Trainingsdurchläufe über den Trainingssplit.
