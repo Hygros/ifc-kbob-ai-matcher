@@ -113,13 +113,14 @@ Zusätzlich werden immer `overview_single_latest.svg` und `evaluation_report_sin
 - Das Training nutzt `MultipleNegativesRankingLoss` auf `(query, positive)` Paaren.
 - Expected-Zeilen unterstützen `;` oder `|` als Trenner und optional `::gewicht`.
 
-
 ## Training mit Queries und Zuordnungen aus dem Dashboard
 
+```powershell
 python Training/run_training_pipeline.py `
-  --query-file Trainingsdaten/dashboard_training_queries.txt `
-  --expected-file Trainingsdaten/dashboard_training_expected.txt `
+  --query-file Training/data/dashboard_training_queries.txt `
+  --expected-file Training/data/dashboard_training_expected.txt `
   --base-model Training/artifacts/models/bge-m3-stage2-real-queries/epochs/epoch-03 `
   --output-dir Training/artifacts/models/bge-m3-finetuned-dashboard `
   --deduplicate --max-per-positive 30 `
   --epochs 3
+```
