@@ -1,2 +1,0 @@
-model,pipeline_variant,cross_encoder_model,cases,hit@1,hit@10,hit@20,hit@30,hit@50,mrr,map@10,ndcg@10,recall@10,avg_expected_score,hit@1_ci_low,hit@1_ci_high,hit@10_ci_low,hit@10_ci_high,mrr@10_ci_low,mrr@10_ci_high,ndcg@10_ci_low,ndcg@10_ci_high
-Training/artifacts/models/bge-m3-finetuned-ifcentity-material-strength-3-epochs,baseline,-,279,0.767025,0.992832,0.996416,1.000000,1.000000,0.833572,0.806046,0.858188,0.962408,0.649467,0.716846,0.817204,0.980197,1.000000,0.796006,0.870710,0.828532,0.888397

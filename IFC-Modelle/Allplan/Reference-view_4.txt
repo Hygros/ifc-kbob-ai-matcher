@@ -1,2 +1,0 @@
-IfcColumn ; COLUMN ; S235JR
-IfcWall ; Wand ; Beton, XPS, Gipsputz

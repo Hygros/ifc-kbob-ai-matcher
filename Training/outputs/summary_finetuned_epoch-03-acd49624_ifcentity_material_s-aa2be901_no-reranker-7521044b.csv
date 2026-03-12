@@ -1,2 +1,0 @@
-model,pipeline_variant,cross_encoder_model,cases,hit@1,hit@10,hit@20,hit@30,hit@50,mrr,map@10,ndcg@10,recall@10,avg_expected_score,hit@1_ci_low,hit@1_ci_high,hit@10_ci_low,hit@10_ci_high,mrr@10_ci_low,mrr@10_ci_high,ndcg@10_ci_low,ndcg@10_ci_high
-Training/artifacts/models/bge-m3-finetuned-generated_queries_without_exposure/epochs/epoch-03,baseline,-,279,0.634409,0.913978,0.928315,0.960573,0.996416,0.733214,0.611160,0.689136,0.804736,0.666489,0.577061,0.690054,0.881720,0.946237,0.691047,0.775281,0.652935,0.730787
