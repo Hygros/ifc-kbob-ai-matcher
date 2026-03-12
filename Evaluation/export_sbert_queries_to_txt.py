@@ -1,5 +1,5 @@
 # usage:
-# python.exe Evaluation/export_sbert_queries_to_txt.py static/Bohrpfahl_4.3.jsonl
+# python.exe Evaluation/export_sbert_queries_to_txt.py Evaluation/test_data/Bohrpfahl_4.3.jsonl
 # or
 # python.exe Evaluation/export_sbert_queries_to_txt.py IFC-Modelle\Tekla\2026\test-2026-4.3.ifc
 
@@ -49,15 +49,12 @@ def ifc_entry_to_string(entry: dict) -> str:
 
 
 def run_ifc_export(ifc_path: Path) -> Path:
-    script_path = PROJECT_ROOT / "IFC_Extraction" / "IFC-extraction-main.py"
-    if not script_path.exists():
-        raise FileNotFoundError(f"IFC-Export-Skript nicht gefunden: {script_path}")
-
     result = subprocess.run(
-        [sys.executable, str(script_path), str(ifc_path)],
+        [sys.executable, "-m", "core.ifc_extraction.ifc_extraction_main", str(ifc_path)],
         capture_output=True,
         text=True,
         encoding="utf-8",
+        cwd=str(PROJECT_ROOT),
     )
 
     if result.stdout:

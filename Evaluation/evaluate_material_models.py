@@ -90,7 +90,7 @@ TOP_K = max(BI_ENCODER_TOP_K, SBERT_RERANK_TOP_N)
 BOOTSTRAP_SAMPLES = int(os.environ.get("EVAL_BOOTSTRAP_SAMPLES", "300"))
 BOOTSTRAP_SEED = 42
 
-DEFAULT_QUERY_FILE_RELATIVE = Path("static") / "Bohrpfahl_4.3_sbert_queries.txt"
+DEFAULT_QUERY_FILE_RELATIVE = Path("Evaluation") / "test_data" / "Bohrpfahl_4.3_sbert_queries.txt"
 DEFAULT_EVALUATION_OUTPUT_RELATIVE = Path("Evaluation") / "exports" / "model_evaluation"
 
 EXPECTED_BY_QUERY_OVERRIDES: Dict[str, str] = {}
