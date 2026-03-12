@@ -1,0 +1,6 @@
+IfcPile BORED Betonpfahl Beton D900 900 Ortbeton
+IfcPile BORED Betonpfahl Beton D800 800 Ortbeton
+IfcPile BORED Betonpfahl Beton D800 800 Ortbeton
+IfcPile BORED Betonpfahl Beton D800 800 Ortbeton
+IfcPile BORED Betonpfahl Beton D800 800 Ortbeton
+IfcPile BORED Betonpfahl Beton D800 800 Ortbeton

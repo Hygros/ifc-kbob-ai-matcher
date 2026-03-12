@@ -1,0 +1,65 @@
+SourceFile,IfcEntity,PredefinedType,Name,Description,Material,MaterialLayerIndex,GUID,Status,CastingMethod,StructuralClass,StrengthClass,ExposureClass,Length,NetVolume,GrossVolume,Ansichtsfläche,ReinforcementVolumeRatio,Count,Weight,Durchmesser,Height,NetArea,SourceFile
+Bohrpfahl_4.3.ifc,IfcPile,BORED,Betonpfahl,D900,"[""Beton""]",1,0yl3zd2P97SRMlpiuEwzWd,"[""NEW""]",Ortbeton,,,,5.4,3.42698,,,100.0,,,900,,,Bohrpfahl_4.3.ifc
+Bohrpfahl_4.3.ifc,IfcPile,BORED,Betonpfahl,D800,"[""Beton""]",1,1EApUHBmr068wDDXX6eJu2,"[""NEW""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,Bohrpfahl_4.3.ifc
+Bohrpfahl_4.3.ifc,IfcPile,BORED,Betonpfahl,D800,"[""Beton""]",1,2PSU_IosP2xOZbGiL_ucjn,"[""NEW""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,Bohrpfahl_4.3.ifc
+Bohrpfahl_4.3.ifc,IfcPile,BORED,Betonpfahl,D800,"[""Beton""]",1,2EDe7PfkX6JeBTA1zvECPk,"[""NEW""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,Bohrpfahl_4.3.ifc
+Bohrpfahl_4.3.ifc,IfcPile,BORED,Betonpfahl,D800,"[""Beton""]",1,1CPFlUbuXD1PMymkbHV5_d,"[""NEW""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,Bohrpfahl_4.3.ifc
+Bohrpfahl_4.3.ifc,IfcPile,BORED,Betonpfahl,D800,"[""Beton""]",1,03mdk8o89FVQt95AxvUtOx,"[""NEW""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,Bohrpfahl_4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,SHEAR,Bügel,,"[""B500B""]",1,2D_cRiv4D2PRk4y5aIgHHo,"[""NICHT DEFINIERT""]",,,,,,,,,,84,1.79731,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,MAIN,1. Lage,,"[""B500B""]",1,0mkcb3UT9CnfmTW$VfXReE,"[""NICHT DEFINIERT""]",,,,,,,,,,3,30.875,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,unterer Stab,,"[""B500B""]",1,2HygeNqXL4w8d5_OGgzUfh,"[""NICHT DEFINIERT""]",,,,,,,,,,1,24.8,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcBeam,EDGEBEAM,Randbord,Randträger bewehrt,"[""Beton NPK G""]",1,1NfRj_nGX3fu7JYv5n6AOy,"[""NEU""]",Ortbeton,NPK G,C30/37,"XC4, XD3, XF4",,5.625,,,200.0,,,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Bügel,,"[""B500B""]",1,2TxVEQuk1FSRL_NKxNimh2,"[""NICHT DEFINIERT""]",,,,,,,,,,3,1.0823,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Bügel,,"[""B500B""]",1,27J2oWtDX5BhtO3R6lwA7B,"[""NICHT DEFINIERT""]",,,,,,,,,,80,1.0823,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Bügel,,"[""B500B""]",1,3YZsqV2wP78f5xCKLD3g5b,"[""NICHT DEFINIERT""]",,,,,,,,,,3,1.0823,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Längsstab,,"[""B500B""]",1,2hTj7dBPL9IeyJvItKWQxN,"[""NICHT DEFINIERT""]",,,,,,,,,,1,19.592,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Längsstab,,"[""B500B""]",1,23IE_$bQ93Ru6yiZOwzXSb,"[""NICHT DEFINIERT""]",,,,,,,,,,1,19.592,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Längsstab,,"[""B500B""]",1,06pGiFPIr5JuhY3orBO5dO,"[""NICHT DEFINIERT""]",,,,,,,,,,1,19.592,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Längsstab,,"[""B500B""]",1,2VomqHg319DRcgwJEJX7o3,"[""NICHT DEFINIERT""]",,,,,,,,,,1,19.592,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcBeam,GIRDER_SEGMENT,Randbord,Test-Kommentar,"[""Beton NPK G""]",1,2kldBsGUz3txA6xYKZG$ha,"[""NEU""]",Ortbeton,NPK G,C30/37,"XC4, XD3, XF4",,5.625,,,200.0,,,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Bügel,,"[""B500B""]",1,3BXM7d_jfEoxu$clRcm98a,"[""NICHT DEFINIERT""]",,,,,,,,,,1,29.95059,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Längsstab,,"[""B500B""]",1,2CnFZJXTD9qgkytiWQ8oTs,"[""NICHT DEFINIERT""]",,,,,,,,,,6,9.386,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Bohrpfahl,D600,"[""Beton""]",1,007Hx0Stz6TRNQuP3GkRUA,"[""NEU""]",Ortbeton,,,,2.5,0.70396,,,,,,600,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Betonpfahl,Pfahlreihe Süd,"[""Beton""]",1,0sumxAlOT3jgYE5WcnMHr1,"[""NEU""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Betonpfahl,Pfahlreihe Süd,"[""Beton NPK F""]",1,2rLBpx2pnFRurMkif0hKmu,"[""NEU""]",Ortbeton,NPK F,C30/37,"XC4, XD3, XF2",5.4,3.42698,,,100.0,,,900,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Betonpfahl,Pfahlreihe Süd,"[""Beton""]",1,39CDy_oJX3bf7IIqq7K1D_,"[""NEU""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Betonpfahl,Pfahlreihe Süd,"[""Beton""]",1,1yQEie70z3YguswtQoM_xT,"[""NEU""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Betonpfahl,Pfahlreihe Süd,"[""Beton""]",1,1c3AMe03z3KBh6EU7WnYB9,"[""NEU""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Betonpfahl,Pfahlreihe Süd,"[""Beton""]",1,3T12F2ZVP9yfdT_NPAtQNE,"[""NEU""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Betonpfahl,Pfahlreihe Süd,"[""Beton""]",1,0WQCxJtSj2BQYjW50PdQK2,"[""NEU""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Betonpfahl,Pfahlreihe Süd,"[""Beton""]",1,3D3dawQ4X2_QBJ45giDzMH,"[""NEU""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Betonpfahl,Pfahlreihe Süd,"[""Beton""]",1,0xKE9WZOX8ogBb6hYlawdH,"[""NEU""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcPile,BORED,Betonpfahl,Pfahlreihe Süd,"[""Beton""]",1,3XR4lKwLDChgizTmsBePYz,"[""NEU""]",Ortbeton,,,,5.4,2.70659,,,100.0,,,800,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcFooting,STRIP_FOOTING,Fundament,Ausführung Pilgerschritt,"[""Beton NPK G""]",1,33z$Fd6MD5svDeMgZFX_Uu,"[""NEU""]",Ortbeton,NPK G,C30/37,"XC4, XD3, XF4",,7.2,,,150.0,,,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcBeam,PIERCAP,Pfahlkopf,Pfahlkopf-Fundament,"[""Beton NPK G""]",1,2fLEfIuMjCUw6ODxSUW6Kk,"[""NEU""]",Ortbeton,NPK G,C30/37,"XC4, XD3, XF4",,7.2,,,150.0,,,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcFooting,STRIP_FOOTING,Fundament,100*1200,"[""Magerbeton""]",1,0pTHdZy9L8BxHbfzgt6LmY,"[""NEU""]",Ortbeton,,,,,1.2,,,0.0,,,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcCovering,,Abdichtung,Flüssigkunststoff,"[""Undefined""]",1,2Q8e4pnhPBswbCJ4wwvY$E,,,,,,,,,125.0,,,,,,125.0,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcSlab,FLOOR,Fahrbahnplatte,Brückenplatte,"[""Beton NPK D""]",1,0aTmWuzVD9HQaHUjSRoAHO,"[""NEU""]",Ortbeton,NPK D,C25/30,"XC4, XD1, XF2",,75.0,,,250.0,,,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcWall,SOLIDWALL,Abdichtung,Beschichtung,"[""Epoxidharz""]",1,1QsyuZ41H6WObBerA28tIc,"[""NEW""]",,,,,10.0,0.05,0.05,25.0,,,,,2.5,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,2U3M6pgMX95Ro05T0AMWrx,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,1aOqsUerbDuuoEmtw_dVou,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,31W$EKzEX1gvW2PrTuCkc4,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,3YuFXuD6T29fgbD_iN$1H1,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,31RA8FL8T46wBG5vLcq8Jg,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,33wU_retj4Iu4CwzdkE50i,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,MAIN,1. Lage aussen,,"[""B500B""]",1,2RA1VCg4j7lvt9N1HWbLNh,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,3qSpeKhMDFpA0VJ5Ie2HVX,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcWall,RETAININGWALL,Rühlwand,,,,3g5vrujSPF9wdPeBRqZL70,"[""NEW""]",Fertigteil,,,,10.32,8.29128,8.30685,51.6,,,,,5.0,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Wendel unten,,"[""B500B""]",1,3Xz9uQUNL2Fgi_kSJjAzxB,"[""NICHT DEFINIERT""]",,,,,,,,,,1,1.71203,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Wendel mitte,,"[""B500B""]",1,1kfNqWEnP978e6k54nPF$m,"[""NICHT DEFINIERT""]",,,,,,,,,,1,88.16867,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Wendel oben,,"[""B500B""]",1,0hV1Llak10Qh$ZSRo$cVb4,"[""NICHT DEFINIERT""]",,,,,,,,,,1,1.71203,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Längsarmierung,,"[""B500B""]",1,37Fl7WHwz3s9ejRnaiQeWG,"[""NICHT DEFINIERT""]",,,,,,,,,,6,8.4925,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,Wendelbewehrung,,"[""B500B""]",1,2$Lctcp6X2HeHhQnB5Us1I,"[""NICHT DEFINIERT""]",,,,,,,,,,1,68.76746,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcWall,RETAININGWALL,Bohrpfahlwand,,,,0mTq8OP_z8N9njzJy18SZS,"[""UNSET""]",Ortbeton,,,,5.4,4.56163,4.56163,8.64,,,,,1.6,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcWall,RETAININGWALL,Bohrpfahlwand,,,,1yK8ukmBz5o9ItaqHK3heY,"[""UNSET""]",Ortbeton,,,,5.4,13.68489,13.68489,24.84,,,,,4.6,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcWall,RETAININGWALL,Widerlagerwand Süd,Süd,"[""Beton NPK G""]",1,14ZYfHTBT3RgGya3Wqcs9W,"[""NEW""]",Ortbeton,NPK G,C30/37,"XC4, XD3, XF4",10.0,12.5,12.5,25.0,200.0,,,,2.5,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcWall,RETAININGWALL,Widerlagerwand Nord,über Pfahlkopfriegel,"[""Beton NPK G""]",1,3ZM0_oY_HECuOsJtEVs0Cd,"[""NEW""]",Ortbeton,NPK G,C30/37,"XC4, XD3, XF4",10.0,12.5,12.5,25.0,,,,,2.5,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,1eGk5lcp1A6x93OfzS1gf7,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,09ZdvbEITEega_zQyu8Cj8,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,3KGxXsaDn7veJnPv24Mfo_,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,0my$YIdLT5w9i57809aWli,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,MAIN,1. Lage aussen,,"[""B500B""]",1,23XG1ZKCD3QBnlzLXiw6Y$,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,2egjnAbRDDsf_Irqthcmr_,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,3w4kByjmz9feEEO6eIsrpa,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcReinforcingBar,NOTDEFINED,1. Lage aussen,,"[""B500B""]",1,0aOzIYOeT9uvQoAXvUPw6P,"[""NICHT DEFINIERT""]",,,,,,,,,,20,3.8868,,,,test-2026-4.3.ifc
+test-2026-4.3.ifc,IfcWall,RETAININGWALL,Rühlwand,,,,2E4E1RprPEHv4F9zgWfgRX,"[""NEW""]",Fertigteil,,,,10.32,8.29128,8.30685,51.6,,,,,5.0,,test-2026-4.3.ifc

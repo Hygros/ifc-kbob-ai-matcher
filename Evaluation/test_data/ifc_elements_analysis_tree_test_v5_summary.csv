@@ -1,0 +1,6 @@
+Metric,Value
+ExportRowsTotal,64
+UniqueElementsGuidBased,64
+DistinctIfcEntity,7
+DistinctPredefinedType,11
+DistinctMaterial,8

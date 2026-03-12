@@ -1,0 +1,16 @@
+IfcEntity,IfcEntityCountGuidBased,PredefinedType,Material,CountGuidBased
+IfcReinforcingBar,33,UNDEFINED,B500B,29
+IfcReinforcingBar,33,MAIN,B500B,3
+IfcReinforcingBar,33,SHEAR,B500B,1
+IfcPile,17,BORED,Beton,16
+IfcPile,17,BORED,Beton NPK F,1
+IfcWall,7,RETAININGWALL,UNDEFINED,4
+IfcWall,7,RETAININGWALL,Beton NPK G,2
+IfcWall,7,SOLIDWALL,Epoxidharz,1
+IfcBeam,3,EDGEBEAM,Beton NPK G,1
+IfcBeam,3,GIRDER_SEGMENT,Beton NPK G,1
+IfcBeam,3,PIERCAP,Beton NPK G,1
+IfcFooting,2,STRIP_FOOTING,Beton NPK G,1
+IfcFooting,2,STRIP_FOOTING,Magerbeton,1
+IfcCovering,1,UNDEFINED,UNDEFINED,1
+IfcSlab,1,FLOOR,Beton NPK D,1
