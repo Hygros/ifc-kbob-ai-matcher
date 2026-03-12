@@ -249,8 +249,6 @@ def render_svg_chart(all_rows: List[SummaryRow], output_file: Path) -> None:
         )
     )
 
-    has_reranked = bool(reranked_by_model)
-
     # Layout constants
     bar_h = 8
     pair_gap = 3       # gap between baseline and reranked bar of the same metric
