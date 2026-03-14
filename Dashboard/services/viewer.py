@@ -4,6 +4,7 @@ import socket
 import subprocess
 import shutil
 import sys
+import time
 
 import streamlit as st
 import streamlit.components.v1 as components
@@ -12,6 +13,15 @@ import streamlit.components.v1 as components
 def _is_port_in_use(port: int) -> bool:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         return sock.connect_ex(("127.0.0.1", port)) == 0
+
+
+def _wait_for_port(port: int, timeout_seconds: float = 10.0, poll_seconds: float = 0.2) -> bool:
+    deadline = time.time() + timeout_seconds
+    while time.time() < deadline:
+        if _is_port_in_use(port):
+            return True
+        time.sleep(poll_seconds)
+    return _is_port_in_use(port)
 
 
 def ensure_static_server(static_dir: str, port: int = 8080) -> None:
@@ -25,31 +35,42 @@ def ensure_static_server(static_dir: str, port: int = 8080) -> None:
     )
 
 
-def ensure_ifclite_viewer(viewer_root: str, port: int = 3000) -> None:
+def ensure_ifclite_viewer(viewer_root: str, port: int = 3000) -> bool:
     if _is_port_in_use(port):
-        return
+        return True
     if not os.path.isdir(viewer_root):
-        return
+        return False
     npm_cmd = shutil.which("npm") or shutil.which("npm.cmd")
     pnpm_cmd = shutil.which("pnpm") or shutil.which("pnpm.cmd")
     if not npm_cmd and not pnpm_cmd:
-        return
+        return False
     creation_flags = 0
     if os.name == "nt":
         creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP
 
+    # Keep this launcher compatible with the existing package.json dev script.
+    # The script already pins host/port/strictPort, so extra forwarded args here
+    # are unnecessary and can be brittle on Windows shells.
     if npm_cmd:
-        command = [npm_cmd, "run", "dev", "--", "--host", "127.0.0.1", "--port", str(port), "--strictPort"]
+        command = [npm_cmd, "run", "dev"]
     else:
-        command = [pnpm_cmd, "run", "dev", "--", "--host", "127.0.0.1", "--port", str(port), "--strictPort"]
+        command = [pnpm_cmd, "run", "dev"]
 
-    subprocess.Popen(
-        command,
-        cwd=viewer_root,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        creationflags=creation_flags,
-    )
+    try:
+        process = subprocess.Popen(
+            command,
+            cwd=viewer_root,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=creation_flags,
+        )
+    except OSError:
+        return False
+
+    if process.poll() is not None:
+        return _is_port_in_use(port)
+
+    return _wait_for_port(port)
 
 
 def render_viewer_bridge(

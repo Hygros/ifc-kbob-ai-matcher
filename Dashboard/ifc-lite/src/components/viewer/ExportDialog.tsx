@@ -4,16 +4,24 @@
 
 /**
  * Export Dialog for IFC export with property mutations
+ *
+ * Schema drives the output format automatically:
+ * - IFC2X3 / IFC4 / IFC4X3 → .ifc (STEP)
+ * - IFC5 → .ifcx (JSON + USD geometry)
+ *
+ * "Changes Only" exports just mutations:
+ * - Below IFC5 → .json
+ * - IFC5 → .ifcx
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import {
   Download,
-  FileText,
-  FileJson,
   AlertCircle,
   Check,
   Loader2,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -40,14 +48,16 @@ import {
   AlertDescription,
   AlertTitle,
 } from '@/components/ui/alert';
+import { Progress } from '@/components/ui/progress';
 import { useViewerStore } from '@/store';
-import { StepExporter, MergedExporter, type MergeModelInput } from '@ifc-lite/export';
+import { configureMutationView } from '@/utils/configureMutationView';
+import { toast } from '@/components/ui/toast';
+import { StepExporter, MergedExporter, Ifc5Exporter, IFC5_KNOWN_PROP_NAMES, type MergeModelInput, type ExportProgress, type StepExportProgress } from '@ifc-lite/export';
 import { MutablePropertyView } from '@ifc-lite/mutations';
-import { extractPropertiesOnDemand, type IfcDataStore } from '@ifc-lite/parser';
+import type { IfcDataStore } from '@ifc-lite/parser';
 
-type ExportFormat = 'ifc' | 'ifcx' | 'json';
 type ExportScope = 'single' | 'merged';
-type SchemaVersion = 'IFC2X3' | 'IFC4' | 'IFC4X3';
+type SchemaVersion = 'IFC2X3' | 'IFC4' | 'IFC4X3' | 'IFC5';
 
 interface ExportDialogProps {
   trigger?: React.ReactNode;
@@ -68,16 +78,40 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
   const legacyGeometryResult = useViewerStore((s) => s.geometryResult);
 
   const [open, setOpen] = useState(false);
-  const [format, setFormat] = useState<ExportFormat>('ifc');
-  const [schema, setSchema] = useState<SchemaVersion>('IFC4');
+  const [schema, setSchema] = useState<SchemaVersion | ''>('');
   const [selectedModelId, setSelectedModelId] = useState<string>('');
   const [exportScope, setExportScope] = useState<ExportScope>('single');
   const [includeGeometry, setIncludeGeometry] = useState(true);
   const [applyMutations, setApplyMutations] = useState(true);
-  const [deltaOnly, setDeltaOnly] = useState(false);
+  const [changesOnly, setChangesOnly] = useState(false);
   const [visibleOnly, setVisibleOnly] = useState(false);
+  const [onlyKnownProperties, setOnlyKnownProperties] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [exportResult, setExportResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [exportProgress, setExportProgress] = useState<{
+    phase: string;
+    percent: number;
+    entitiesProcessed: number;
+    entitiesTotal: number;
+    currentModel?: string;
+  } | null>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const prevProgressRef = useRef<typeof exportProgress>(null);
+
+  const scrollToBottom = useCallback(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+    }
+  }, []);
+
+  // Auto-scroll when progress first appears
+  useEffect(() => {
+    if (exportProgress && !prevProgressRef.current) scrollToBottom();
+    prevProgressRef.current = exportProgress;
+  }, [exportProgress, scrollToBottom]);
+
+  // Derived: is this an IFC5/IFCX export?
+  const isIfc5 = schema === 'IFC5';
 
   // Get list of models with data stores - includes both federated models and legacy single-model
   const modelList = useMemo(() => {
@@ -137,16 +171,38 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
     const dataStore = selectedModel.ifcDataStore;
     mutationView = new MutablePropertyView(dataStore.properties || null, selectedModelId);
 
-    // Set up on-demand property extraction if the data store supports it
-    if (dataStore.onDemandPropertyMap && dataStore.source?.length > 0) {
-      mutationView.setOnDemandExtractor((entityId: number) => {
-        return extractPropertiesOnDemand(dataStore as IfcDataStore, entityId);
-      });
-    }
+    configureMutationView(mutationView, dataStore as IfcDataStore);
 
     // Register the mutation view
     registerMutationView(selectedModelId, mutationView);
   }, [selectedModel, selectedModelId, getMutationView, registerMutationView]);
+
+  // Default schema to selected model's schema version
+  useEffect(() => {
+    if (!selectedModel) return;
+    const modelSchema = selectedModel.schemaVersion as SchemaVersion;
+    if (modelSchema) {
+      setSchema(modelSchema);
+    }
+  }, [selectedModel?.schemaVersion]);
+
+  // Determine schema conversion direction
+  const sourceSchema = (selectedModel?.schemaVersion as SchemaVersion) || '';
+  const schemaConversion = useMemo(() => {
+    if (!sourceSchema || !schema) return null;
+    const order: Record<string, number> = { IFC2X3: 1, IFC4: 2, IFC4X3: 3, IFC5: 4 };
+    const src = order[sourceSchema] ?? 0;
+    const dst = order[schema] ?? 0;
+    if (src === dst) return null;
+    return src < dst ? 'upgrade' as const : 'downgrade' as const;
+  }, [sourceSchema, schema]);
+
+  // Reset scope to single when switching to IFC5 (merged not supported)
+  useEffect(() => {
+    if (isIfc5) {
+      setExportScope('single');
+    }
+  }, [isIfc5]);
 
   const modifiedCount = useMemo(() => {
     return getModifiedEntityCount();
@@ -211,15 +267,52 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
     return localIds.size > 0 ? localIds : null;
   }, [models, isolatedEntities, isolatedEntitiesByModel]);
 
+  // Detect if the model has properties that would be filtered by onlyKnownProperties.
+  // Only relevant for IFC5 exports — show the toggle only when there's something to filter.
+  const hasFilterableProperties = useMemo(() => {
+    if (!isIfc5 || !selectedModel?.ifcDataStore) return false;
+    const mutationView = getMutationView(selectedModelId);
+    const propSource = mutationView || selectedModel.ifcDataStore.properties;
+    if (!propSource) return false;
+
+    // Sample a few entities to check for unknown property names
+    const entities = selectedModel.ifcDataStore.entities;
+    const limit = Math.min(entities.count, 50);
+    for (let i = 0; i < limit; i++) {
+      const id = entities.expressId[i];
+      const psets = propSource.getForEntity(id);
+      for (const pset of psets) {
+        for (const prop of pset.properties) {
+          if (!IFC5_KNOWN_PROP_NAMES.has(prop.name)) return true;
+        }
+      }
+    }
+    return false;
+  }, [isIfc5, selectedModel, selectedModelId, getMutationView]);
+
+  // Compute output format description for UI
+  const outputInfo = useMemo(() => {
+    if (changesOnly) {
+      return isIfc5
+        ? { ext: '.ifcx', label: 'IFCX (JSON)' }
+        : { ext: '.json', label: 'JSON' };
+    }
+    return isIfc5
+      ? { ext: '.ifcx', label: 'IFCX (JSON + USD geometry)' }
+      : { ext: '.ifc', label: 'IFC (STEP)' };
+  }, [isIfc5, changesOnly]);
+
   const handleExport = useCallback(async () => {
+    if (!schema) return;
     if (exportScope === 'single' && !selectedModel) return;
 
     setIsExporting(true);
     setExportResult(null);
+    setExportProgress(null);
 
     try {
-      // Handle merged export of all models
-      if (format === 'ifc' && exportScope === 'merged') {
+      // Handle merged export of all models (STEP only, not IFC5)
+      if (!isIfc5 && exportScope === 'merged' && !changesOnly) {
         const mergeInputs: MergeModelInput[] = Array.from(models.values()).map((m) => ({
           id: m.id,
           name: m.name,
@@ -238,7 +331,7 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
           }
         }
 
-        const result = mergedExporter.export({
+        const result = await mergedExporter.exportAsync({
           schema,
           projectStrategy: 'keep-first',
           visibleOnly,
@@ -246,7 +339,18 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
           isolatedEntityIdsByModel: isolatedByModel,
           description: `Merged export of ${mergeInputs.length} models from ifc-lite`,
           application: 'ifc-lite',
+          onProgress: (p: ExportProgress) => setExportProgress({
+            phase: p.phase === 'preparing' ? 'Preparing models...'
+              : p.phase === 'entities' ? `Processing entities${p.currentModel ? ` (${p.currentModel})` : ''}...`
+              : 'Assembling file...',
+            percent: p.percent,
+            entitiesProcessed: p.entitiesProcessed,
+            entitiesTotal: p.entitiesTotal,
+            currentModel: p.currentModel,
+          }),
         });
+
+        setExportProgress(null);
 
         const blob = new Blob([result.content], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
@@ -258,78 +362,79 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        setExportResult({
-          success: true,
-          message: `Merged ${result.stats.modelCount} models, ${result.stats.totalEntityCount} entities`,
-        });
+        const msg = `Merged ${result.stats.modelCount} models, ${result.stats.totalEntityCount.toLocaleString()} entities`;
+        setExportResult({ success: true, message: msg });
+        toast.success(msg);
         return;
       }
 
       if (!selectedModel) return;
       const mutationView = getMutationView(selectedModelId);
+      const baseName = selectedModel.name.replace(/\.[^.]+$/, '');
 
-      if (format === 'ifc') {
-        const exporter = new StepExporter(selectedModel.ifcDataStore, mutationView || undefined);
+      // ── IFC5 → always IFCX ──────────────────────────────────────────
+      if (isIfc5) {
+        const federatedModel = models.get(selectedModelId);
+        const idOffset = federatedModel?.idOffset ?? 0;
 
-        // Build visibility filter for visible-only export
-        const localHidden = visibleOnly ? getLocalHiddenIds(selectedModelId) : undefined;
-        const localIsolated = visibleOnly ? getLocalIsolatedIds(selectedModelId) : undefined;
+        const exporter = new Ifc5Exporter(
+          selectedModel.ifcDataStore,
+          selectedModel.geometryResult,
+          mutationView || undefined,
+          idOffset,
+        );
+
+        // When changesOnly, restrict to mutated entities and force applyMutations
+        let localHidden: Set<number> | undefined;
+        let localIsolated: Set<number> | undefined;
+        let effectiveVisibleOnly = visibleOnly;
+        let effectiveApplyMutations = applyMutations;
+
+        if (changesOnly && mutationView) {
+          // Compute the set of entity IDs that have mutations
+          const mutations = mutationView.getMutations();
+          const mutatedEntityIds = new Set<number>();
+          for (const m of mutations) {
+            mutatedEntityIds.add(m.entityId);
+          }
+          // Use isolatedEntityIds as an allowlist to export only mutated entities
+          localIsolated = mutatedEntityIds;
+          effectiveVisibleOnly = true;
+          effectiveApplyMutations = true;
+        } else if (visibleOnly) {
+          localHidden = getLocalHiddenIds(selectedModelId);
+          localIsolated = getLocalIsolatedIds(selectedModelId) ?? undefined;
+          effectiveVisibleOnly = true;
+        }
 
         const result = exporter.export({
-          schema,
-          includeGeometry,
-          applyMutations,
-          deltaOnly,
-          visibleOnly,
+          includeGeometry: changesOnly ? false : includeGeometry,
+          includeProperties: true,
+          applyMutations: effectiveApplyMutations,
+          visibleOnly: effectiveVisibleOnly,
           hiddenEntityIds: localHidden,
           isolatedEntityIds: localIsolated,
-          description: `Exported from ifc-lite with ${modifiedCount} modifications`,
-          application: 'ifc-lite',
+          onlyKnownProperties,
+          author: 'ifc-lite',
         });
 
-        // Download the file
-        const blob = new Blob([result.content], { type: 'text/plain' });
+        const blob = new Blob([result.content], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        const suffix = visibleOnly ? '_visible' : '_modified';
-        a.download = `${selectedModel.name.replace(/\.[^.]+$/, '')}${suffix}.ifc`;
+        const suffix = changesOnly ? '_changes' : (visibleOnly ? '_visible' : '_export');
+        a.download = `${baseName}${suffix}.ifcx`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        setExportResult({
-          success: true,
-          message: `Exported ${result.stats.entityCount} entities (${result.stats.modifiedEntityCount} modified)`,
-        });
-      } else if (format === 'ifcx') {
-        // Export as IFCX JSON
-        const data = {
-          format: 'ifcx',
-          modelId: selectedModelId,
-          modelName: selectedModel.name,
-          schemaVersion: 'IFC5',
-          mutations: mutationView?.getMutations() || [],
-          exportedAt: new Date().toISOString(),
-        };
+        const ifcxMsg = `Exported IFCX: ${result.stats.nodeCount} nodes, ${result.stats.meshCount} meshes, ${result.stats.propertyCount} properties`;
+        setExportResult({ success: true, message: ifcxMsg });
+        toast.success(ifcxMsg);
 
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${selectedModel.name.replace(/\.[^.]+$/, '')}_modified.ifcx`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        setExportResult({
-          success: true,
-          message: `Exported IFCX with ${mutationView?.getMutations().length || 0} mutations`,
-        });
-      } else {
-        // Export mutations as JSON
+      // ── Changes only (pre-IFC5) → JSON ───────────────────────────────
+      } else if (changesOnly) {
         const mutations = mutationView?.getMutations() || [];
         const data = {
           version: 1,
@@ -343,27 +448,68 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${selectedModel.name.replace(/\.[^.]+$/, '')}_changes.json`;
+        a.download = `${baseName}_changes.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        setExportResult({
-          success: true,
-          message: `Exported ${mutations.length} changes as JSON`,
+        const jsonMsg = `Exported ${mutations.length} changes as JSON`;
+        setExportResult({ success: true, message: jsonMsg });
+        toast.success(jsonMsg);
+
+      // ── Pre-IFC5 full export → STEP ──────────────────────────────────
+      } else {
+        const exporter = new StepExporter(selectedModel.ifcDataStore, mutationView || undefined);
+
+        const localHidden = visibleOnly ? getLocalHiddenIds(selectedModelId) : undefined;
+        const localIsolated = visibleOnly ? getLocalIsolatedIds(selectedModelId) : undefined;
+
+        const result = await exporter.exportAsync({
+          schema,
+          includeGeometry,
+          applyMutations,
+          visibleOnly,
+          hiddenEntityIds: localHidden,
+          isolatedEntityIds: localIsolated,
+          description: `Exported from ifc-lite with ${modifiedCount} modifications`,
+          application: 'ifc-lite',
+          onProgress: (p: StepExportProgress) => setExportProgress({
+            phase: p.phase === 'preparing' ? 'Preparing export...'
+              : p.phase === 'entities' ? 'Processing entities...'
+              : 'Assembling file...',
+            percent: p.percent,
+            entitiesProcessed: p.entitiesProcessed,
+            entitiesTotal: p.entitiesTotal,
+          }),
         });
+
+        setExportProgress(null);
+
+        const blob = new Blob([result.content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const suffix = visibleOnly ? '_visible' : '_export';
+        a.download = `${baseName}${suffix}.ifc`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        const stepMsg = `Exported ${result.stats.entityCount} entities (${result.stats.modifiedEntityCount} modified)`;
+        setExportResult({ success: true, message: stepMsg });
+        toast.success(stepMsg);
       }
     } catch (error) {
       console.error('Export failed:', error);
-      setExportResult({
-        success: false,
-        message: `Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      });
+      const errMsg = `Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
+      setExportResult({ success: false, message: errMsg });
+      toast.error(errMsg);
     } finally {
       setIsExporting(false);
     }
-  }, [selectedModel, selectedModelId, format, schema, exportScope, includeGeometry, applyMutations, deltaOnly, visibleOnly, getMutationView, getLocalHiddenIds, getLocalIsolatedIds, modifiedCount, models]);
+  }, [selectedModel, selectedModelId, schema, isIfc5, exportScope, includeGeometry, applyMutations, changesOnly, visibleOnly, onlyKnownProperties, getMutationView, getLocalHiddenIds, getLocalIsolatedIds, modifiedCount, models]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -386,9 +532,9 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4 py-4">
-          {/* Export scope selector (only when multiple models loaded) */}
-          {format === 'ifc' && modelList.length > 1 && (
+        <div ref={scrollAreaRef} className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto">
+          {/* Scope selector (only for STEP schemas with multiple models) */}
+          {!isIfc5 && !changesOnly && modelList.length > 1 && (
             <div className="flex items-center gap-4">
               <Label className="w-32">Scope</Label>
               <Select value={exportScope} onValueChange={(v) => setExportScope(v as ExportScope)}>
@@ -417,7 +563,7 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
                   const displayName = m.name.length > maxLen ? m.name.slice(0, maxLen) + '\u2026' : m.name;
                   return (
                   <SelectItem key={m.id} value={m.id} title={m.name}>
-                    {displayName}{m.isDirty ? ' *' : ''}
+                    {displayName}{m.isDirty ? ' *' : ''}{m.schemaVersion ? ` (${m.schemaVersion})` : ''}
                   </SelectItem>
                   );
                 })}
@@ -426,80 +572,97 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
           </div>
           )}
 
-          {/* Format selector */}
+          {/* Schema selector — this drives the output format */}
           <div className="flex items-center gap-4">
-            <Label className="w-32">Format</Label>
-            <Select value={format} onValueChange={(v) => setFormat(v as ExportFormat)}>
+            <Label className="w-32">Schema</Label>
+            <Select value={schema} onValueChange={(v) => setSchema(v as SchemaVersion)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ifc">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4" />
-                    IFC (STEP)
-                  </div>
-                </SelectItem>
-                <SelectItem value="ifcx">
-                  <div className="flex items-center gap-2">
-                    <FileJson className="h-4 w-4" />
-                    IFCX (JSON)
-                  </div>
-                </SelectItem>
-                <SelectItem value="json">
-                  <div className="flex items-center gap-2">
-                    <FileJson className="h-4 w-4" />
-                    Changes Only (JSON)
-                  </div>
-                </SelectItem>
+                {(['IFC2X3', 'IFC4', 'IFC4X3', 'IFC5'] as const).map((v) => (
+                  <SelectItem key={v} value={v}>
+                    {v === 'IFC5' ? 'IFC5 (Alpha)' : v}
+                    {v === sourceSchema ? ' (current)' : ''}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
-          {/* Schema version (for IFC format) */}
-          {format === 'ifc' && (
-            <div className="flex items-center gap-4">
-              <Label className="w-32">Schema</Label>
-              <Select value={schema} onValueChange={(v) => setSchema(v as SchemaVersion)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="IFC2X3">IFC2X3</SelectItem>
-                  <SelectItem value="IFC4">IFC4</SelectItem>
-                  <SelectItem value="IFC4X3">IFC4X3</SelectItem>
-                </SelectContent>
-              </Select>
+          {/* Schema conversion warning */}
+          {schemaConversion && (
+            <Alert variant={schemaConversion === 'downgrade' ? 'destructive' : 'default'}>
+              {schemaConversion === 'upgrade' ? (
+                <ArrowUp className="h-4 w-4" />
+              ) : (
+                <ArrowDown className="h-4 w-4" />
+              )}
+              <AlertTitle>
+                Schema {schemaConversion === 'upgrade' ? 'Upgrade' : 'Downgrade'}
+              </AlertTitle>
+              <AlertDescription>
+                Converting from {sourceSchema} to {schema}.
+                {schemaConversion === 'downgrade'
+                  ? ' Some data may be lost in the conversion to an older schema.'
+                  : ' Entity types will be mapped to the newer schema.'}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Output format indicator */}
+          <div className="flex items-center gap-4">
+            <Label className="w-32 text-muted-foreground">Output</Label>
+            <Badge variant="secondary">{outputInfo.label}</Badge>
+            <span className="text-xs text-muted-foreground">{outputInfo.ext}</span>
+          </div>
+
+          {/* Options */}
+          <div className="flex items-center justify-between">
+            <div>
+              <Label>Export Visible Only</Label>
+              <p className="text-xs text-muted-foreground">Only include entities currently visible in the 3D view</p>
+            </div>
+            <Switch checked={visibleOnly} onCheckedChange={setVisibleOnly} />
+          </div>
+
+          {!changesOnly && exportScope === 'single' && (
+            <div className="flex items-center justify-between">
+              <Label>Include Geometry</Label>
+              <Switch checked={includeGeometry} onCheckedChange={setIncludeGeometry} />
             </div>
           )}
 
-          {/* Options */}
-          {format === 'ifc' && (
-            <>
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label>Export Visible Only</Label>
-                  <p className="text-xs text-muted-foreground">Only include entities currently visible in the 3D view</p>
-                </div>
-                <Switch checked={visibleOnly} onCheckedChange={setVisibleOnly} />
+          {exportScope === 'single' && (
+            <div className="flex items-center justify-between">
+              <Label>Apply Property Changes</Label>
+              <Switch checked={applyMutations} onCheckedChange={setApplyMutations} />
+            </div>
+          )}
+
+          {exportScope === 'single' && (
+            <div className="flex items-center justify-between">
+              <div>
+                <Label>Changes Only</Label>
+                <p className="text-xs text-muted-foreground">
+                  {isIfc5 ? 'Export as IFCX overlay with mutations only' : 'Export mutations as JSON delta'}
+                </p>
               </div>
-              {exportScope === 'single' && (
-              <>
-              <div className="flex items-center justify-between">
-                <Label>Include Geometry</Label>
-                <Switch checked={includeGeometry} onCheckedChange={setIncludeGeometry} />
+              <Switch checked={changesOnly} onCheckedChange={setChangesOnly} />
+            </div>
+          )}
+
+          {/* IFC5: strict property schema filtering */}
+          {isIfc5 && hasFilterableProperties && (
+            <div className="flex items-center justify-between">
+              <div>
+                <Label>Only Known IFC5 Properties</Label>
+                <p className="text-xs text-muted-foreground">
+                  Skip properties without an official IFC5 schema (avoids viewer warnings)
+                </p>
               </div>
-              <div className="flex items-center justify-between">
-                <Label>Apply Property Changes</Label>
-                <Switch checked={applyMutations} onCheckedChange={setApplyMutations} />
-              </div>
-              <div className="flex items-center justify-between">
-                <Label>Export Changes Only (Delta)</Label>
-                <Switch checked={deltaOnly} onCheckedChange={setDeltaOnly} />
-              </div>
-              </>
-              )}
-            </>
+              <Switch checked={onlyKnownProperties} onCheckedChange={setOnlyKnownProperties} />
+            </div>
           )}
 
           {/* Stats */}
@@ -511,6 +674,22 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
                 {modifiedCount} entities have been modified
               </AlertDescription>
             </Alert>
+          )}
+
+          {/* Export Progress */}
+          {isExporting && exportProgress && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <span className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {exportProgress.phase}
+                </span>
+                <span>
+                  {exportProgress.entitiesProcessed.toLocaleString()} / {exportProgress.entitiesTotal.toLocaleString()} entities
+                </span>
+              </div>
+              <Progress value={exportProgress.percent * 100} />
+            </div>
           )}
 
           {/* Export result */}
@@ -531,7 +710,7 @@ export function ExportDialog({ trigger }: ExportDialogProps) {
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button onClick={handleExport} disabled={isExporting || !selectedModel}>
+          <Button onClick={handleExport} disabled={isExporting || !selectedModel || !schema}>
             {isExporting ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />

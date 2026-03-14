@@ -13,9 +13,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useViewerStore } from '@/store';
+import { configureMutationView } from '@/utils/configureMutationView';
 import { StepExporter } from '@ifc-lite/export';
 import { MutablePropertyView } from '@ifc-lite/mutations';
-import { extractPropertiesOnDemand, type IfcDataStore } from '@ifc-lite/parser';
+import type { IfcDataStore } from '@ifc-lite/parser';
+import { toast } from '@/components/ui/toast';
 
 interface ExportChangesButtonProps {
   /** Optional custom class name */
@@ -79,12 +81,7 @@ export function ExportChangesButton({ className }: ExportChangesButtonProps) {
     const dataStore = modelInfo.ifcDataStore;
     mutationView = new MutablePropertyView(dataStore.properties || null, modelInfo.id);
 
-    // Set up on-demand property extraction
-    if (dataStore.onDemandPropertyMap && dataStore.source?.length > 0) {
-      mutationView.setOnDemandExtractor((entityId: number) => {
-        return extractPropertiesOnDemand(dataStore as IfcDataStore, entityId);
-      });
-    }
+    configureMutationView(mutationView, dataStore as IfcDataStore);
 
     registerMutationView(modelInfo.id, mutationView);
   }, [modelInfo, getMutationView, registerMutationView]);
@@ -147,11 +144,12 @@ export function ExportChangesButton({ className }: ExportChangesButtonProps) {
       // Reset status after 2 seconds
       setTimeout(() => setExportStatus('idle'), 2000);
 
-      console.log(`[ExportChangesButton] Exported ${result.stats.entityCount} entities (${result.stats.modifiedEntityCount} modified)`);
+      toast.success(`Exported ${result.stats.entityCount} entities (${result.stats.modifiedEntityCount} modified)`);
     } catch (error) {
       console.error('[ExportChangesButton] Export failed:', error);
       setExportStatus('error');
       setTimeout(() => setExportStatus('idle'), 3000);
+      toast.error(`Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsExporting(false);
     }

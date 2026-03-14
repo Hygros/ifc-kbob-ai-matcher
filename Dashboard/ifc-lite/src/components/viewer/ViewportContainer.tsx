@@ -9,6 +9,7 @@ import { ToolOverlays } from './ToolOverlays';
 import { Section2DPanel } from './Section2DPanel';
 import { BasketPresentationDock } from './BasketPresentationDock';
 import { useViewerStore } from '@/store';
+import { collectIfcBuildingStoreyElementsWithIfcSpace } from '@/store/basketVisibleSet';
 import { useIfc } from '@/hooks/useIfc';
 import { useWebGPU } from '@/hooks/useWebGPU';
 import { Upload, MousePointer, Layers, Info, Command, AlertTriangle, ChevronDown, ExternalLink, Plus } from 'lucide-react';
@@ -27,6 +28,7 @@ export function ViewportContainer() {
   const selectedStoreys = useViewerStore((s) => s.selectedStoreys);
   const typeVisibility = useViewerStore((s) => s.typeVisibility);
   const isolatedEntities = useViewerStore((s) => s.isolatedEntities);
+  const classFilter = useViewerStore((s) => s.classFilter);
   // Multi-model support: get all loaded models from store (for merged geometry)
   const storeModels = useViewerStore((s) => s.models);
   const resetViewerState = useViewerStore((s) => s.resetViewerState);
@@ -173,72 +175,86 @@ export function ViewportContainer() {
   // Check if any models are loaded (even if hidden) - used to show empty 3D vs starting UI
   const hasLoadedModels = storeModels.size > 0 || (geometryResult?.meshes && geometryResult.meshes.length > 0);
 
-  // Filter geometry based on type visibility only
-  // PERFORMANCE FIX: Don't filter by storey or hiddenEntities here
-  // Instead, let the renderer handle visibility filtering at the batch level
-  // This avoids expensive batch rebuilding when visibility changes
+  // PERF: Incremental geometry filtering using refs.
+  // Instead of creating a new 200K+ element array every batch (~200ms),
+  // we push ONLY new meshes into a cached array — O(batch_size) not O(total).
+  // A version counter triggers downstream re-renders via the Viewport prop.
+  const filteredCacheRef = useRef<MeshData[]>([]);
+  const filteredSourceLenRef = useRef(0);
+  const filteredTypeVisRef = useRef(typeVisibility);
+  const filteredVersionRef = useRef(0);
+
   const filteredGeometry = useMemo(() => {
     if (!mergedGeometryResult?.meshes) {
+      filteredCacheRef.current = [];
+      filteredSourceLenRef.current = 0;
+      filteredVersionRef.current = 0;
       return null;
     }
 
-    let meshes = mergedGeometryResult.meshes;
+    const allMeshes = mergedGeometryResult.meshes;
+    const cache = filteredCacheRef.current;
 
-    // Filter by type visibility (spatial elements)
-    meshes = meshes.filter(mesh => {
+    // Full rebuild if: type visibility changed, source shrunk (new file), or empty cache
+    const prevVis = filteredTypeVisRef.current;
+    const typeVisChanged =
+      prevVis.spaces !== typeVisibility.spaces ||
+      prevVis.openings !== typeVisibility.openings ||
+      prevVis.site !== typeVisibility.site;
+    if (typeVisChanged || allMeshes.length < filteredSourceLenRef.current) {
+      cache.length = 0;
+      filteredSourceLenRef.current = 0;
+      filteredTypeVisRef.current = typeVisibility;
+    }
+
+    const needsFilter = !typeVisibility.spaces || !typeVisibility.openings || !typeVisibility.site;
+    const prevCacheLen = cache.length;
+
+    // Only process NEW meshes since last run — O(batch_size) not O(total)
+    for (let i = filteredSourceLenRef.current; i < allMeshes.length; i++) {
+      const mesh = allMeshes[i];
       const ifcType = mesh.ifcType;
 
-      // Check type visibility
-      if (ifcType === 'IfcSpace' && !typeVisibility.spaces) {
-        return false;
-      }
-      if (ifcType === 'IfcOpeningElement' && !typeVisibility.openings) {
-        return false;
-      }
-      if (ifcType === 'IfcSite' && !typeVisibility.site) {
-        return false;
+      if (needsFilter) {
+        if (ifcType === 'IfcSpace' && !typeVisibility.spaces) continue;
+        if (ifcType === 'IfcOpeningElement' && !typeVisibility.openings) continue;
+        if (ifcType === 'IfcSite' && !typeVisibility.site) continue;
       }
 
-      return true;
-    });
-
-    // Apply transparency for spatial elements
-    meshes = meshes.map(mesh => {
-      const ifcType = mesh.ifcType;
-      const isSpace = ifcType === 'IfcSpace';
-      const isOpening = ifcType === 'IfcOpeningElement';
-
-      if (isSpace || isOpening) {
-        // Create a new color array with reduced opacity
-        const newColor: [number, number, number, number] = [
-          mesh.color[0],
-          mesh.color[1],
-          mesh.color[2],
-          Math.min(mesh.color[3] * 0.3, 0.3), // Semi-transparent (30% opacity max)
-        ];
-        return { ...mesh, color: newColor };
+      if (ifcType === 'IfcSpace' || ifcType === 'IfcOpeningElement') {
+        cache.push({
+          ...mesh,
+          color: [mesh.color[0], mesh.color[1], mesh.color[2], Math.min(mesh.color[3] * 0.3, 0.3)],
+        });
+      } else {
+        cache.push(mesh);
       }
+    }
 
-      return mesh;
-    });
+    filteredSourceLenRef.current = allMeshes.length;
 
-    return meshes;
+    // Only bump version when cache content actually changed — avoids
+    // unnecessary downstream re-renders when memo runs with same data.
+    if (cache.length !== prevCacheLen || typeVisChanged) {
+      filteredVersionRef.current++;
+    }
+
+    // Return the same array reference — downstream change detection uses
+    // geometryVersion (which increments each batch) instead of array identity.
+    return cache;
   }, [mergedGeometryResult, typeVisibility]);
+
+  // Version counter that changes every batch — triggers useGeometryStreaming
+  // without requiring a new geometry array reference.
+  const geometryVersion = filteredVersionRef.current;
 
   // Compute combined isolation set (storeys + manual isolation)
   // This is passed to the renderer for batch-level visibility filtering
   // Now supports multi-model: aggregates elements from all models for selected storeys
   // IMPORTANT: Returns globalIds (meshes use globalIds after federation registry transformation)
   const computedIsolatedIds = useMemo(() => {
-    // If manual isolation is active, use that (already contains globalIds)
-    if (isolatedEntities !== null) {
-      return isolatedEntities;
-    }
-
-    // If storeys are selected, compute combined element IDs from all selected storeys
-    // across ALL models (multi-model support)
-    // NOTE: Storey hierarchy uses original expressIds, but meshes use globalIds
-    // We must transform expressIds -> globalIds using the model's offset
+    // Compute storey isolation if storeys are selected
+    let storeyIsolation: Set<number> | null = null;
     if (selectedStoreys.size > 0) {
       const combinedGlobalIds = new Set<number>();
 
@@ -247,52 +263,62 @@ export function ViewportContainer() {
         const hierarchy = model.ifcDataStore?.spatialHierarchy;
         if (!hierarchy) continue;
 
-        // Get this model's offset directly from the model (no need for registry)
         const offset = model.idOffset ?? 0;
 
         for (const storeyId of selectedStoreys) {
-          // Note: storeyId itself might be a globalId if the user selected via mesh click,
-          // or an original ID if selected via hierarchy panel. The byStorey map uses original IDs.
-          // For now, try both the storeyId and storeyId - offset
-          const storeyElementIds = hierarchy.byStorey.get(storeyId) || hierarchy.byStorey.get(storeyId - offset);
+          const localStoreyId = hierarchy.byStorey.has(storeyId) ? storeyId : storeyId - offset;
+          const storeyElementIds = collectIfcBuildingStoreyElementsWithIfcSpace(hierarchy, localStoreyId);
           if (storeyElementIds) {
             for (const originalExpressId of storeyElementIds) {
-              // Transform to globalId
-              const globalId = originalExpressId + offset;
-              combinedGlobalIds.add(globalId);
+              combinedGlobalIds.add(originalExpressId + offset);
             }
           }
         }
       }
 
-      // Also check legacy ifcDataStore (for single-model mode without federation)
-      // In this case, offset is 0, so globalId = expressId
+      // Legacy single-model mode (offset = 0)
       if (ifcDataStore?.spatialHierarchy && storeModels.size === 0) {
         const hierarchy = ifcDataStore.spatialHierarchy;
         for (const storeyId of selectedStoreys) {
-          const storeyElementIds = hierarchy.byStorey.get(storeyId);
+          const storeyElementIds = collectIfcBuildingStoreyElementsWithIfcSpace(hierarchy, storeyId);
           if (storeyElementIds) {
             for (const id of storeyElementIds) {
-              combinedGlobalIds.add(id); // offset = 0 for legacy single-model
+              combinedGlobalIds.add(id);
             }
           }
         }
       }
 
       if (combinedGlobalIds.size > 0) {
-        return combinedGlobalIds;
+        storeyIsolation = combinedGlobalIds;
       }
     }
 
-    // No isolation active
-    return null;
-  }, [storeModels, ifcDataStore, selectedStoreys, isolatedEntities]);
+    // Collect all active filters and intersect them
+    const filters: Set<number>[] = [];
+    if (storeyIsolation !== null) filters.push(storeyIsolation);
+    if (classFilter !== null) filters.push(classFilter.ids);
+    if (isolatedEntities !== null) filters.push(isolatedEntities);
+
+    if (filters.length === 0) return null;
+    if (filters.length === 1) return filters[0];
+
+    // Intersect all active filters — start from smallest for efficiency
+    const sorted = filters.sort((a, b) => a.size - b.size);
+    const intersection = new Set<number>();
+    for (const id of sorted[0]) {
+      if (sorted.every(s => s.has(id))) {
+        intersection.add(id);
+      }
+    }
+    return intersection;
+  }, [storeModels, ifcDataStore, selectedStoreys, isolatedEntities, classFilter]);
 
   // Grid Pattern
   const GridPattern = () => (
     <>
       {/* Light mode grid - subtle gray */}
-      <div 
+      <div
         className="absolute inset-0 z-0 pointer-events-none opacity-[0.06] dark:hidden"
         style={{
           backgroundImage: `linear-gradient(#3b4261 1px, transparent 1px), linear-gradient(90deg, #3b4261 1px, transparent 1px)`,
@@ -301,7 +327,7 @@ export function ViewportContainer() {
         }}
       />
       {/* Dark mode grid - subtle blue/cyan tint */}
-      <div 
+      <div
         className="absolute inset-0 z-0 pointer-events-none opacity-[0.12] hidden dark:block"
         style={{
           backgroundImage: `linear-gradient(#3b4261 1px, transparent 1px), linear-gradient(90deg, #3b4261 1px, transparent 1px)`,
@@ -312,9 +338,12 @@ export function ViewportContainer() {
     </>
   );
 
-  // Empty state when no file is loaded at all (show starting UI)
-  // But NOT when models are loaded but just hidden - in that case show empty 3D canvas
-  if (!hasLoadedModels && !loading) {
+  // Do not mount the WebGPU viewport while capability detection is pending
+  // or unsupported. In iframe auto-load flows this prevents hard renderer
+  // crashes before the fallback UI can render.
+  //
+  // Also show empty-state UI when no file is loaded.
+  if ((!hasLoadedModels && !loading) || webgpu.checking || !webgpu.supported) {
     return (
       <div
         className="relative h-full w-full bg-white dark:bg-black text-zinc-900 dark:text-zinc-50 overflow-hidden"
@@ -464,7 +493,7 @@ export function ViewportContainer() {
 
           {/* Main Card */}
           <div className="max-w-md w-full bg-white dark:bg-[#16161e] border border-zinc-300 dark:border-[#3b4261] p-8 flex flex-col items-center transition-transform hover:-translate-y-1 duration-200 shadow-lg">
-            
+
             <style>{`
               @keyframes float-slow {
                 0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -479,15 +508,15 @@ export function ViewportContainer() {
             <div className="mb-10 relative group/logo cursor-pointer">
               {/* Back Layer */}
               <div className="absolute -inset-6 bg-zinc-100 dark:bg-[#1f2335] -rotate-3 z-0 border border-zinc-300 dark:border-[#3b4261] transition-all duration-500 group-hover/logo:rotate-0 group-hover/logo:scale-110" />
-              
+
               {/* Middle Layer - accent on hover */}
               <div className="absolute -inset-6 border border-primary z-0 opacity-0 scale-95 rotate-3 transition-all duration-500 delay-75 group-hover/logo:opacity-40 group-hover/logo:rotate-6 group-hover/logo:scale-105" />
 
               {/* Logo Container */}
               <div className="relative z-10 animate-float-slow transition-transform duration-300 group-hover/logo:scale-110">
-                <img 
-                  src="/logo.png" 
-                  alt="IFClite Logo" 
+                <img
+                  src="/logo.png"
+                  alt="IFClite Logo"
                   className="h-28 w-auto drop-shadow-lg"
                 />
               </div>
@@ -504,11 +533,10 @@ export function ViewportContainer() {
             <button
               onClick={() => webgpu.supported && fileInputRef.current?.click()}
               disabled={!webgpu.supported || webgpu.checking}
-              className={`group w-full flex items-center justify-center gap-3 px-6 py-3 font-mono text-sm border transition-all ${
-                !webgpu.supported || webgpu.checking
+              className={`group w-full flex items-center justify-center gap-3 px-6 py-3 font-mono text-sm border transition-all ${!webgpu.supported || webgpu.checking
                   ? 'border-zinc-200 dark:border-[#3b4261]/50 text-zinc-300 dark:text-[#565f89]/50 cursor-not-allowed'
                   : 'border-zinc-300 dark:border-[#3b4261] text-zinc-600 dark:text-[#a9b1d6] hover:border-primary hover:text-primary cursor-pointer'
-              }`}
+                }`}
             >
               <Upload className={`h-4 w-4 transition-transform ${webgpu.supported ? 'group-hover:-translate-y-0.5' : ''}`} />
               <span>{webgpu.checking ? 'Checking WebGPU...' : webgpu.supported ? 'Open .ifc file' : 'WebGPU Required'}</span>
@@ -526,8 +554,8 @@ export function ViewportContainer() {
               { icon: Layers, label: "Filter", desc: "Isolate storeys", accentClass: 'text-purple-500 dark:text-[#bb9af7]' },
               { icon: Info, label: "Analyze", desc: "View properties", accentClass: 'text-cyan-500 dark:text-[#7dcfff]' }
             ].map((feature, i) => (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className="p-4 flex items-center gap-4 bg-zinc-100 dark:bg-[#1f2335] border border-zinc-300 dark:border-[#3b4261]"
               >
                 <div className={`p-2 bg-white dark:bg-[#16161e] border border-zinc-300 dark:border-[#3b4261] ${feature.accentClass}`}>
@@ -580,6 +608,7 @@ export function ViewportContainer() {
 
       <Viewport
         geometry={filteredGeometry}
+        geometryVersion={geometryVersion}
         coordinateInfo={mergedGeometryResult?.coordinateInfo}
         computedIsolatedIds={computedIsolatedIds}
         modelIdToIndex={modelIdToIndex}
@@ -587,7 +616,7 @@ export function ViewportContainer() {
       <ViewportOverlays />
       <ToolOverlays />
       <BasketPresentationDock />
-      <Section2DPanel 
+      <Section2DPanel
         mergedGeometry={mergedGeometryResult}
         computedIsolatedIds={computedIsolatedIds}
         modelIdToIndex={modelIdToIndex}

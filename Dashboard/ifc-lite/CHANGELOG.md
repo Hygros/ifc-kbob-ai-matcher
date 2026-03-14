@@ -1,5 +1,279 @@
 # @ifc-lite/viewer
 
+## 1.16.0
+
+### Minor Changes
+
+- [#368](https://github.com/louistrue/ifc-lite/pull/368) [`0f9d20c`](https://github.com/louistrue/ifc-lite/commit/0f9d20c3b1d3cd88abffc27a2b88a234ef8c74c8) Thanks [@louistrue](https://github.com/louistrue)! - Use Material Symbols IFC class icons in hierarchy panel for improved visual clarity
+
+### Patch Changes
+
+- [#368](https://github.com/louistrue/ifc-lite/pull/368) [`0f9d20c`](https://github.com/louistrue/ifc-lite/commit/0f9d20c3b1d3cd88abffc27a2b88a234ef8c74c8) Thanks [@louistrue](https://github.com/louistrue)! - Add double-escape keyboard shortcut to close all panels and return to starting view
+
+- [#368](https://github.com/louistrue/ifc-lite/pull/368) [`0f9d20c`](https://github.com/louistrue/ifc-lite/commit/0f9d20c3b1d3cd88abffc27a2b88a234ef8c74c8) Thanks [@louistrue](https://github.com/louistrue)! - Refactor internals across parser, renderer, export, and viewer packages
+
+- [#368](https://github.com/louistrue/ifc-lite/pull/368) [`0f9d20c`](https://github.com/louistrue/ifc-lite/commit/0f9d20c3b1d3cd88abffc27a2b88a234ef8c74c8) Thanks [@louistrue](https://github.com/louistrue)! - Show all package versions in viewer
+
+- Updated dependencies [[`0f9d20c`](https://github.com/louistrue/ifc-lite/commit/0f9d20c3b1d3cd88abffc27a2b88a234ef8c74c8), [`0f9d20c`](https://github.com/louistrue/ifc-lite/commit/0f9d20c3b1d3cd88abffc27a2b88a234ef8c74c8)]:
+  - @ifc-lite/wasm@1.14.4
+  - @ifc-lite/parser@2.1.1
+  - @ifc-lite/renderer@1.14.4
+  - @ifc-lite/export@1.15.1
+
+## 1.15.0
+
+### Minor Changes
+
+- [#354](https://github.com/louistrue/ifc-lite/pull/354) [`3f212f1`](https://github.com/louistrue/ifc-lite/commit/3f212f1e24b896cbc6ff63444c02635a1128ba3f) Thanks [@louistrue](https://github.com/louistrue)! - Include IfcSpace elements in storey isolation and add combinable class/type/storey filters
+
+### Patch Changes
+
+- [#354](https://github.com/louistrue/ifc-lite/pull/354) [`3f212f1`](https://github.com/louistrue/ifc-lite/commit/3f212f1e24b896cbc6ff63444c02635a1128ba3f) Thanks [@louistrue](https://github.com/louistrue)! - Fix viewer.isolate() hiding everything when passed spatial structure elements like storeys
+
+- [#354](https://github.com/louistrue/ifc-lite/pull/354) [`3f212f1`](https://github.com/louistrue/ifc-lite/commit/3f212f1e24b896cbc6ff63444c02635a1128ba3f) Thanks [@louistrue](https://github.com/louistrue)! - Add dynamic IFCX schema import detection for IFC5 export
+
+- [#354](https://github.com/louistrue/ifc-lite/pull/354) [`3f212f1`](https://github.com/louistrue/ifc-lite/commit/3f212f1e24b896cbc6ff63444c02635a1128ba3f) Thanks [@louistrue](https://github.com/louistrue)! - Fix mutation state not resetting when opening a new file
+
+- Updated dependencies [[`3f212f1`](https://github.com/louistrue/ifc-lite/commit/3f212f1e24b896cbc6ff63444c02635a1128ba3f), [`3f212f1`](https://github.com/louistrue/ifc-lite/commit/3f212f1e24b896cbc6ff63444c02635a1128ba3f), [`40bf3d0`](https://github.com/louistrue/ifc-lite/commit/40bf3d00cb5d5ef3512b96cd5e066442adcaab87), [`3f212f1`](https://github.com/louistrue/ifc-lite/commit/3f212f1e24b896cbc6ff63444c02635a1128ba3f)]:
+  - @ifc-lite/ids@1.14.4
+  - @ifc-lite/export@1.15.0
+  - @ifc-lite/parser@2.1.0
+  - @ifc-lite/encoding@1.14.4
+  - @ifc-lite/lists@1.14.4
+
+## 1.14.4
+
+### Patch Changes
+
+- [#339](https://github.com/louistrue/ifc-lite/pull/339) [`691f8a5`](https://github.com/louistrue/ifc-lite/commit/691f8a57ad51c0649de0dbcd17f4b7ecd48e7da7) Thanks [@louistrue](https://github.com/louistrue)! - Expose the Script Editor from a new Panels menu and consolidate auxiliary panel toggles in the viewer toolbar.
+
+- Updated dependencies [[`ba9040c`](https://github.com/louistrue/ifc-lite/commit/ba9040c6ff3204f3a936dd2f481c4cd8a4e6f5b5)]:
+  - @ifc-lite/parser@2.0.0
+  - @ifc-lite/export@1.14.4
+  - @ifc-lite/query@1.14.4
+
+## 1.14.3
+
+### Patch Changes
+
+- Updated dependencies [[`07851b2`](https://github.com/louistrue/ifc-lite/commit/07851b2161b4cfcaa2dfc1b0f31a6fcc2db99e45), [`041ddb4`](https://github.com/louistrue/ifc-lite/commit/041ddb4a40c7e23b08fb7b7ce42690a9cc9708a0), [`041ddb4`](https://github.com/louistrue/ifc-lite/commit/041ddb4a40c7e23b08fb7b7ce42690a9cc9708a0), [`041ddb4`](https://github.com/louistrue/ifc-lite/commit/041ddb4a40c7e23b08fb7b7ce42690a9cc9708a0)]:
+  - @ifc-lite/mutations@1.14.3
+  - @ifc-lite/wasm@1.14.3
+  - @ifc-lite/sandbox@1.14.3
+  - @ifc-lite/geometry@1.14.3
+  - @ifc-lite/export@1.14.3
+  - @ifc-lite/bcf@1.14.3
+  - @ifc-lite/cache@1.14.3
+  - @ifc-lite/data@1.14.3
+  - @ifc-lite/drawing-2d@1.14.3
+  - @ifc-lite/encoding@1.14.3
+  - @ifc-lite/ids@1.14.3
+  - @ifc-lite/lens@1.14.3
+  - @ifc-lite/lists@1.14.3
+  - @ifc-lite/parser@1.14.3
+  - @ifc-lite/query@1.14.3
+  - @ifc-lite/renderer@1.14.3
+  - @ifc-lite/server-client@1.14.3
+  - @ifc-lite/spatial@1.14.3
+
+## 1.14.2
+
+### Patch Changes
+
+- Updated dependencies [[`740f7a7`](https://github.com/louistrue/ifc-lite/commit/740f7a7228413657d13014565d9e457f0e00e8a3), [`740f7a7`](https://github.com/louistrue/ifc-lite/commit/740f7a7228413657d13014565d9e457f0e00e8a3)]:
+  - @ifc-lite/export@1.14.2
+  - @ifc-lite/parser@1.14.2
+  - @ifc-lite/bcf@1.14.2
+  - @ifc-lite/cache@1.14.2
+  - @ifc-lite/data@1.14.2
+  - @ifc-lite/drawing-2d@1.14.2
+  - @ifc-lite/encoding@1.14.2
+  - @ifc-lite/geometry@1.14.2
+  - @ifc-lite/ids@1.14.2
+  - @ifc-lite/lens@1.14.2
+  - @ifc-lite/lists@1.14.2
+  - @ifc-lite/mutations@1.14.2
+  - @ifc-lite/query@1.14.2
+  - @ifc-lite/renderer@1.14.2
+  - @ifc-lite/sandbox@1.14.2
+  - @ifc-lite/server-client@1.14.2
+  - @ifc-lite/spatial@1.14.2
+  - @ifc-lite/wasm@1.14.2
+
+## 1.14.1
+
+### Patch Changes
+
+- Updated dependencies [[`efb5c82`](https://github.com/louistrue/ifc-lite/commit/efb5c82e5ce0567443f348d382bce922e4b270f0), [`efb5c82`](https://github.com/louistrue/ifc-lite/commit/efb5c82e5ce0567443f348d382bce922e4b270f0), [`071d251`](https://github.com/louistrue/ifc-lite/commit/071d251708388771afd288bc2ef01b4d1a074607), [`efb5c82`](https://github.com/louistrue/ifc-lite/commit/efb5c82e5ce0567443f348d382bce922e4b270f0), [`efb5c82`](https://github.com/louistrue/ifc-lite/commit/efb5c82e5ce0567443f348d382bce922e4b270f0)]:
+  - @ifc-lite/renderer@1.14.1
+  - @ifc-lite/spatial@1.14.1
+  - @ifc-lite/geometry@1.14.1
+  - @ifc-lite/wasm@1.14.1
+  - @ifc-lite/parser@1.14.1
+  - @ifc-lite/sandbox@1.14.1
+  - @ifc-lite/bcf@1.14.1
+  - @ifc-lite/cache@1.14.1
+  - @ifc-lite/data@1.14.1
+  - @ifc-lite/drawing-2d@1.14.1
+  - @ifc-lite/encoding@1.14.1
+  - @ifc-lite/export@1.14.1
+  - @ifc-lite/ids@1.14.1
+  - @ifc-lite/lens@1.14.1
+  - @ifc-lite/lists@1.14.1
+  - @ifc-lite/mutations@1.14.1
+  - @ifc-lite/query@1.14.1
+  - @ifc-lite/server-client@1.14.1
+
+## 1.14.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @ifc-lite/bcf@1.14.0
+  - @ifc-lite/cache@1.14.0
+  - @ifc-lite/data@1.14.0
+  - @ifc-lite/drawing-2d@1.14.0
+  - @ifc-lite/encoding@1.14.0
+  - @ifc-lite/export@1.14.0
+  - @ifc-lite/geometry@1.14.0
+  - @ifc-lite/ids@1.14.0
+  - @ifc-lite/lens@1.14.0
+  - @ifc-lite/lists@1.14.0
+  - @ifc-lite/mutations@1.14.0
+  - @ifc-lite/parser@1.14.0
+  - @ifc-lite/query@1.14.0
+  - @ifc-lite/renderer@1.14.0
+  - @ifc-lite/sandbox@1.14.0
+  - @ifc-lite/server-client@1.14.0
+  - @ifc-lite/spatial@1.14.0
+  - @ifc-lite/wasm@1.14.0
+
+## 1.13.0
+
+### Patch Changes
+
+- Updated dependencies [[`3bc1cda`](https://github.com/louistrue/ifc-lite/commit/3bc1cdabcff1d9992ec6799ddbd83a169152fa3c), [`3bc1cda`](https://github.com/louistrue/ifc-lite/commit/3bc1cdabcff1d9992ec6799ddbd83a169152fa3c)]:
+  - @ifc-lite/renderer@1.13.0
+  - @ifc-lite/bcf@1.13.0
+  - @ifc-lite/cache@1.13.0
+  - @ifc-lite/data@1.13.0
+  - @ifc-lite/drawing-2d@1.13.0
+  - @ifc-lite/encoding@1.13.0
+  - @ifc-lite/export@1.13.0
+  - @ifc-lite/geometry@1.13.0
+  - @ifc-lite/ids@1.13.0
+  - @ifc-lite/lens@1.13.0
+  - @ifc-lite/lists@1.13.0
+  - @ifc-lite/mutations@1.13.0
+  - @ifc-lite/parser@1.13.0
+  - @ifc-lite/query@1.13.0
+  - @ifc-lite/sandbox@1.13.0
+  - @ifc-lite/server-client@1.13.0
+  - @ifc-lite/spatial@1.13.0
+  - @ifc-lite/wasm@1.13.0
+
+## 1.12.0
+
+### Minor Changes
+
+- [#268](https://github.com/louistrue/ifc-lite/pull/268) [`2562382`](https://github.com/louistrue/ifc-lite/commit/25623821fa6d7e94b094772563811fb01ce066c7) Thanks [@louistrue](https://github.com/louistrue)! - Add IFC5 (IFCX) export with full schema conversion and USD geometry
+
+  New `Ifc5Exporter` converts IFC data from any schema (IFC2X3/IFC4/IFC4X3) to the IFC5 IFCX JSON format:
+
+  - Entity types converted to IFC5 naming (aligned with IFC4X3)
+  - Properties mapped to IFCX attribute namespaces (`bsi::ifc::prop::`)
+  - Tessellated geometry converted to USD mesh format with Z-up coordinates
+  - Spatial hierarchy mapped to IFCX path-based node structure
+  - Color and presentation exported as USD attributes
+
+  The export dialog is simplified: schema selection now drives the output format automatically (IFC5 → `.ifcx`, others → `.ifc`). No separate format picker needed.
+
+  Schema converter fixes:
+
+  - Skipped entities become IFCPROXY placeholders instead of being dropped, preventing dangling STEP references
+  - Alignment entities (IFCALIGNMENTCANT, etc.) are preserved for IFC4X3/IFC5 targets
+
+### Patch Changes
+
+- Updated dependencies [[`2562382`](https://github.com/louistrue/ifc-lite/commit/25623821fa6d7e94b094772563811fb01ce066c7)]:
+  - @ifc-lite/export@1.12.0
+  - @ifc-lite/bcf@1.12.0
+  - @ifc-lite/cache@1.12.0
+  - @ifc-lite/data@1.12.0
+  - @ifc-lite/drawing-2d@1.12.0
+  - @ifc-lite/encoding@1.12.0
+  - @ifc-lite/geometry@1.12.0
+  - @ifc-lite/ids@1.12.0
+  - @ifc-lite/lens@1.12.0
+  - @ifc-lite/lists@1.12.0
+  - @ifc-lite/mutations@1.12.0
+  - @ifc-lite/parser@1.12.0
+  - @ifc-lite/query@1.12.0
+  - @ifc-lite/renderer@1.12.0
+  - @ifc-lite/sandbox@1.12.0
+  - @ifc-lite/server-client@1.12.0
+  - @ifc-lite/spatial@1.12.0
+  - @ifc-lite/wasm@1.12.0
+
+## 1.11.3
+
+### Patch Changes
+
+- [#258](https://github.com/louistrue/ifc-lite/pull/258) [`6c5f36d`](https://github.com/louistrue/ifc-lite/commit/6c5f36ddb4ae1879788f433a45c8bab5eabeb496) Thanks [@louistrue](https://github.com/louistrue)! - Improve large-file load performance targeting ~3–5 s savings on a 326 MB IFC file.
+
+  - Replace O(total_accumulated) `.reduce()` calls in `appendGeometryBatch` with O(batch_size) incremental totals
+  - Defer data model parser to after geometry streaming completes (no main-thread CPU contention with WASM)
+  - Accumulate color updates locally during streaming; apply single `updateMeshColors()` at complete
+  - Disable IndexedDB caching for files above 150 MB (source buffer required for on-demand extraction)
+
+- Updated dependencies []:
+  - @ifc-lite/bcf@1.11.3
+  - @ifc-lite/cache@1.11.3
+  - @ifc-lite/data@1.11.3
+  - @ifc-lite/drawing-2d@1.11.3
+  - @ifc-lite/encoding@1.11.3
+  - @ifc-lite/export@1.11.3
+  - @ifc-lite/geometry@1.11.3
+  - @ifc-lite/ids@1.11.3
+  - @ifc-lite/lens@1.11.3
+  - @ifc-lite/lists@1.11.3
+  - @ifc-lite/mutations@1.11.3
+  - @ifc-lite/parser@1.11.3
+  - @ifc-lite/query@1.11.3
+  - @ifc-lite/renderer@1.11.3
+  - @ifc-lite/sandbox@1.11.3
+  - @ifc-lite/server-client@1.11.3
+  - @ifc-lite/spatial@1.11.3
+  - @ifc-lite/wasm@1.11.3
+
+## 1.11.1
+
+### Patch Changes
+
+- [#240](https://github.com/louistrue/ifc-lite/pull/240) [`a423e83`](https://github.com/louistrue/ifc-lite/commit/a423e8390afcb78f2de57203b26715df726335ed) Thanks [@louistrue](https://github.com/louistrue)! - Fix deferred IFC style colors not applying on first load by separating persistent mesh color updates from transient overlay color updates.
+
+  This restores expected glass transparency and keeps first-load and cache-load colors consistent.
+
+- Updated dependencies [[`02876ac`](https://github.com/louistrue/ifc-lite/commit/02876ac97748ca9aaabfc3e5882ef9d2a37ca437)]:
+  - @ifc-lite/geometry@1.11.1
+  - @ifc-lite/bcf@1.11.1
+  - @ifc-lite/cache@1.11.1
+  - @ifc-lite/data@1.11.1
+  - @ifc-lite/drawing-2d@1.11.1
+  - @ifc-lite/encoding@1.11.1
+  - @ifc-lite/export@1.11.1
+  - @ifc-lite/ids@1.11.1
+  - @ifc-lite/lens@1.11.1
+  - @ifc-lite/lists@1.11.1
+  - @ifc-lite/mutations@1.11.1
+  - @ifc-lite/parser@1.11.1
+  - @ifc-lite/query@1.11.1
+  - @ifc-lite/renderer@1.11.1
+  - @ifc-lite/sandbox@1.11.1
+  - @ifc-lite/server-client@1.11.1
+  - @ifc-lite/spatial@1.11.1
+  - @ifc-lite/wasm@1.11.1
+
 ## 1.11.0
 
 ### Patch Changes

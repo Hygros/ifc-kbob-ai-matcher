@@ -1,10 +1,14 @@
 import os
+import time
 
 import streamlit as st
 
 from Dashboard.config import DEFAULT_SBERT_MODEL, DEFAULT_CROSS_ENCODER_MODEL
 from Dashboard.services.ifc_pipeline import preload_sbert_resources, preload_cross_encoder_resources
 from Dashboard.services.viewer import ensure_ifclite_viewer
+
+
+VIEWER_START_RETRY_INTERVAL_SECONDS = 3.0
 
 
 def initialize_app_runtime() -> None:
@@ -27,8 +31,16 @@ def initialize_app_runtime() -> None:
         st.session_state["preloaded_cross_encoder_model"] = ce_model
 
     if "viewer_server_started" not in st.session_state:
-        viewer_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ifc-lite")
-        if not os.path.isdir(viewer_root):
-            viewer_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ifc-viewer", "ifc-lite")
-        ensure_ifclite_viewer(viewer_root, port=3000)
-        st.session_state["viewer_server_started"] = True
+        st.session_state["viewer_server_started"] = False
+    if "viewer_server_last_attempt" not in st.session_state:
+        st.session_state["viewer_server_last_attempt"] = 0.0
+
+    viewer_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ifc-lite")
+    if not os.path.isdir(viewer_root):
+        viewer_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ifc-viewer", "ifc-lite")
+
+    now = time.time()
+    last_attempt = float(st.session_state.get("viewer_server_last_attempt", 0.0) or 0.0)
+    if now - last_attempt >= VIEWER_START_RETRY_INTERVAL_SECONDS:
+        st.session_state["viewer_server_last_attempt"] = now
+        st.session_state["viewer_server_started"] = ensure_ifclite_viewer(viewer_root, port=3000)

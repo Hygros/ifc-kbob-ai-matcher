@@ -323,28 +323,8 @@ export function useMouseControls(params: UseMouseControlsParams): void {
         (tool === 'select' && e.shiftKey) ||
         (tool !== 'orbit' && tool !== 'select' && e.shiftKey));
 
-      // Set orbit pivot to what user clicks on (standard CAD/BIM behavior)
-      // Simple and predictable: orbit around clicked geometry, or model center if empty space
-      if (willOrbit && tool !== 'measure' && tool !== 'walk') {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        // Pick at cursor position - orbit around what user is clicking on
-        // Uses visibility filtering so hidden elements don't affect orbit pivot
-        const pickResult = await renderer.pick(x, y, getPickOptions());
-        if (pickResult !== null) {
-          const center = getEntityCenter(geometryRef.current, pickResult.expressId);
-          if (center) {
-            camera.setOrbitPivot(center);
-          } else {
-            camera.setOrbitPivot(null);
-          }
-        } else {
-          // No geometry under cursor - orbit around current target (model center)
-          camera.setOrbitPivot(null);
-        }
-      }
+      // Orbit center is camera.target — it stays fixed during orbit.
+      // It only changes via zoom (mouse-to-point) or object selection.
 
       if (tool === 'pan' || e.button === 1 || e.button === 2) {
         mouseState.isPanning = true;
@@ -716,6 +696,7 @@ export function useMouseControls(params: UseMouseControlsParams): void {
             selectedId: selectedEntityIdRef.current,
             selectedModelIndex: selectedModelIndexRef.current,
             clearColor: clearColorRef.current,
+            isInteracting: true,
             sectionPlane: activeToolRef.current === 'section' ? {
               ...sectionPlaneRef.current,
               min: sectionRangeRef.current?.min,
@@ -727,7 +708,9 @@ export function useMouseControls(params: UseMouseControlsParams): void {
           calculateScale();
         } else if (!renderPendingRef.current) {
           // Schedule a final render for when throttle expires
-          // This ensures we always render the final position
+          // IMPORTANT: Keep isInteracting: true during drag to prevent flickering
+          // caused by post-processing toggling on/off between throttled frames.
+          // Post-processing is restored on mouseup (non-interacting render).
           renderPendingRef.current = true;
           requestAnimationFrame(() => {
             renderPendingRef.current = false;
@@ -737,6 +720,7 @@ export function useMouseControls(params: UseMouseControlsParams): void {
               selectedId: selectedEntityIdRef.current,
               selectedModelIndex: selectedModelIndexRef.current,
               clearColor: clearColorRef.current,
+              isInteracting: true,
               sectionPlane: activeToolRef.current === 'section' ? {
                 ...sectionPlaneRef.current,
                 min: sectionRangeRef.current?.min,
@@ -853,8 +837,6 @@ export function useMouseControls(params: UseMouseControlsParams): void {
       mouseState.isDragging = false;
       mouseState.isPanning = false;
       canvas.style.cursor = tool === 'pan' ? 'grab' : (tool === 'orbit' ? 'grab' : (tool === 'measure' ? 'crosshair' : 'default'));
-      // Clear orbit pivot after each orbit operation
-      camera.setOrbitPivot(null);
     };
 
     const handleMouseLeave = () => {
@@ -862,7 +844,6 @@ export function useMouseControls(params: UseMouseControlsParams): void {
       mouseState.isDragging = false;
       mouseState.isPanning = false;
       camera.stopInertia();
-      camera.setOrbitPivot(null);
       // Restore cursor based on active tool
       if (tool === 'measure') {
         canvas.style.cursor = 'crosshair';
@@ -890,18 +871,56 @@ export function useMouseControls(params: UseMouseControlsParams): void {
       const mouseX = e.clientX - rect.left;
       const mouseY = e.clientY - rect.top;
       camera.zoom(e.deltaY, false, mouseX, mouseY, canvas.width, canvas.height);
-      renderer.render({
-        hiddenIds: hiddenEntitiesRef.current,
-        isolatedIds: isolatedEntitiesRef.current,
-        selectedId: selectedEntityIdRef.current,
-        selectedModelIndex: selectedModelIndexRef.current,
-        clearColor: clearColorRef.current,
-        sectionPlane: activeToolRef.current === 'section' ? {
-          ...sectionPlaneRef.current,
-          min: sectionRangeRef.current?.min,
-          max: sectionRangeRef.current?.max,
-        } : undefined,
-      });
+
+      // PERFORMANCE: Adaptive throttle for wheel zoom (same as orbit)
+      // Without this, every wheel event triggers a synchronous render —
+      // wheel events fire at 60-120Hz which overwhelms the GPU on large models.
+      const meshCount = geometryRef.current?.length ?? 0;
+      const throttleMs = meshCount > 50000 ? RENDER_THROTTLE_MS_HUGE
+        : meshCount > 10000 ? RENDER_THROTTLE_MS_LARGE
+          : RENDER_THROTTLE_MS_SMALL;
+
+      const now = performance.now();
+      if (now - lastRenderTimeRef.current >= throttleMs) {
+        lastRenderTimeRef.current = now;
+        renderer.render({
+          hiddenIds: hiddenEntitiesRef.current,
+          isolatedIds: isolatedEntitiesRef.current,
+          selectedId: selectedEntityIdRef.current,
+          selectedModelIndex: selectedModelIndexRef.current,
+          clearColor: clearColorRef.current,
+          isInteracting: true,
+          sectionPlane: activeToolRef.current === 'section' ? {
+            ...sectionPlaneRef.current,
+            min: sectionRangeRef.current?.min,
+            max: sectionRangeRef.current?.max,
+          } : undefined,
+        });
+        calculateScale();
+      } else if (!renderPendingRef.current) {
+        // Schedule a final render to ensure we always render the last zoom position
+        // IMPORTANT: Keep isInteracting: true to prevent flickering from post-processing
+        // toggling. Post-processing is restored by the zoom idle timer below.
+        renderPendingRef.current = true;
+        requestAnimationFrame(() => {
+          renderPendingRef.current = false;
+          renderer.render({
+            hiddenIds: hiddenEntitiesRef.current,
+            isolatedIds: isolatedEntitiesRef.current,
+            selectedId: selectedEntityIdRef.current,
+            selectedModelIndex: selectedModelIndexRef.current,
+            clearColor: clearColorRef.current,
+            isInteracting: true,
+            sectionPlane: activeToolRef.current === 'section' ? {
+              ...sectionPlaneRef.current,
+              min: sectionRangeRef.current?.min,
+              max: sectionRangeRef.current?.max,
+            } : undefined,
+          });
+          calculateScale();
+        });
+      }
+
       // Update measurement screen coordinates immediately during zoom (only in measure mode)
       if (activeToolRef.current === 'measure') {
         if (hasPendingMeasurements()) {
@@ -921,7 +940,6 @@ export function useMouseControls(params: UseMouseControlsParams): void {
           };
         }
       }
-      calculateScale();
     };
 
     // Click handling

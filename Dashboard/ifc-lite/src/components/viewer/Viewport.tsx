@@ -40,15 +40,39 @@ import { useRenderUpdates } from './useRenderUpdates.js';
 
 interface ViewportProps {
   geometry: MeshData[] | null;
+  /** Monotonic counter that increments when geometry changes — used to trigger
+   *  streaming effects even when the geometry array reference is stable. */
+  geometryVersion?: number;
   coordinateInfo?: CoordinateInfo;
   computedIsolatedIds?: Set<number> | null;
   modelIdToIndex?: Map<string, number>;
 }
 
-export function Viewport({ geometry, coordinateInfo, computedIsolatedIds, modelIdToIndex }: ViewportProps) {
+export function Viewport({ geometry, geometryVersion, coordinateInfo, computedIsolatedIds, modelIdToIndex }: ViewportProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<Renderer | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+
+  const focusViewportForKeyboardShortcuts = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const activeElement = document.activeElement;
+    if (activeElement instanceof HTMLElement && activeElement !== canvas) {
+      const isEditable =
+        activeElement.tagName === 'INPUT' ||
+        activeElement.tagName === 'TEXTAREA' ||
+        activeElement.isContentEditable;
+
+      if (isEditable) {
+        activeElement.blur();
+      }
+    }
+
+    if (document.activeElement !== canvas) {
+      canvas.focus({ preventScroll: true });
+    }
+  }, []);
 
   // Selection state
   const { selectedEntityId, selectedEntityIds, setSelectedEntityId, setSelectedEntity, toggleSelection, models } = useSelectionState();
@@ -102,6 +126,30 @@ export function Viewport({ geometry, coordinateInfo, computedIsolatedIds, modelI
   // (useMouseControls/useTouchControls capture this at effect setup time)
   const handlePickForSelectionRef = useRef(handlePickForSelection);
   useEffect(() => { handlePickForSelectionRef.current = handlePickForSelection; }, [handlePickForSelection]);
+
+  // Update orbit center when selection changes.
+  // When an object is selected, orbit center silently moves to its center
+  // (no camera movement — only affects future orbit rotation).
+  // When deselected, clear orbit center so orbit uses camera.target instead.
+  useEffect(() => {
+    const renderer = rendererRef.current;
+    if (!renderer || !isInitialized) return;
+    const camera = renderer.getCamera();
+    const orbitPivot = selectedEntityId !== null
+      ? (getEntityCenter(geometry, selectedEntityId) ?? null)
+      : null;
+
+    const cameraWithCompat = camera as typeof camera & {
+      setOrbitPivot?: (pivot: { x: number; y: number; z: number } | null) => void;
+      setOrbitCenter?: (center: { x: number; y: number; z: number } | null) => void;
+    };
+
+    if (typeof cameraWithCompat.setOrbitPivot === 'function') {
+      cameraWithCompat.setOrbitPivot(orbitPivot);
+    } else if (typeof cameraWithCompat.setOrbitCenter === 'function') {
+      cameraWithCompat.setOrbitCenter(orbitPivot);
+    }
+  }, [selectedEntityId, isInitialized, geometry]);
 
   // Multi-select handler: Ctrl+Click adds/removes from multi-selection
   // Properly populates both selectedEntitiesSet (multi-model) and selectedEntityIds (legacy)
@@ -482,7 +530,19 @@ export function Viewport({ geometry, coordinateInfo, computedIsolatedIds, modelI
     canvas.width = width;
     canvas.height = height;
 
-    const renderer = new Renderer(canvas);
+    let renderer: Renderer;
+    try {
+      renderer = new Renderer(canvas);
+    } catch (error) {
+      console.error('[Viewport] Failed to create renderer', error);
+      return () => {
+        aborted = true;
+        setIsInitialized(false);
+        rendererRef.current = null;
+        clearGlobalRefs();
+      };
+    }
+
     rendererRef.current = renderer;
 
     // Register refs for BCF hook access (snapshot capture, camera control)
@@ -629,6 +689,12 @@ export function Viewport({ geometry, coordinateInfo, computedIsolatedIds, modelI
 
       // Initial render
       renderCurrent();
+    }).catch((error) => {
+      console.error('[Viewport] Renderer initialization failed', error);
+      if (aborted) return;
+      setIsInitialized(false);
+      rendererRef.current = null;
+      clearGlobalRefs();
     });
 
     return () => {
@@ -789,6 +855,7 @@ export function Viewport({ geometry, coordinateInfo, computedIsolatedIds, modelI
     rendererRef,
     isInitialized,
     geometry,
+    geometryVersion,
     coordinateInfo,
     isStreaming,
     geometryBoundsRef,
@@ -831,7 +898,9 @@ export function Viewport({ geometry, coordinateInfo, computedIsolatedIds, modelI
     <canvas
       ref={canvasRef}
       data-viewport="main"
+      tabIndex={-1}
       className="w-full h-full block"
+      onPointerDown={focusViewportForKeyboardShortcuts}
     />
   );
 }

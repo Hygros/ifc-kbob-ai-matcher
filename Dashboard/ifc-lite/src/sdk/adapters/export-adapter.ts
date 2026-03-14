@@ -5,13 +5,35 @@
 import type { StoreApi } from './types.js';
 import type { EntityRef, EntityData, PropertySetData, QuantitySetData, ExportBackendMethods } from '@ifc-lite/sdk';
 import { EntityNode } from '@ifc-lite/query';
-import { getModelForRef } from './model-compat.js';
+import { StepExporter, type StepExportOptions } from '@ifc-lite/export';
+import { getModelForRef, LEGACY_MODEL_ID } from './model-compat.js';
+import { applyAttributeMutationsToEntityData, getMutationViewForModel } from './mutation-view.js';
 
 /** Options for CSV export */
 interface CsvOptions {
   columns: string[];
   separator?: string;
   filename?: string;
+}
+
+
+/** Options for IFC STEP export */
+interface IfcExportOptions {
+  schema?: 'IFC2X3' | 'IFC4' | 'IFC4X3';
+  filename?: string;
+  includeMutations?: boolean;
+  visibleOnly?: boolean;
+}
+
+/** Validate that a value is an IfcExportOptions object. */
+function isIfcExportOptions(v: unknown): v is IfcExportOptions {
+  if (v === null || typeof v !== 'object') return false;
+  const options = v as IfcExportOptions;
+  if (options.schema !== undefined && options.schema !== 'IFC2X3' && options.schema !== 'IFC4' && options.schema !== 'IFC4X3') return false;
+  if (options.filename !== undefined && typeof options.filename !== 'string') return false;
+  if (options.includeMutations !== undefined && typeof options.includeMutations !== 'boolean') return false;
+  if (options.visibleOnly !== undefined && typeof options.visibleOnly !== 'boolean') return false;
+  return true;
 }
 
 /**
@@ -57,6 +79,28 @@ function normalizeRefs(raw: unknown[]): EntityRef[] {
   });
 }
 
+export function resolveVisibilityFilterSets(
+  state: StoreApi['getState'] extends () => infer T ? T : never,
+  modelId: string,
+  selectedExpressIds: Set<number>,
+  entityCount: number,
+): { visibleOnly: boolean; hiddenEntityIds: Set<number>; isolatedEntityIds: Set<number> | null } {
+  const shouldLimitToSelection = selectedExpressIds.size < entityCount;
+  const isLegacyModel = state.models.size === 0 && (modelId === LEGACY_MODEL_ID || modelId === 'legacy');
+  const modelHidden = state.hiddenEntitiesByModel.get(modelId) ?? (isLegacyModel ? state.hiddenEntities : undefined);
+  const modelIsolated = state.isolatedEntitiesByModel.get(modelId) ?? (isLegacyModel ? state.isolatedEntities : null);
+
+  return {
+    visibleOnly: shouldLimitToSelection,
+    hiddenEntityIds: shouldLimitToSelection
+      ? new Set<number>()
+      : new Set<number>(modelHidden ?? []),
+    isolatedEntityIds: shouldLimitToSelection
+      ? selectedExpressIds
+      : modelIsolated,
+  };
+}
+
 /**
  * Escape a CSV cell value — wrap in quotes if it contains the separator,
  * double-quotes, or newlines.
@@ -83,14 +127,14 @@ export function createExportAdapter(store: StoreApi): ExportBackendMethods {
     if (!model?.ifcDataStore) return null;
 
     const node = new EntityNode(model.ifcDataStore, ref.expressId);
-    return {
+    return applyAttributeMutationsToEntityData(store, ref.modelId, ref.expressId, {
       ref,
       globalId: node.globalId,
       name: node.name,
       type: node.type,
       description: node.description,
       objectType: node.objectType,
-    };
+    });
   }
 
   /** Resolve property sets for an entity */
@@ -264,7 +308,68 @@ export function createExportAdapter(store: StoreApi): ExportBackendMethods {
       return result;
     },
 
-    download(content: string, filename: string, mimeType?: string) {
+    ifc(rawRefs: unknown, rawOptions: unknown) {
+      const candidateOptions = rawOptions ?? {};
+      if (!isEntityRefArray(rawRefs)) {
+        throw new Error('export.ifc: first argument must be an array of entity references');
+      }
+      if (!isIfcExportOptions(candidateOptions)) {
+        throw new Error('export.ifc: second argument must be { schema?: IFC2X3|IFC4|IFC4X3, filename?: string, includeMutations?: boolean, visibleOnly?: boolean }');
+      }
+
+      const refs = normalizeRefs(rawRefs);
+      if (refs.length === 0) {
+        throw new Error('export.ifc: expected at least one entity reference');
+      }
+
+      const modelIds = new Set(refs.map(ref => ref.modelId));
+      if (modelIds.size !== 1) {
+        throw new Error('export.ifc: all entity references must belong to the same model');
+      }
+
+      const modelId = refs[0].modelId;
+      const state = store.getState();
+      const model = getModelForRef(state, modelId);
+      if (!model?.ifcDataStore) {
+        throw new Error(`export.ifc: model '${modelId}' is not loaded`);
+      }
+
+      if (model.ifcDataStore.schemaVersion === 'IFC5') {
+        throw new Error('export.ifc: IFC5 export is not supported by STEP exporter, use IFC2X3/IFC4/IFC4X3 models');
+      }
+
+      const options = candidateOptions;
+      const selectedExpressIds = new Set(refs.map(ref => ref.expressId));
+      const visibilityFilters = resolveVisibilityFilterSets(
+        state,
+        modelId,
+        selectedExpressIds,
+        model.ifcDataStore.entityCount,
+      );
+      const visibleOnly = options.visibleOnly === true || visibilityFilters.visibleOnly;
+      const hiddenEntityIds = visibleOnly ? visibilityFilters.hiddenEntityIds : new Set<number>();
+      const isolatedEntityIds = visibleOnly ? visibilityFilters.isolatedEntityIds : null;
+
+      const exporter = new StepExporter(
+        model.ifcDataStore,
+        options.includeMutations === false ? undefined : getMutationViewForModel(store, modelId) ?? undefined,
+      );
+      const exportOptions: StepExportOptions = {
+        schema: options.schema ?? model.ifcDataStore.schemaVersion,
+        includeGeometry: true,
+        includeProperties: true,
+        includeQuantities: true,
+        includeRelationships: true,
+        applyMutations: options.includeMutations ?? true,
+        visibleOnly,
+        hiddenEntityIds,
+        isolatedEntityIds,
+      };
+
+      return exporter.export(exportOptions).content;
+    },
+
+    download(content: string | Uint8Array, filename: string, mimeType?: string) {
       triggerDownload(content, filename, mimeType ?? 'text/plain');
       return undefined;
     },
@@ -272,7 +377,10 @@ export function createExportAdapter(store: StoreApi): ExportBackendMethods {
 }
 
 /** Trigger a browser file download */
-function triggerDownload(content: string, filename: string, mimeType: string): void {
+function triggerDownload(content: string | Uint8Array, filename: string, mimeType: string): void {
+  if (typeof document === 'undefined') {
+    throw new Error('download() requires a browser environment (document is unavailable)');
+  }
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

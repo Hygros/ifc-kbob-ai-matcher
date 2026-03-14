@@ -36,7 +36,9 @@ import {
   ClipboardCheck,
   Palette,
   Orbit,
+  Layout,
   LayoutTemplate,
+  FileCode2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -67,8 +69,10 @@ import { ExportChangesButton } from './ExportChangesButton';
 import { useFloorplanView } from '@/hooks/useFloorplanView';
 import { recordRecentFiles, cacheFileBlobs } from '@/lib/recent-files';
 import { ThemeSwitch } from './ThemeSwitch';
+import { toast } from '@/components/ui/toast';
 
 type Tool = 'select' | 'pan' | 'orbit' | 'walk' | 'measure' | 'section';
+type WorkspacePanel = 'script' | 'list' | 'bcf' | 'ids' | 'lens';
 
 // #region FIX: Move ToolButton OUTSIDE MainToolbar to prevent recreation on every render
 // This fixes Radix UI Tooltip's asChild prop becoming stale during re-renders
@@ -175,13 +179,11 @@ export function MainToolbar({ onShowShortcuts }: MainToolbarProps = {} as MainTo
   const toggleTypeVisibility = useViewerStore((state) => state.toggleTypeVisibility);
   const resetViewerState = useViewerStore((state) => state.resetViewerState);
   const bcfPanelVisible = useViewerStore((state) => state.bcfPanelVisible);
-  const toggleBcfPanel = useViewerStore((state) => state.toggleBcfPanel);
   const setBcfPanelVisible = useViewerStore((state) => state.setBcfPanelVisible);
   const idsPanelVisible = useViewerStore((state) => state.idsPanelVisible);
-  const toggleIdsPanel = useViewerStore((state) => state.toggleIdsPanel);
   const setIdsPanelVisible = useViewerStore((state) => state.setIdsPanelVisible);
   const listPanelVisible = useViewerStore((state) => state.listPanelVisible);
-  const toggleListPanel = useViewerStore((state) => state.toggleListPanel);
+  const setListPanelVisible = useViewerStore((state) => state.setListPanelVisible);
   const setRightPanelCollapsed = useViewerStore((state) => state.setRightPanelCollapsed);
   const projectionMode = useViewerStore((state) => state.projectionMode);
   const toggleProjectionMode = useViewerStore((state) => state.toggleProjectionMode);
@@ -192,40 +194,74 @@ export function MainToolbar({ onShowShortcuts }: MainToolbarProps = {} as MainTo
   const toggleBasketPresentationVisible = useViewerStore((state) => state.toggleBasketPresentationVisible);
   // Lens state
   const lensPanelVisible = useViewerStore((state) => state.lensPanelVisible);
-  const toggleLensPanel = useViewerStore((state) => state.toggleLensPanel);
   const setLensPanelVisible = useViewerStore((state) => state.setLensPanelVisible);
+  const scriptPanelVisible = useViewerStore((state) => state.scriptPanelVisible);
+  const setScriptPanelVisible = useViewerStore((state) => state.setScriptPanelVisible);
 
-  // Check which type geometries exist across ALL loaded models (federation-aware)
+  // Check which type geometries exist across ALL loaded models (federation-aware).
+  // PERF: Use meshes.length as dep proxy instead of full geometryResult, and
+  // scan incrementally — once a type is found it stays found, so we only scan
+  // NEW meshes since the last check. Per-model cursors ensure federated models
+  // each track their own scan position independently.
+  const typeGeomScanRef = useRef({
+    spaces: false, openings: false, site: false,
+    legacyLastLen: 0,
+    modelLastLen: new Map<string | number, number>(),
+  });
+  const meshLen = geometryResult?.meshes.length ?? 0;
   const typeGeometryExists = useMemo(() => {
-    const result = { spaces: false, openings: false, site: false };
+    const scan = typeGeomScanRef.current;
 
-    // Check all federated models
+    // Reset if legacy meshes array shrunk (new file loaded)
+    if (meshLen < scan.legacyLastLen) {
+      scan.spaces = false;
+      scan.openings = false;
+      scan.site = false;
+      scan.legacyLastLen = 0;
+      scan.modelLastLen.clear();
+    }
+
+    // Already found all types — nothing to do
+    if (scan.spaces && scan.openings && scan.site) {
+      return { spaces: scan.spaces, openings: scan.openings, site: scan.site };
+    }
+
+    // Check federated models (scan only new meshes per model)
     if (models.size > 0) {
-      for (const [, model] of models) {
+      for (const [modelId, model] of models) {
         const meshes = model.geometryResult?.meshes;
         if (!meshes) continue;
-        for (const m of meshes) {
-          if (m.ifcType === 'IfcSpace') result.spaces = true;
-          else if (m.ifcType === 'IfcOpeningElement') result.openings = true;
-          else if (m.ifcType === 'IfcSite') result.site = true;
-          // Early exit if all found
-          if (result.spaces && result.openings && result.site) return result;
+        const modelStart = scan.modelLastLen.get(modelId) ?? 0;
+        // Reset cursor if model was reloaded (mesh array shrunk)
+        const start = meshes.length < modelStart ? 0 : modelStart;
+        for (let i = start; i < meshes.length; i++) {
+          const t = meshes[i].ifcType;
+          if (t === 'IfcSpace') scan.spaces = true;
+          else if (t === 'IfcOpeningElement') scan.openings = true;
+          else if (t === 'IfcSite') scan.site = true;
+          if (scan.spaces && scan.openings && scan.site) break;
         }
+        scan.modelLastLen.set(modelId, meshes.length);
+        if (scan.spaces && scan.openings && scan.site) break;
       }
     }
 
-    // Fallback: also check legacy single-model geometryResult
+    // Legacy single-model path (scan only new meshes)
     if (geometryResult?.meshes) {
-      for (const m of geometryResult.meshes) {
-        if (m.ifcType === 'IfcSpace') result.spaces = true;
-        else if (m.ifcType === 'IfcOpeningElement') result.openings = true;
-        else if (m.ifcType === 'IfcSite') result.site = true;
-        if (result.spaces && result.openings && result.site) return result;
+      const meshes = geometryResult.meshes;
+      for (let i = scan.legacyLastLen; i < meshes.length; i++) {
+        const t = meshes[i].ifcType;
+        if (t === 'IfcSpace') scan.spaces = true;
+        else if (t === 'IfcOpeningElement') scan.openings = true;
+        else if (t === 'IfcSite') scan.site = true;
+        if (scan.spaces && scan.openings && scan.site) break;
       }
     }
 
-    return result;
-  }, [models, geometryResult]);
+    scan.legacyLastLen = meshLen;
+    return { spaces: scan.spaces, openings: scan.openings, site: scan.site };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- meshLen is a stable proxy for geometryResult
+  }, [models, meshLen]);
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -327,12 +363,66 @@ export function MainToolbar({ onShowShortcuts }: MainToolbarProps = {} as MainTo
     goHomeFromStore();
   }, []);
 
+  const handleToggleBottomPanel = useCallback((panel: 'script' | 'list') => {
+    const isScriptPanel = panel === 'script';
+    const nextScriptVisible = isScriptPanel ? !scriptPanelVisible : false;
+    const nextListVisible = isScriptPanel ? false : !listPanelVisible;
+
+    setScriptPanelVisible(nextScriptVisible);
+    setListPanelVisible(nextListVisible);
+
+    if (nextScriptVisible || nextListVisible) {
+      setRightPanelCollapsed(false);
+    }
+  }, [listPanelVisible, scriptPanelVisible, setListPanelVisible, setRightPanelCollapsed, setScriptPanelVisible]);
+
+  const handleToggleRightPanel = useCallback((panel: 'bcf' | 'ids' | 'lens') => {
+    const nextBcfVisible = panel === 'bcf' ? !bcfPanelVisible : false;
+    const nextIdsVisible = panel === 'ids' ? !idsPanelVisible : false;
+    const nextLensVisible = panel === 'lens' ? !lensPanelVisible : false;
+
+    setBcfPanelVisible(nextBcfVisible);
+    setIdsPanelVisible(nextIdsVisible);
+    setLensPanelVisible(nextLensVisible);
+
+    if (nextBcfVisible || nextIdsVisible || nextLensVisible) {
+      setRightPanelCollapsed(false);
+    }
+  }, [
+    bcfPanelVisible,
+    idsPanelVisible,
+    lensPanelVisible,
+    setBcfPanelVisible,
+    setIdsPanelVisible,
+    setLensPanelVisible,
+    setRightPanelCollapsed,
+  ]);
+
+  const activeWorkspacePanels = useMemo(() => {
+    const panels = new Set<WorkspacePanel>();
+    if (scriptPanelVisible) panels.add('script');
+    if (listPanelVisible) panels.add('list');
+    if (bcfPanelVisible) panels.add('bcf');
+    if (idsPanelVisible) panels.add('ids');
+    if (lensPanelVisible) panels.add('lens');
+    return panels;
+  }, [bcfPanelVisible, idsPanelVisible, lensPanelVisible, listPanelVisible, scriptPanelVisible]);
+
+  const workspacePanelLabel = useMemo(() => {
+    if (activeWorkspacePanels.size === 0) return null;
+    if (activeWorkspacePanels.size > 1) return 'Multiple Panels';
+    if (activeWorkspacePanels.has('script')) return 'Script Editor';
+    if (activeWorkspacePanels.has('list')) return 'Lists';
+    if (activeWorkspacePanels.has('bcf')) return 'BCF Issues';
+    if (activeWorkspacePanels.has('ids')) return 'IDS Validation';
+    return 'Lens Rules';
+  }, [activeWorkspacePanels]);
+
   const handleExportGLB = useCallback(() => {
     if (!geometryResult) return;
     try {
       const exporter = new GLTFExporter(geometryResult);
       const glb = exporter.exportGLB({ includeMetadata: true });
-      // Create a new Uint8Array from the buffer to ensure correct typing
       const blob = new Blob([new Uint8Array(glb)], { type: 'model/gltf-binary' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -340,8 +430,10 @@ export function MainToolbar({ onShowShortcuts }: MainToolbarProps = {} as MainTo
       a.download = 'model.glb';
       a.click();
       URL.revokeObjectURL(url);
+      toast.success(`Exported GLB (${(blob.size / 1024).toFixed(0)} KB)`);
     } catch (err) {
       console.error('Export failed:', err);
+      toast.error(`GLB export failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   }, [geometryResult]);
 
@@ -354,8 +446,10 @@ export function MainToolbar({ onShowShortcuts }: MainToolbarProps = {} as MainTo
       a.href = dataUrl;
       a.download = 'screenshot.png';
       a.click();
+      toast.success('Screenshot saved');
     } catch (err) {
       console.error('Screenshot failed:', err);
+      toast.error('Screenshot failed');
     }
   }, []);
 
@@ -392,15 +486,16 @@ export function MainToolbar({ onShowShortcuts }: MainToolbarProps = {} as MainTo
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
+      toast.success(`Exported ${type} CSV`);
     } catch (err) {
       console.error('CSV export failed:', err);
+      toast.error(`CSV export failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   }, [ifcDataStore]);
 
   const handleExportJSON = useCallback(() => {
     if (!ifcDataStore) return;
     try {
-      // Export basic JSON structure of entities
       const entities: Record<string, unknown>[] = [];
       for (let i = 0; i < ifcDataStore.entities.count; i++) {
         const id = ifcDataStore.entities.expressId[i];
@@ -421,8 +516,10 @@ export function MainToolbar({ onShowShortcuts }: MainToolbarProps = {} as MainTo
       a.download = 'model-data.json';
       a.click();
       URL.revokeObjectURL(url);
+      toast.success(`Exported ${entities.length} entities as JSON`);
     } catch (err) {
       console.error('JSON export failed:', err);
+      toast.error(`JSON export failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   }, [ifcDataStore]);
 
@@ -584,76 +681,61 @@ export function MainToolbar({ onShowShortcuts }: MainToolbarProps = {} as MainTo
       <ExportChangesButton />
 
       {/* ── Panels ── */}
-      {/* BCF Issues Button */}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant={bcfPanelVisible ? 'default' : 'ghost'}
-            size="icon-sm"
-            onClick={(e) => {
-              (e.currentTarget as HTMLButtonElement).blur();
-              if (!bcfPanelVisible) {
-                // Close other right-panel content first, then expand
-                setIdsPanelVisible(false);
-                setLensPanelVisible(false);
-                setRightPanelCollapsed(false);
-              }
-              toggleBcfPanel();
-            }}
-            className={cn(bcfPanelVisible && 'bg-primary text-primary-foreground')}
+      <DropdownMenu>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant={activeWorkspacePanels.size > 0 ? 'default' : 'ghost'}
+                size="icon-sm"
+                aria-label={workspacePanelLabel ? `Panels: ${workspacePanelLabel}` : 'Panels'}
+                className={cn(activeWorkspacePanels.size > 0 && 'bg-primary text-primary-foreground')}
+              >
+                <Layout className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+          </TooltipTrigger>
+          <TooltipContent>{workspacePanelLabel ? `Panels: ${workspacePanelLabel}` : 'Panels'}</TooltipContent>
+        </Tooltip>
+        <DropdownMenuContent align="start" className="w-56">
+          <DropdownMenuCheckboxItem
+            checked={activeWorkspacePanels.has('script')}
+            onCheckedChange={() => handleToggleBottomPanel('script')}
           >
-            <MessageSquare className="h-4 w-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>BCF Issues</TooltipContent>
-      </Tooltip>
-
-      {/* IDS Validation Button */}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant={idsPanelVisible ? 'default' : 'ghost'}
-            size="icon-sm"
-            onClick={(e) => {
-              (e.currentTarget as HTMLButtonElement).blur();
-              if (!idsPanelVisible) {
-                // Close other right-panel content first, then expand
-                setBcfPanelVisible(false);
-                setLensPanelVisible(false);
-                setRightPanelCollapsed(false);
-              }
-              toggleIdsPanel();
-            }}
-            className={cn(idsPanelVisible && 'bg-primary text-primary-foreground')}
+            <FileCode2 className="h-4 w-4 mr-2" />
+            Script Editor
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={activeWorkspacePanels.has('list')}
+            onCheckedChange={() => handleToggleBottomPanel('list')}
           >
-            <ClipboardCheck className="h-4 w-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>IDS Validation</TooltipContent>
-      </Tooltip>
-
-      {/* Lists Button */}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant={listPanelVisible ? 'default' : 'ghost'}
-            size="icon-sm"
-            onClick={(e) => {
-              (e.currentTarget as HTMLButtonElement).blur();
-              // Close script panel (bottom-panel exclusivity)
-              useViewerStore.getState().setScriptPanelVisible(false);
-              if (!listPanelVisible) {
-                setRightPanelCollapsed(false);
-              }
-              toggleListPanel();
-            }}
-            className={cn(listPanelVisible && 'bg-primary text-primary-foreground')}
+            <FileSpreadsheet className="h-4 w-4 mr-2" />
+            Lists
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuCheckboxItem
+            checked={activeWorkspacePanels.has('bcf')}
+            onCheckedChange={() => handleToggleRightPanel('bcf')}
           >
-            <FileSpreadsheet className="h-4 w-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>Lists</TooltipContent>
-      </Tooltip>
+            <MessageSquare className="h-4 w-4 mr-2" />
+            BCF Issues
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={activeWorkspacePanels.has('ids')}
+            onCheckedChange={() => handleToggleRightPanel('ids')}
+          >
+            <ClipboardCheck className="h-4 w-4 mr-2" />
+            IDS Validation
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={activeWorkspacePanels.has('lens')}
+            onCheckedChange={() => handleToggleRightPanel('lens')}
+          >
+            <Palette className="h-4 w-4 mr-2" />
+            Lens Rules
+          </DropdownMenuCheckboxItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       <Separator orientation="vertical" className="h-6 mx-1" />
 
@@ -780,30 +862,6 @@ export function MainToolbar({ onShowShortcuts }: MainToolbarProps = {} as MainTo
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-
-      {/* Lens (rule-based filtering) */}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant={lensPanelVisible ? 'default' : 'ghost'}
-            size="icon-sm"
-            onClick={(e) => {
-              (e.currentTarget as HTMLButtonElement).blur();
-              if (!lensPanelVisible) {
-                // Close other right-panel content first, then expand
-                setBcfPanelVisible(false);
-                setIdsPanelVisible(false);
-                setRightPanelCollapsed(false);
-              }
-              toggleLensPanel();
-            }}
-            className={cn(lensPanelVisible && 'bg-primary text-primary-foreground')}
-          >
-            <Palette className="h-4 w-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>Lens (Color Rules)</TooltipContent>
-      </Tooltip>
 
       <Separator orientation="vertical" className="h-6 mx-1" />
 

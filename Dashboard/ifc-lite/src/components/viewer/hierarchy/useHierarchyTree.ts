@@ -5,18 +5,19 @@
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import type { IfcDataStore } from '@ifc-lite/parser';
 import type { GeometryResult } from '@ifc-lite/geometry';
-import type { FederatedModel } from '@/store';
+import { useViewerStore, type FederatedModel } from '@/store';
 import type { TreeNode, UnifiedStorey } from './types';
 import {
   buildUnifiedStoreys,
   getUnifiedStoreyElements as getUnifiedStoreyElementsFn,
   buildTreeData,
   buildTypeTree,
+  buildIfcTypeTree,
   filterNodes,
   splitNodes,
 } from './treeDataBuilder';
 
-export type GroupingMode = 'spatial' | 'type';
+export type GroupingMode = 'spatial' | 'type' | 'ifc-type';
 
 interface UseHierarchyTreeParams {
   models: Map<string, FederatedModel>;
@@ -164,12 +165,22 @@ export function useHierarchyTree({ models, ifcDataStore, isMultiModel, geometryR
     return geometryResult?.meshes.length ?? 0;
   }, [models, geometryResult?.meshes.length]);
 
-  // Pre-computed set of global IDs with geometry — stable across color changes
+  // Pre-computed set of global IDs with geometry — stable across color changes.
+  // PERF: Skip when no geometry source exists (during initial streaming before
+  // any data is ready). Gate on models OR ifcDataStore so federated scenarios
+  // (models.size > 0 but ifcDataStore is null) still build the set correctly.
+  const hasGeometrySource = models.size > 0 || !!ifcDataStore;
   const geometricIds = useMemo(
-    () => buildGeometricIdSet(models, geometryResult),
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- meshCount is a stable proxy
-    [models, meshCount]
+    () => hasGeometrySource ? buildGeometricIdSet(models, geometryResult) : new Set<number>(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- meshCount is a stable proxy; hasGeometrySource gates streaming
+    [models, hasGeometrySource ? meshCount : 0]
   );
+
+  const toGlobalIdsForModel = useCallback((modelId: string, expressIds: number[]): number[] => {
+    if (modelId === 'legacy') return expressIds;
+    const state = useViewerStore.getState();
+    return expressIds.map((expressId) => state.toGlobalId(modelId, expressId));
+  }, []);
 
   // Build the tree data structure based on grouping mode
   // Note: hiddenEntities intentionally NOT in deps - visibility computed lazily for performance
@@ -177,6 +188,9 @@ export function useHierarchyTree({ models, ifcDataStore, isMultiModel, geometryR
     (): TreeNode[] => {
       if (groupingMode === 'type') {
         return buildTypeTree(models, ifcDataStore, expandedNodes, isMultiModel, geometricIds);
+      }
+      if (groupingMode === 'ifc-type') {
+        return buildIfcTypeTree(models, ifcDataStore, expandedNodes, isMultiModel, geometricIds);
       }
       return buildTreeData(models, ifcDataStore, expandedNodes, isMultiModel, unifiedStoreys);
     },
@@ -207,11 +221,11 @@ export function useHierarchyTree({ models, ifcDataStore, isMultiModel, geometryR
     });
   }, []);
 
-  // Get all elements for a node (handles type groups, unified storeys, single storeys, model contributions, and elements)
+  // Get all elements for a node (handles type groups, ifc-type, unified storeys, single storeys, model contributions, and elements)
   const getNodeElements = useCallback((node: TreeNode): number[] => {
-    if (node.type === 'type-group') {
+    if (node.type === 'type-group' || node.type === 'ifc-type') {
       // GlobalIds are pre-stored on the node during tree construction — O(1)
-      return node.expressIds;
+      return node.globalIds;
     }
     if (node.type === 'unified-storey') {
       // Get all elements from all models for this unified storey
@@ -226,34 +240,43 @@ export function useHierarchyTree({ models, ifcDataStore, isMultiModel, geometryR
       const model = models.get(modelId);
       if (model?.ifcDataStore?.spatialHierarchy) {
         const localIds = (model.ifcDataStore.spatialHierarchy.byStorey.get(storeyId) as number[]) || [];
-        // Convert local expressIds to global IDs using model's idOffset
-        const offset = model.idOffset ?? 0;
-        return localIds.map(id => id + offset);
+        return toGlobalIdsForModel(modelId, localIds);
       }
     } else if (node.type === 'IfcBuildingStorey') {
       // Get storey elements
       const storeyId = node.expressIds[0];
       const modelId = node.modelIds[0];
 
-      // Try legacy dataStore first (no offset needed, IDs are already global)
-      if (ifcDataStore?.spatialHierarchy) {
+      if (modelId === 'legacy' && ifcDataStore?.spatialHierarchy) {
         const elements = ifcDataStore.spatialHierarchy.byStorey.get(storeyId);
         if (elements) return elements as number[];
       }
 
-      // Or from the model in federation - need to apply idOffset
       const model = models.get(modelId);
       if (model?.ifcDataStore?.spatialHierarchy) {
         const localIds = (model.ifcDataStore.spatialHierarchy.byStorey.get(storeyId) as number[]) || [];
-        const offset = model.idOffset ?? 0;
-        return localIds.map(id => id + offset);
+        return toGlobalIdsForModel(modelId, localIds);
+      }
+    } else if (node.type === 'IfcSpace') {
+      const spaceId = node.expressIds[0];
+      const modelId = node.modelIds[0];
+
+      if (modelId === 'legacy' && ifcDataStore?.spatialHierarchy) {
+        const elements = ifcDataStore.spatialHierarchy.bySpace.get(spaceId) ?? [];
+        return [spaceId, ...(elements as number[])];
+      }
+
+      const model = models.get(modelId);
+      if (model?.ifcDataStore?.spatialHierarchy) {
+        const localIds = (model.ifcDataStore.spatialHierarchy.bySpace.get(spaceId) as number[]) || [];
+        return [...node.globalIds, ...toGlobalIdsForModel(modelId, localIds)];
       }
     } else if (node.type === 'element') {
-      return node.expressIds;
+      return node.globalIds;
     }
     // Spatial containers (Project, Site, Building) and top-level models don't have direct element visibility toggle
     return [];
-  }, [models, ifcDataStore, unifiedStoreys, getUnifiedStoreyElements]);
+  }, [models, ifcDataStore, unifiedStoreys, getUnifiedStoreyElements, toGlobalIdsForModel]);
 
   // Persist grouping mode preference
   const handleSetGroupingMode = useCallback((mode: GroupingMode) => {
