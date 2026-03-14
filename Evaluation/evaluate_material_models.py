@@ -62,6 +62,7 @@ COLUMN_MATERIAL = "Material"
 MODEL_NAMES = [
     "google/embeddinggemma-300m",
     "BAAI/bge-m3",
+    "Hygroskopisch/bge-m3-ifc-kbob-finetuned",
     "intfloat/multilingual-e5-large",
     "intfloat/multilingual-e5-base",
     "sentence-transformers/LaBSE",
