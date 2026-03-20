@@ -32,7 +32,7 @@ dev-ratio 0.1:
 seed 42:
     Fixiert Zufall (Shuffle/Split) für besser reproduzierbare Runs.
 fp16 (Default: aus):
-    Mixed Precision ist nur aktiv, wenn du den Flag explizit setzt. Sonst läuft Training in voller Präzision.
+    Mixed Precision ist nur aktiv, wenn Flag explizit gesetzt. Sonst läuft Training in voller Präzision.
 
 
 usage: run_training_pipeline.py [-h] --query-file QUERY_FILE --expected-file EXPECTED_FILE [--base-model BASE_MODEL]
@@ -84,7 +84,8 @@ def build_run_id(args: argparse.Namespace) -> str:
         f"q={args.query_file}|e={args.expected_file}|m={args.base_model}|ep={args.epochs}|"
         f"bs={args.batch_size}|lr={args.lr}|mx={args.max_length}|dv={args.dev_ratio}|"
         f"sd={args.seed}|wu={args.warmup_ratio}|{dedup}|dev={args.device}|fp16={args.fp16}|"
-        f"mpp={args.max_per_positive}"
+        f"mpp={args.max_per_positive}|hnf={args.hard_negatives_file}|"
+        f"hnm={args.hard_negative_mode}|hns={args.hard_negative_selection}"
     )
     hash8 = hashlib.sha1(signature.encode("utf-8")).hexdigest()[:8]
     return (
@@ -126,6 +127,23 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=0,
         help="Maximale Anzahl Paare pro unique Positive (0 = unbegrenzt).",
+    )
+    parser.add_argument(
+        "--hard-negatives-file",
+        default="",
+        help="Optionales JSONL mit query + hard_negatives (z. B. aus mine_hard_negatives.py).",
+    )
+    parser.add_argument(
+        "--hard-negative-mode",
+        choices=["off", "fallback", "strict"],
+        default="fallback",
+        help="Weitergabe an train_bge_m3.py.",
+    )
+    parser.add_argument(
+        "--hard-negative-selection",
+        choices=["first", "random"],
+        default="first",
+        help="Weitergabe an train_bge_m3.py.",
     )
     parser.add_argument(
         "--run-id",
@@ -183,6 +201,8 @@ def main() -> None:
         prepare_command.append("--deduplicate")
     if args.max_per_positive > 0:
         prepare_command.extend(["--max-per-positive", str(args.max_per_positive), "--seed", str(args.seed)])
+    if args.hard_negatives_file.strip():
+        prepare_command.extend(["--hard-negatives-file", args.hard_negatives_file])
     run_command(prepare_command)
 
     run_command([sys.executable, str(VALIDATE_SCRIPT), "--pairs-file", str(pairs_out)])
@@ -217,6 +237,10 @@ def main() -> None:
         args.device,
         "--run-id",
         resolved_run_id,
+        "--hard-negative-mode",
+        args.hard_negative_mode,
+        "--hard-negative-selection",
+        args.hard_negative_selection,
     ]
     if args.save_each_epoch:
         train_command.append("--save-each-epoch")

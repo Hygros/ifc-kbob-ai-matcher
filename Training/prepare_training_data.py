@@ -47,6 +47,54 @@ def parse_expected_tokens_line(line: str) -> list[tuple[str, float | None]]:
     return tokens
 
 
+def normalize_key(value: str) -> str:
+    return value.strip().casefold()
+
+
+def load_hard_negatives_jsonl(path: Path) -> dict[str, list[str]]:
+    if not path.is_file():
+        raise FileNotFoundError(f"Hard-negatives Datei nicht gefunden: {path}")
+
+    by_query: dict[str, list[str]] = {}
+    seen_by_query: dict[str, set[str]] = {}
+
+    with path.open("r", encoding="utf-8") as handle:
+        for line_no, line in enumerate(handle, start=1):
+            line = line.strip()
+            if not line:
+                continue
+
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"Ungültiges JSONL in hard-negatives Zeile {line_no}: {exc}") from exc
+
+            query = str(row.get("query", "")).strip()
+            if not query:
+                continue
+
+            raw_negatives = row.get("hard_negatives", [])
+            if isinstance(raw_negatives, str):
+                raw_negatives = [raw_negatives]
+            if not isinstance(raw_negatives, list):
+                continue
+
+            query_key = normalize_key(query)
+            if query_key not in by_query:
+                by_query[query_key] = []
+                seen_by_query[query_key] = set()
+
+            for value in raw_negatives:
+                candidate = str(value).strip()
+                candidate_key = normalize_key(candidate)
+                if not candidate_key or candidate_key in seen_by_query[query_key]:
+                    continue
+                seen_by_query[query_key].add(candidate_key)
+                by_query[query_key].append(candidate)
+
+    return by_query
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Erzeugt Trainingspaare (query, positive) aus Query- und Expected-TXT."
@@ -79,6 +127,11 @@ def parse_args() -> argparse.Namespace:
         default=42,
         help="Random Seed für reproduzierbares Sampling bei --max-per-positive.",
     )
+    parser.add_argument(
+        "--hard-negatives-file",
+        default="",
+        help="Optionales JSONL mit query + hard_negatives (z. B. aus mine_hard_negatives.py).",
+    )
     return parser.parse_args()
 
 
@@ -87,6 +140,12 @@ def main() -> None:
     query_file = Path(args.query_file).expanduser().resolve()
     expected_file = Path(args.expected_file).expanduser().resolve()
     out_file = Path(args.out).expanduser().resolve()
+
+    hard_negatives_by_query: dict[str, list[str]] = {}
+    if args.hard_negatives_file.strip():
+        hard_negatives_file = Path(args.hard_negatives_file).expanduser().resolve()
+        hard_negatives_by_query = load_hard_negatives_jsonl(hard_negatives_file)
+        print(f"Hard-negatives geladen für {len(hard_negatives_by_query)} Queries: {hard_negatives_file}")
 
     queries = load_non_empty_lines(query_file)
     expected_lines = load_non_empty_lines(expected_file)
@@ -120,6 +179,17 @@ def main() -> None:
             }
             if weight is not None:
                 record["weight"] = weight
+
+            query_key = normalize_key(query)
+            positive_key = normalize_key(positive)
+            hard_negatives = [
+                negative
+                for negative in hard_negatives_by_query.get(query_key, [])
+                if normalize_key(negative) != positive_key
+            ]
+            if hard_negatives:
+                record["hard_negatives"] = hard_negatives
+
             records.append(record)
 
     if args.max_per_positive > 0:

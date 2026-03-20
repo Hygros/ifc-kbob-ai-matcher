@@ -8,7 +8,7 @@ Training/run_single_model_evaluation.py --model Training/artifacts/models/bge-m3
 
 Training/run_single_model_evaluation.py --model Training/artifacts/models/bge-m3-finetuned-generated_queries_without_exposure/epochs/epoch-01 --query-file Evaluation/exports/queries/ifcentity_material_strength.txt --expected-file Evaluation/expected_material/expected.txt --cross-encoder-model "" --device auto --run-label finetuned --output-dir Training/outputs
 
-
+Training/run_single_model_evaluation.py --model models/Hygroskopisch/bge-m3-ifc-kbob-finetuned --query-file Evaluation/exports/queries/ifcentity_material_strength.txt --expected-file Evaluation/expected_material/expected.txt --cross-encoder-model "" --device auto --run-label finetuned --output-dir Training/outputs
 
 additional options:
 --cross-encoder-model BAAI/bge-reranker-v2-m3 --rerank-top-n 30

@@ -6,6 +6,7 @@ import random
 import shutil
 from collections import defaultdict
 from collections.abc import Iterator
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 
@@ -25,6 +26,13 @@ class InputExampleDataset(Dataset[InputExample]):
 
     def __getitem__(self, index: int) -> InputExample:
         return self._examples[index]
+
+
+@dataclass(frozen=True)
+class TrainingRecord:
+    query: str
+    positive: str
+    hard_negatives: tuple[str, ...] = ()
 
 
 class UniquePositiveBatchSampler:
@@ -88,11 +96,11 @@ class UniquePositiveBatchSampler:
         return math.ceil(self._total / self._batch_size)
 
 
-def read_pairs(path: Path) -> list[tuple[str, str]]:
+def read_records(path: Path) -> list[TrainingRecord]:
     if not path.is_file():
         raise FileNotFoundError(f"Trainingsdatei nicht gefunden: {path}")
 
-    pairs: list[tuple[str, str]] = []
+    records: list[TrainingRecord] = []
     with path.open("r", encoding="utf-8") as handle:
         for line_no, line in enumerate(handle, start=1):
             line = line.strip()
@@ -104,31 +112,52 @@ def read_pairs(path: Path) -> list[tuple[str, str]]:
             positive = str(row.get("positive", "")).strip()
             if not query or not positive:
                 raise ValueError(f"Ungültiger Datensatz in Zeile {line_no}: query/positive fehlt.")
-            pairs.append((query, positive))
+            hard_negatives_raw = row.get("hard_negatives", [])
+            if isinstance(hard_negatives_raw, str):
+                hard_negatives_raw = [hard_negatives_raw]
+            if hard_negatives_raw is None:
+                hard_negatives_raw = []
+            if not isinstance(hard_negatives_raw, list):
+                raise ValueError(
+                    f"Ungültiger Datensatz in Zeile {line_no}: hard_negatives muss Liste oder String sein."
+                )
 
-    if not pairs:
+            positive_key = positive.casefold().strip()
+            seen_negatives: set[str] = set()
+            hard_negatives: list[str] = []
+            for value in hard_negatives_raw:
+                candidate = str(value).strip()
+                candidate_key = candidate.casefold().strip()
+                if not candidate_key or candidate_key == positive_key or candidate_key in seen_negatives:
+                    continue
+                seen_negatives.add(candidate_key)
+                hard_negatives.append(candidate)
+
+            records.append(TrainingRecord(query=query, positive=positive, hard_negatives=tuple(hard_negatives)))
+
+    if not records:
         raise ValueError("Keine Trainingspaare gefunden.")
 
-    return pairs
+    return records
 
 
-def split_pairs(
-    pairs: list[tuple[str, str]],
+def split_records(
+    records: list[TrainingRecord],
     dev_ratio: float,
     seed: int,
-) -> tuple[list[tuple[str, str]], list[tuple[str, str]]]:
+) -> tuple[list[TrainingRecord], list[TrainingRecord]]:
     """Split on query level: all pairs of a query stay together in train or dev."""
     if not 0 <= dev_ratio < 1:
         raise ValueError("--dev-ratio muss im Bereich [0, 1) liegen.")
 
     if dev_ratio == 0:
-        return list(pairs), []
+        return list(records), []
 
-    query_to_pairs: dict[str, list[tuple[str, str]]] = {}
-    for query, positive in pairs:
-        query_to_pairs.setdefault(query, []).append((query, positive))
+    query_to_records: dict[str, list[TrainingRecord]] = {}
+    for record in records:
+        query_to_records.setdefault(record.query, []).append(record)
 
-    unique_queries = list(query_to_pairs.keys())
+    unique_queries = list(query_to_records.keys())
     rng = random.Random(seed)
     rng.shuffle(unique_queries)
 
@@ -138,26 +167,26 @@ def split_pairs(
 
     dev_queries = set(unique_queries[:dev_query_count])
 
-    dev_pairs: list[tuple[str, str]] = []
-    train_pairs: list[tuple[str, str]] = []
-    for query, positive in pairs:
-        if query in dev_queries:
-            dev_pairs.append((query, positive))
+    dev_records: list[TrainingRecord] = []
+    train_records: list[TrainingRecord] = []
+    for record in records:
+        if record.query in dev_queries:
+            dev_records.append(record)
         else:
-            train_pairs.append((query, positive))
+            train_records.append(record)
 
-    if not train_pairs:
+    if not train_records:
         raise ValueError("Nach dem Split sind keine Trainingsdaten übrig. --dev-ratio verringern.")
-    return train_pairs, dev_pairs
+    return train_records, dev_records
 
 
-def build_ir_evaluator(dev_pairs: list[tuple[str, str]]) -> InformationRetrievalEvaluator | None:
-    if not dev_pairs:
+def build_ir_evaluator(dev_records: list[TrainingRecord]) -> InformationRetrievalEvaluator | None:
+    if not dev_records:
         return None
 
     query_to_positives: dict[str, set[str]] = {}
-    for query, positive in dev_pairs:
-        query_to_positives.setdefault(query, set()).add(positive)
+    for record in dev_records:
+        query_to_positives.setdefault(record.query, set()).add(record.positive)
 
     if not query_to_positives:
         return None
@@ -185,6 +214,92 @@ def build_ir_evaluator(dev_pairs: list[tuple[str, str]]) -> InformationRetrieval
         relevant_docs=relevant_docs,
         name="dev_ir",
     )
+
+
+def build_train_examples(
+    train_records: list[TrainingRecord],
+    hard_negative_mode: str,
+    hard_negative_selection: str,
+    seed: int,
+) -> tuple[list[InputExample], dict[str, int]]:
+    if not train_records:
+        raise ValueError("Keine Trainingsdaten vorhanden.")
+
+    records_with_hard_negatives = sum(1 for record in train_records if record.hard_negatives)
+    dropped_no_hard_negatives = 0
+    fallback_negatives_used = 0
+    dropped_unusable = 0
+
+    selected_records = list(train_records)
+    use_hard_negatives = hard_negative_mode != "off" and records_with_hard_negatives > 0
+
+    if hard_negative_mode == "strict":
+        selected_records = [record for record in train_records if record.hard_negatives]
+        dropped_no_hard_negatives = len(train_records) - len(selected_records)
+        use_hard_negatives = True
+        if not selected_records:
+            raise ValueError("--hard-negative-mode strict gewählt, aber keine hard_negatives in den Trainingsdaten gefunden.")
+    elif hard_negative_mode == "fallback" and not use_hard_negatives:
+        print("Hinweis: Keine hard_negatives gefunden, es wird mit [query, positive] trainiert.")
+
+    rng = random.Random(seed)
+    unique_positives = list({record.positive for record in selected_records})
+
+    global_hard_pool: list[str] = []
+    seen_global_hard: set[str] = set()
+    for record in selected_records:
+        for candidate in record.hard_negatives:
+            candidate_key = candidate.casefold().strip()
+            if candidate_key and candidate_key not in seen_global_hard:
+                seen_global_hard.add(candidate_key)
+                global_hard_pool.append(candidate)
+
+    examples: list[InputExample] = []
+
+    for record in selected_records:
+        if not use_hard_negatives:
+            examples.append(InputExample(texts=[record.query, record.positive]))
+            continue
+
+        hard_negative: str | None = None
+        if record.hard_negatives:
+            if hard_negative_selection == "random":
+                hard_negative = rng.choice(record.hard_negatives)
+            else:
+                hard_negative = record.hard_negatives[0]
+
+        if hard_negative is None and hard_negative_mode == "fallback":
+            positive_key = record.positive.casefold().strip()
+            fallback_candidates = [value for value in unique_positives if value.casefold().strip() != positive_key]
+            if fallback_candidates:
+                hard_negative = rng.choice(fallback_candidates)
+                fallback_negatives_used += 1
+            else:
+                pool_candidates = [value for value in global_hard_pool if value.casefold().strip() != positive_key]
+                if pool_candidates:
+                    hard_negative = rng.choice(pool_candidates)
+                    fallback_negatives_used += 1
+
+        if hard_negative is None:
+            dropped_unusable += 1
+            continue
+
+        examples.append(InputExample(texts=[record.query, record.positive, hard_negative]))
+
+    if not examples:
+        raise ValueError("Nach Hard-Negative-Verarbeitung sind keine Trainingsbeispiele übrig.")
+
+    stats = {
+        "records_total": len(train_records),
+        "records_after_mode": len(selected_records),
+        "records_with_hard_negatives": records_with_hard_negatives,
+        "examples_total": len(examples),
+        "dropped_no_hard_negatives": dropped_no_hard_negatives,
+        "fallback_negatives_used": fallback_negatives_used,
+        "dropped_unusable": dropped_unusable,
+        "use_hard_negatives": 1 if use_hard_negatives else 0,
+    }
+    return examples, stats
 
 
 def choose_device(user_device: str) -> str:
@@ -223,6 +338,18 @@ def parse_args() -> argparse.Namespace:
         "--checkpoints-dir",
         default="",
         help="Optionaler Ordner für Epochen-Checkpoints (Default: <output-dir>/epochs).",
+    )
+    parser.add_argument(
+        "--hard-negative-mode",
+        choices=["off", "fallback", "strict"],
+        default="fallback",
+        help="off: ignorieren, fallback: nutzen + fehlende auffüllen, strict: nur Datensätze mit hard_negatives.",
+    )
+    parser.add_argument(
+        "--hard-negative-selection",
+        choices=["first", "random"],
+        default="first",
+        help="Auswahlstrategie, wenn mehrere hard_negatives pro Datensatz vorliegen.",
     )
     return parser.parse_args()
 
@@ -278,23 +405,38 @@ def main() -> None:
 
     run_id = sanitize_label(args.run_id, fallback=f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
 
-    all_pairs = read_pairs(train_path)
-    train_pairs, dev_pairs = split_pairs(all_pairs, dev_ratio=args.dev_ratio, seed=args.seed)
+    all_records = read_records(train_path)
+    train_records, dev_records = split_records(all_records, dev_ratio=args.dev_ratio, seed=args.seed)
 
     device = choose_device(args.device)
     print(f"Device: {device}")
     print(f"Base model: {args.base_model}")
-    train_queries = len({q for q, _ in train_pairs})
-    dev_queries = len({q for q, _ in dev_pairs})
+    train_queries = len({record.query for record in train_records})
+    dev_queries = len({record.query for record in dev_records})
     print(
-        f"Gesamtpaare: {len(all_pairs)} | Train: {len(train_pairs)} ({train_queries} Queries) | "
-        f"Dev: {len(dev_pairs)} ({dev_queries} Queries)"
+        f"Gesamtpaare: {len(all_records)} | Train: {len(train_records)} ({train_queries} Queries) | "
+        f"Dev: {len(dev_records)} ({dev_queries} Queries)"
     )
 
     model = SentenceTransformer(args.base_model, device=device)
     model.max_seq_length = args.max_length
 
-    train_examples = [InputExample(texts=[query, positive]) for query, positive in train_pairs]
+    train_examples, hard_negative_stats = build_train_examples(
+        train_records=train_records,
+        hard_negative_mode=args.hard_negative_mode,
+        hard_negative_selection=args.hard_negative_selection,
+        seed=args.seed,
+    )
+    if hard_negative_stats["use_hard_negatives"]:
+        print(
+            "Hard-negatives aktiv: "
+            f"records_with_hard_negatives={hard_negative_stats['records_with_hard_negatives']}, "
+            f"fallback_negatives_used={hard_negative_stats['fallback_negatives_used']}, "
+            f"dropped_unusable={hard_negative_stats['dropped_unusable']}"
+        )
+    else:
+        print("Hard-negatives deaktiviert oder nicht vorhanden: Training mit [query, positive].")
+
     train_dataset = InputExampleDataset(train_examples)
     batch_sampler = UniquePositiveBatchSampler(train_examples, batch_size=args.batch_size, seed=args.seed)
     train_dataloader = DataLoader(
@@ -309,7 +451,7 @@ def main() -> None:
     print(f"UniquePositiveBatchSampler: {batch_sampler._unique_positives} unique Positives, batch_size={args.batch_size}")
     train_loss = losses.MultipleNegativesRankingLoss(model=model)
 
-    evaluator = build_ir_evaluator(dev_pairs)
+    evaluator = build_ir_evaluator(dev_records)
     warmup_steps = math.ceil(len(train_dataloader) * args.epochs * args.warmup_ratio)
 
     step_checkpoint_dir: Path | None = None
@@ -386,11 +528,14 @@ def main() -> None:
         "dev_ratio": float(args.dev_ratio),
         "seed": int(args.seed),
         "fp16": bool(args.fp16),
+        "hard_negative_mode": args.hard_negative_mode,
+        "hard_negative_selection": args.hard_negative_selection,
+        "hard_negative_stats": hard_negative_stats,
         "save_each_epoch": bool(args.save_each_epoch),
         "steps_per_epoch": int(steps_per_epoch),
-        "total_pairs": len(all_pairs),
-        "train_pairs": len(train_pairs),
-        "dev_pairs": len(dev_pairs),
+        "total_pairs": len(all_records),
+        "train_pairs": len(train_records),
+        "dev_pairs": len(dev_records),
         "epoch_checkpoints": epoch_checkpoint_paths,
     }
     metadata_path = output_dir / "run_metadata.json"

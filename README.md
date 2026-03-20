@@ -4,7 +4,6 @@ Automatisierte Zuordnung von IFC-Bauelementen zu Ökobilanzdaten (KBOB) mit Sent
 
 ## Du möchtest das Tool ausprobieren und der Code interessiert dich weniger?
 Dann gehe auf diese Seite: [https://hygroskopisch-ifc-kbob-ai-matcher.hf.space/]
-(Einige Funktionen des Viewers haben noch Fehler, das Mapping funktioniert jedoch.)
 
 
 ## Überblick
@@ -149,7 +148,7 @@ streamlit run Dashboard/app_with_viewer.py
 streamlit run Dashboard/app_with_viewer.py
 ```
 
-1. **Uploads-Tab:** IFC-Datei hochladen, SBERT-Modell und optional Cross-Encoder wählen, "Mapping berechnen" klicken.
+1. **Uploads-Tab:** IFC-Datei hochladen, SBERT-Modell und optional Cross-Encoder wählen (Cross-Encoder sind nicht trainiert und verschlechtern daher das Resultat), "Mapping berechnen" klicken.
 2. **AI-Mapping-Tab:** Vom AI vorgeschlagene KBOB-Materialien prüfen und bestätigen/korrigieren. 3D-Viewer zeigt das gewählte Element. Bewehrungsannahmen konfigurieren.
 3. **Charts-Tab:** UBP, CO₂, Energie und weitere KPIs nach Element, Material oder IfcEntity visualisieren.
 
@@ -172,7 +171,7 @@ python -m core.ifc_extraction.ifc_batch_export_to_csv --ifc-folder <Ordner> --ou
 
 ## Evaluation
 
-Die Evaluation vergleicht bis zu 13 Bi-Encoder-Modelle (+ optionalen Cross-Encoder) gegen Ground-Truth-Zuordnungen.
+Die Evaluation vergleicht bis zu 13 Bi-Encoder-Modelle (+ optionalen Cross-Encoder (nicht trainiert und verschlechtern das Resultat)) gegen Ground-Truth-Zuordnungen.
 
 ```bash
 # Komplette Pipeline mit interaktiver Modell-/Dateiauswahl

@@ -70,13 +70,15 @@ def validate_raw_files(query_file: Path, expected_file: Path) -> tuple[int, int]
     return len(queries), total_expected_tokens
 
 
-def validate_pairs_file(pairs_file: Path) -> tuple[int, int, int, int]:
+def validate_pairs_file(pairs_file: Path) -> tuple[int, int, int, int, int, int]:
     if not pairs_file.is_file():
         raise FileNotFoundError(f"Pairs-Datei nicht gefunden: {pairs_file}")
 
     row_count = 0
     unique_pairs: set[tuple[str, str]] = set()
     unique_queries: set[str] = set()
+    rows_with_hard_negatives = 0
+    hard_negative_total = 0
 
     with pairs_file.open("r", encoding="utf-8") as handle:
         for line_no, line in enumerate(handle, start=1):
@@ -95,18 +97,56 @@ def validate_pairs_file(pairs_file: Path) -> tuple[int, int, int, int]:
                     f"Ungültiger Eintrag in Zeile {line_no}: 'query' und 'positive' müssen gesetzt sein."
                 )
 
+            hard_negatives_raw = row.get("hard_negatives", [])
+            if isinstance(hard_negatives_raw, str):
+                hard_negatives = [hard_negatives_raw] if hard_negatives_raw.strip() else []
+            elif isinstance(hard_negatives_raw, list):
+                hard_negatives = hard_negatives_raw
+            elif hard_negatives_raw is None:
+                hard_negatives = []
+            else:
+                raise ValueError(
+                    f"Ungültiger Eintrag in Zeile {line_no}: 'hard_negatives' muss Liste oder String sein."
+                )
+
             row_count += 1
             query_key = query.casefold()
             positive_key = positive.casefold()
             unique_queries.add(query_key)
             unique_pairs.add((query_key, positive_key))
 
+            if hard_negatives:
+                rows_with_hard_negatives += 1
+                seen_negatives: set[str] = set()
+                for value in hard_negatives:
+                    candidate = str(value).strip()
+                    candidate_key = candidate.casefold()
+                    if not candidate_key:
+                        raise ValueError(
+                            f"Ungültiger Eintrag in Zeile {line_no}: leeres hard negative gefunden."
+                        )
+                    if candidate_key == positive_key:
+                        raise ValueError(
+                            f"Ungültiger Eintrag in Zeile {line_no}: positive darf nicht in hard_negatives enthalten sein."
+                        )
+                    if candidate_key in seen_negatives:
+                        continue
+                    seen_negatives.add(candidate_key)
+                    hard_negative_total += 1
+
     if row_count == 0:
         raise ValueError("Pairs-Datei enthält keine gültigen Trainingszeilen.")
 
     unique_pair_count = len(unique_pairs)
     duplicate_pair_count = row_count - unique_pair_count
-    return row_count, unique_pair_count, duplicate_pair_count, len(unique_queries)
+    return (
+        row_count,
+        unique_pair_count,
+        duplicate_pair_count,
+        len(unique_queries),
+        rows_with_hard_negatives,
+        hard_negative_total,
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -131,7 +171,14 @@ def main() -> None:
         print(f"Raw-Validierung OK: queries={query_count}, expected_tokens={token_count}")
 
     if args.pairs_file:
-        pair_count, unique_pair_count, duplicate_pair_count, query_count = validate_pairs_file(
+        (
+            pair_count,
+            unique_pair_count,
+            duplicate_pair_count,
+            query_count,
+            rows_with_hard_negatives,
+            hard_negative_total,
+        ) = validate_pairs_file(
             Path(args.pairs_file).expanduser().resolve()
         )
         print(
@@ -139,7 +186,9 @@ def main() -> None:
             f"pairs_total={pair_count}, "
             f"unique_pairs={unique_pair_count}, "
             f"duplicate_pairs={duplicate_pair_count}, "
-            f"unique_queries={query_count}"
+            f"unique_queries={query_count}, "
+            f"rows_with_hard_negatives={rows_with_hard_negatives}, "
+            f"hard_negatives_total={hard_negative_total}"
         )
         print("Für das Training werden die unique-pairs verwendet.")
 

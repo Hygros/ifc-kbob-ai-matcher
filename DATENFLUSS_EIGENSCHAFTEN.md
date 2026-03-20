@@ -1,18 +1,27 @@
 # Datenfluss: IFC-Export → SBERT Mapping → Dashboard
 
-## 1. IFC-EXPORT (ifc_extraction_core.py)
+Stand: Abgleich mit aktuellem Code in Dashboard + angebundenen Kernmodulen.
 
-### Direkt aus IFC-Element extrahiert (Basis-Attribute):
+## 1. IFC-EXPORT (core/ifc_extraction/ifc_extraction_core.py)
+
+### Direkt aus IFC-Element extrahiert (Basis-Attribute)
 ```
-IfcEntity              (z.B. IfcBeam, IfcColumn, IfcWall)
-PredefinedType        (z.B. PIERCAP, CANTILEVER, LOAD_BEARING)
+IfcEntity
+PredefinedType
 Name
 Description
 GUID
-HasModeledRebar       (boolean flag für modellierte Bewehrung)
 ```
 
-### Aus PropertySets extrahiert (DEFAULT_PROPERTY_FIELDS):
+### Zusätzliche technische Felder für Dashboard/Viewer-Linking
+```
+HasModeledRebar        (abgeleitet aus IfcReinforcingBar-Geschwisterelementen)
+AggregateChildGUIDs    (Descendants für Viewer-Highlighting)
+AggregateParentGUID    (Parent-GUID für Viewer-Highlighting)
+```
+
+### Aus PropertySets extrahiert
+DEFAULT_PROPERTY_FIELDS:
 ```
 Description
 Status
@@ -23,31 +32,42 @@ Length
 NetVolume
 GrossVolume
 ReinforcementVolumeRatio
-Height                (zusätzlich extrahiert)
-NetArea               (zusätzlich extrahiert)
-Count                 (nur bei IfcReinforcingBar)
-Weight                (nur bei IfcReinforcingBar)
 ```
 
-### Berechnete Felder (COMPUTED_FIELDS):
+Zusätzlich extrahiert:
 ```
-Durchmesser           (berechnet aus Length + NetVolume für DIAMETER_CANDIDATE_ENTITIES)
-Ansichtsfläche        (berechnet für IfcWall: Length × Height; für IfcCovering: NetArea)
+Height                 (für Flächenberechnung)
+NetArea                (für Flächenberechnung)
+Count                  (nur bei IfcReinforcingBar)
+Weight                 (nur bei IfcReinforcingBar)
 ```
 
-### Material-Informationen:
+### Berechnete Felder
 ```
-Material              (Namen aus IfcMaterial Definitions)
-MaterialLayerIndex    (Index für mehrschichtige Materialien: 1, 2, 3, ...)
-MaterialLayerThickness
+Durchmesser            (aktuell für IfcPile aus Length + NetVolume)
+Ansichtsfläche         (IfcWall: Length × Height, IfcCovering: NetArea)
 ```
+
+### Material-Informationen
+```
+Material               (als Liste, z.B. ["Beton C30/37"])
+MaterialLayerIndex     (1..n bei mehrschichtigen Materialien)
+MaterialLayerThickness (pro Layer)
+```
+
+Hinweis: Bei mehrschichtigen Materialien werden NetVolume/GrossVolume anteilig über die Layer-Dicken aufgeteilt (falls alle Dicken vorhanden und > 0).
 
 ---
 
-## 2. SBERT MAPPING INPUT (Sentence_Transformer_V00.py)
+## 2. SBERT-Mapping (vom Dashboard genutzt)
 
-### Felder für Bi-Encoder (IFC_EXPORT_FIELDS):
-Diese Felder werden zu einer Suchquery zusammengefügt:
+Primärer Runtime-Pfad:
+```
+Dashboard/services/ifc_pipeline.py
+    -> core/sbert/sentence_transformer.py (run_sbert_matching)
+```
+
+### Bi-Encoder Query-Felder (core/sbert/sentence_transformer.py)
 ```
 IfcEntity
 PredefinedType
@@ -58,20 +78,29 @@ CastingMethod
 StrengthClass
 ```
 
-**Hinweis:** Diese Felder werden konkateniert zu einem Query-Text für die SBERT-Ähnlichkeitssuche gegen die KBOB-Datenbank
+Diese Felder werden zu einem Query-Text konkateniert und gegen die KBOB-Materialdatenbank gematcht.
 
-### Cross-Encoder Reranking:
+### Cross-Encoder Reranking (optional im Upload-Tab)
 ```
-Input:  Top-K Ergebnisse vom Bi-Encoder (TOP_K_RESULTS = 30)
-Scores: RERANK_TOP_N = 30
-Output: Re-ranked Material-Matches mit normalisierten Scores [0, 1]
+TOP_K_RESULTS = 30
+RERANK_TOP_N = 30
 ```
+
+Bei aktivem Cross-Encoder werden die Top-N Treffer pro Query neu bewertet; die Scores werden auf [0, 1] normalisiert.
+
+### Wichtige Abweichung für Export/Training
+In Evaluation/export_sbert_queries_to_txt.py ist die Feldliste leicht anders:
+```
+IfcEntity, PredefinedType, Name, Material, Description, Durchmesser, CastingMethod
+```
+
+Also: dort Description statt StrengthClass.
 
 ---
 
-## 3. DASHBOARD DARSTELLUNG (tab_ai_mapping.py)
+## 3. Dashboard-Darstellung (Dashboard/ui/tab_ai_mapping.py)
 
-### Aufbereitete Basis-Spalten für die UI (base_cols):
+### Basis-Spalten für die Mapping-UI (base_cols)
 ```
 IfcEntity
 PredefinedType
@@ -81,112 +110,140 @@ MaterialLayerIndex
 Description
 Material
 Durchmesser
-top_k_matches          (SBERT Match-Ergebnisse mit Scores)
+top_k_matches
+AggregateChildGUIDs
+AggregateParentGUID
 ```
 
-### Element-Label im Dashboard:
-Zusammengestellt aus (wenn Wert gültig ist):
+### Element-Label in der linken Liste
+Zusammengestellt aus gültigen Werten in:
 ```
-IfcEntity | PredefinedType | Name | Description | Material | CastingMethod | StrengthClass | Ø Durchmesser
-```
-
-### Zusätzliche im Merge angezeigte Felder:
-```
-Material KBOB          (Nutzer-Auswahl)
-AI Score               (Score des ausgewählten Materials)
+IfcEntity | PredefinedType | Name | Description | Material | Ø Durchmesser
 ```
 
-### Übersicht-Tabelle (subheader "Übersicht"):
+Zusatz:
+```
+(n Elemente)            (wenn eine Gruppe mehrere GUIDs enthält)
+```
+
+Hinweis: CastingMethod/StrengthClass sind im aktuellen base_cols nicht enthalten und erscheinen daher im Label standardmässig nicht.
+
+### Materialauswahl pro Gruppe
+```
+1) Top-K Treffer aus top_k_matches (mit Score)
+2) Danach vollständige KBOB-Materialliste (Fallback/Manuell)
+```
+
+### Im Merge zusätzlich verwendete Spalten
+```
+Material KBOB
+AI Score
+```
+
+### Übersicht-Tabelle (Subheader "Übersicht")
 ```
 IfcEntity
 PredefinedType
 Name
-Description            (umbenannt zu "Beschrieb")
+Beschrieb              (aus Description)
 Durchmesser
-Material KBOB          (Nutzer-Auswahl)
-AI Score               (formatiert auf 3 Dezimalstellen)
+Material KBOB
+AI Score               (3 Nachkommastellen)
 ```
 
 ---
 
-## 4. FILTERN & AUSSCHLÜSSE
+## 4. Filtern, Gruppieren, Ausschlüsse
 
-### Im Dashboard nicht angezeigt:
+### Ausgeschlossene Zeilen
 ```
+MaterialLayerIndex == "R"
+```
+Diese synthetischen Bewehrungszeilen werden in AI-Mapping ausgeblendet und primär für Charts/Totals genutzt.
+
+### Gruppierungslogik (Dashboard/domain/mapping.py)
+Standard-Gruppierung über:
+```
+IfcEntity, PredefinedType, Name, Description, Material, Durchmesser, MaterialLayerIndex, top_k_matches
+```
+
+Spezialfall Bewehrungs-Entities:
+```
+IfcReinforcingBar, IfcReinforcingMesh, IfcTendon
+```
+Diese werden je Entity-Typ zusammengefasst; bei unterschiedlichen Feldwerten werden Konfliktfelder auf None gesetzt.
+
+### In der AI-Mapping-Tabelle nicht direkt angezeigt
+```
+GUID
+AggregateChildGUIDs
+AggregateParentGUID
 Status
-StructuralClass
-ExposureClass
 CastingMethod
 StrengthClass
-GUID                   (nur intern für Viewer-Linking)
-top_k_matches          (nur für Material-Dropdown-Vorschläge)
+ExposureClass
 Height
 NetArea
-Count, Weight
+Count
+Weight
 ReinforcementVolumeRatio
 MaterialLayerThickness
 ```
 
-### Ausgeschlossene Zeilen:
+---
+
+## 5. Reinforcement-spezifische Felder
+
+### Automatisch angereichert (add_reinforcement_info)
 ```
-MaterialLayerIndex == "R"  (synthetische Bewehrungs-Zeilen, nur für Charts)
+is_concrete
+has_modeled_rebar
+reinforcement_ratio_source      ("ifc" | "default" | None)
+reinforcement_ratio_kg_m3
+reinforcement_mass_kg
+reinforcement_status            ("explicit" | "assumed" | "none" | "no_material")
+```
+
+Details:
+```
+- IfcReinforcingBar erhält Status "none" und keinen Ratio-Default.
+- reinforcement_mass_kg wird nur für Status "assumed" geführt.
+```
+
+### Im Dashboard vom Nutzer gesetzt/überschrieben
+```
+reinforcement_accepted
+reinforcement_ratio_kg_m3
+reinforcement_source            (typisch "user", sonst aus Auto-Logik)
+```
+
+Persistiert wird pro GUID + MaterialLayerIndex in die JSONL-Datei.
+
+---
+
+## 6. Kurzüberblick Feldabdeckung
+
+```
+IFC-Export
+    Basis + PSet + berechnete Felder + Material-Layer + Viewer-GUID-Hilfsfelder
+
+SBERT-Matching (Runtime)
+    7 Query-Felder -> top_k_matches (Top 30)
+    optional: Cross-Encoder Reranking der Top 30
+
+Dashboard AI-Mapping
+    base_cols: 11 Felder
+    Übersicht: 7 sichtbare Spalten
+    Persistenz: Auswahlfelder + Reinforcement-Entscheidungen
 ```
 
 ---
 
-## 5. REINFORCEMENT-SPEZIFISCHE FELDER
+## 7. Keine Werte: is_valid-Filter im Label
 
-### Im SBERT-Prozess berechnet (add_reinforcement_info):
-```
-is_concrete            (boolean: Material-Check gegen CONCRETE_KEYWORDS)
-has_modeled_rebar      (boolean: aus HasModeledRebar Flag)
-reinforcement_ratio_source    ("ifc" | "default")
-reinforcement_ratio_kg_m3     (float)
-reinforcement_mass_kg  (berechnet: volume_m3 × ratio)
-reinforcement_status   ("explicit" | "assumed" | "none" | "no_material")
-```
-
-### Im Dashboard vom Nutzer eingegeben:
-```
-reinforcement_accepted       (checkbox)
-reinforcement_ratio_kg_m3    (number_input, optional)
-reinforcement_source         (tracking: "user" | "ifc" | "default")
-```
-
----
-
-## 6. ZUSAMMENFASSUNG: FELDABDECKUNG
-
-```
-┌────────────────────────────────────────────────────────────────┐
-│                        IFC-EXPORT                              │
-├──────────────────────┬──────────────────────┬──────────────────┤
-│ ~29 Felder           │ Basis + Properties   │ SBERT Input      │
-│ (JSONL-Datei)        │ + Material + Berechnet                  │
-└──────────────────────┴──────────────────────┴──────────────────┘
-                             ↓
-┌────────────────────────────────────────────────────────────────┐
-│                     SBERT PROCESSING                           │
-├──────────────────────┬──────────────────────┬──────────────────┤
-│ 9 Felder             │ Konkateniert zu      │ Top-K Matches    │
-│ (IFC_EXPORT_FIELDS)  │ Query-Text           │ mit Scores       │
-└──────────────────────┴──────────────────────┴──────────────────┘
-                             ↓
-┌────────────────────────────────────────────────────────────────┐
-│                   DASHBOARD ANZEIGE                            │
-├──────────────────────┬──────────────────────┬──────────────────┤
-│ 9 Felder angezeigt   │ Label: 8 Felder      │ Tabelle: 7 Felder│
-│ (base_cols)          │ kombiniert           │                  │
-└──────────────────────┴──────────────────────┴──────────────────┘
-```
-
----
-
-## 7. KEINE WERTE: NUR STRUKTUR
-
-Alle Werte werden nach diesen Kriterien gefiltert (is_valid-Check):
+Werte werden nur angezeigt, wenn sie diese Checks bestehen:
 ```
 - value NOT IN (None, "", [], {})
-- string_value.strip() NOT empty
-- normalized string NOT IN {"nan", "none", "null", "undefined", "notdefined", "n/a", "na", "-"}
+- string_value.strip() nicht leer
+- normalized(value) NOT IN {"nan", "none", "null", "undefined", "notdefined", "n/a", "na", "-"}
 ```

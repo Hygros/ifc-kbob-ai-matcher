@@ -81,21 +81,55 @@ def _resolve_model_name(model_name: str | None = None) -> str:
     if model_name is None:
         return MODEL_NAME
     normalized = str(model_name).strip()
-    return normalized if normalized else MODEL_NAME
+    if not normalized:
+        return MODEL_NAME
+    local_model_path = _resolve_local_model_path(normalized)
+    return str(local_model_path) if local_model_path is not None else normalized
+
+
+def _resolve_local_model_path(model_name: str) -> Path | None:
+    candidate = Path(model_name)
+    candidates = [candidate] if candidate.is_absolute() else [_PROJECT_ROOT / candidate, candidate]
+    for local_candidate in candidates:
+        try:
+            if local_candidate.is_dir():
+                return local_candidate.resolve()
+        except OSError:
+            continue
+    return None
+
+
+def _is_sentence_transformer_directory(directory: Path) -> bool:
+    if not directory.is_dir():
+        return False
+    has_modules = (directory / "modules.json").is_file()
+    has_sbert_config = (directory / "config_sentence_transformers.json").is_file() or (
+        directory / "sentence_bert_config.json"
+    ).is_file()
+    return has_modules and has_sbert_config
 
 
 def _model_directory_for(model_name: str) -> str:
+    model_path = Path(model_name)
+    if model_path.is_absolute():
+        return str(model_path)
     return str(SBERT_MODELS_DIR / model_name)
 
 
 def load_or_save_model(model_name: str | None = None, device: str = "cpu") -> SentenceTransformer:
     resolved_model_name = _resolve_model_name(model_name)
-    model_directory = _model_directory_for(resolved_model_name)
-    if os.path.isdir(model_directory) and os.listdir(model_directory):
-        return SentenceTransformer(model_directory, device=device)
+    resolved_model_path = Path(resolved_model_name)
+    if _is_sentence_transformer_directory(resolved_model_path):
+        return SentenceTransformer(str(resolved_model_path), device=device)
+
+    model_directory = Path(_model_directory_for(resolved_model_name))
+    if _is_sentence_transformer_directory(model_directory):
+        return SentenceTransformer(str(model_directory), device=device)
+
     model = SentenceTransformer(resolved_model_name, device=device)
-    os.makedirs(model_directory, exist_ok=True)
-    model.save(model_directory)
+    if not resolved_model_path.is_absolute():
+        model_directory.mkdir(parents=True, exist_ok=True)
+        model.save(str(model_directory))
     return model
 
 # --- JSONL Processing ---

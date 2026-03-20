@@ -33,6 +33,7 @@ REINFORCEMENT_STEEL_DENSITY_FALLBACK: float = 7850.0
 SBERT_MODEL_OPTIONS = [
     "BAAI/bge-m3",
     "Hygroskopisch/bge-m3-ifc-kbob-finetuned",
+    "Training/artifacts/models/Hygroskopisch/bge-m3-ifc-kbob-hn-phase1",
     "intfloat/multilingual-e5-large",
     "intfloat/multilingual-e5-base",
     "google/embeddinggemma-300m",
