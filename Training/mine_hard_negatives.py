@@ -435,7 +435,7 @@ def main() -> None:
                     cross_family_extras=cross_family_extras,
                 )
                 family_hn_total = sum(len(r["hard_negatives"]) for r in family_records)
-                print(f"\n--- Intra-Family Hard-Negatives ---")
+                print("\n--- Intra-Family Hard-Negatives ---")
                 print(f"Taxonomy: {len(mat_to_family)} materials in {len(family_to_mats)} families")
                 print(f"Queries with family HN: {len(family_records)}")
                 print(f"Total family HN: {family_hn_total}")
@@ -447,7 +447,7 @@ def main() -> None:
         extra_records=family_records,
     )
 
-    print(f"\n--- Eval-basierte Hard-Negatives ---")
+    print("\n--- Eval-basierte Hard-Negatives ---")
     print(f"Rows total: {stats['rows_total']}")
     print(f"Rows top1-wrong: {stats['wrong_rows']}")
     if stats.get("include_narrow_wins"):
@@ -457,7 +457,7 @@ def main() -> None:
     print(f"Dropped cross-query positives: {stats['dropped_cross_query_positive']}")
     print(f"Cross-query protection: {stats['cross_query_positive_protection']}")
     print(f"Queries with eval HN: {len(records)}")
-    print(f"\n--- Zusammenfassung ---")
+    print("\n--- Zusammenfassung ---")
     print(f"Eval-HN records: {len(records)}, Family-HN records: {len(family_records)}")
     print(f"Total records in output: {len(records) + len(family_records)}")
     print(f"Output: {out_file}")

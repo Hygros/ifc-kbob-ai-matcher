@@ -186,7 +186,6 @@ def get_mapping(query: str, original: str, policy: dict) -> str:
     has_fichte = "Fichte" in query
     has_tanne = "Tanne" in query
     has_laerche = "LÄRCHE" in query_upper
-    has_holzart = has_buche or has_eiche or has_fichte or has_tanne or has_laerche
     has_aluminium = "Aluminium" in query
     has_metal = "Metall" in query
     has_kunststoff = _contains_any(query_upper, plastic_alias_tokens)

@@ -21,7 +21,7 @@ Das Projekt besteht aus drei Hauptbereichen und einer gemeinsamen Codebasis:
 
 ```text
 IFC-Datei
-  → core/ifc_extraction   (Elemente, Materialien, PropertySets → JSONL)
+  → core/ifc_extraction    (Elemente, Materialien, PropertySets → JSONL)
   → core/sbert             (Bi-Encoder-Matching + Cross-Encoder-Reranking gegen KBOB-DB)
   → Dashboard              (Nutzer wählt Zuordnung, UBP-Berechnung, Charts)
 ```
