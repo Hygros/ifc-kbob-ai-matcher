@@ -15,7 +15,7 @@ Das Projekt besteht aus drei Hauptbereichen und einer gemeinsamen Codebasis:
 | **Dashboard** | Streamlit-App: IFC-Upload, AI-Materialzuordnung, 3D-Viewer, Umweltindikator-Visualisierung |
 | **Evaluation** | Evaluation von Bi-Encoder- und Cross-Encoder-Modellen gegen erwartete Materialzuordnungen |
 | **Training** | Fine-Tuning von Sentence-Transformer-Modellen (BAAI/bge-m3) mit eigenen Trainingsdaten |
-| **core** | Gemeinsam genutzte Module: IFC-Extraktion, SBERT-Matching, UBP-Berechnung, Synonyme |
+| **core** | Gemeinsam genutzte Module: IFC-Extraktion, SBERT-Matching, UBP-Berechnung |
 
 ### Pipeline-Ablauf
 
@@ -29,7 +29,7 @@ IFC-Datei
 ## Projektstruktur
 
 ```text
-Matching/
+ifc-kbob-ai-matcher/
 │
 ├── core/                              # Gemeinsam genutzte Module
 │   ├── ifc_extraction/                # IFC-Parsing und Element-/Materialextraktion
@@ -37,17 +37,11 @@ Matching/
 │   │   ├── ifc_extraction_main.py     #   CLI-Einstiegspunkt (python -m core.ifc_extraction.ifc_extraction_main)
 │   │   ├── ifc_material_extract_util.py
 │   │   ├── ifc_batch_export_to_csv.py #   Batch-Export ganzer IFC-Ordner → CSV + Analyse-Reports
-│   │   ├── ifc_export_simple.py       #   Einfacher Hierarchie-/PropertySet-Export als Text
 │   │   └── ifc_reinforcement_relation.py
 │   ├── sbert/                         # Sentence-Transformer Matching-Engine
 │   │   ├── sentence_transformer.py    #   Bi-Encoder + Cross-Encoder Reranking gegen KBOB
 │   │   ├── batch_benchmark.py         #   Batch-Size-Benchmark für optimale Encoding-Performance
 │   │   └── cross_encoder.py           #   Standalone Cross-Encoder-Demo
-│   ├── synonyme/                      # Deutsche Synonym-Anreicherung
-│   │   ├── conceptnet.py              #   ConceptNet API
-│   │   ├── conceptnet_scraper.py      #   ConceptNet mit HTML-Fallback
-│   │   ├── odenet.py                  #   OdeNet (German WordNet)
-│   │   └── openthesaurus.py           #   OpenThesaurus API
 │   ├── calculate_ubp21_per_element.py # UBP/GWP/Energie-Berechnung pro Element
 │   └── ifc_units_reader.py            # IFC-Einheiten-Interpretation (SI, Prefixes)
 │
@@ -76,41 +70,43 @@ Matching/
 │   ├── run_evaluation_pipeline.py     #   Orchestrator: Query-Export → Evaluate → Report
 │   ├── evaluate_material_models.py    #   Kern-Engine: 13 Bi-Encoder + Cross-Encoder Benchmarks
 │   ├── build_evaluation_report.py     #   Markdown-Report + SVG-Übersichtsgrafik generieren
+│   ├── build_split_evaluation_matrix.py
 │   ├── export_sbert_queries_to_txt.py #   IFC/JSONL → Query-TXT für Evaluation
 │   ├── run_single_model_evaluation.py #   Einzelevaluation eines einzelnen Bi-Encoder-Modells
 │   ├── retrieval_metrics.py           #   Hit@K, MRR, MAP@10, nDCG@10, Recall@10
 │   ├── metric_explanations.md         #   Erklärung der Metriken
-│   ├── test_data/                     #   Testdaten (IFC, JSONL, Queries, Analyse-CSVs)
 │   ├── ground_truth/                  #   Ground-Truth-Dateien für Evaluation
 │   ├── outputs/                       #   Generierte Queries + Evaluationsergebnisse
-│   │   ├── queries/                   #     Query-TXT-Dateien
-│   │   │   └── _archive/              #     Historische Query-Varianten
-│   │   └── results/                   #     CSV-Metriken, Reports, SVG-Grafiken
-│   ├── tests/                         #   Unit-Tests (pytest)
+│   │   ├── queries/                   #     Exportierte Query-TXT-Dateien
+│   │   └── single_model/              #     Outputs aus run_single_model_evaluation.py
+│   ├── tests/                         #   Unit-Tests
 │
 ├── Training/                          # Bi-Encoder Fine-Tuning
-│   ├── run_training_pipeline.py       #   Orchestrator: validate → prepare → train
+│   ├── run_training_pipeline.py       #   Orchestrator: validate → prepare → validate → qa → manifest → train
 │   ├── prepare_training_data.py       #   Query/Expected TXT → JSONL-Trainingspaare
 │   ├── train_bge_m3.py                #   Fine-Tuning mit MultipleNegativesRankingLoss
 │   ├── validate_training_data.py      #   Validierung von Roh- und JSONL-Trainingsdaten
+│   ├── run_data_qa_preflight.py       #   QA-Gates vor dem Training
+│   ├── mine_hard_negatives.py         #   Mining harter Negatives aus Evaluation-Details
+│   ├── mine_family_hard_negatives.py  #   Intra-Family Hard-Negatives
 │   ├── query_generation/              #   Query-Generator-Skripte + Policy
 │   │   ├── sources/                   #     Eingabedateien (possible_*.txt, Materialliste)
 │   │   └── generated_queries/         #     Generierte Query-/Mapping-TXT aus den Query-Generatoren
 │   ├── data/                          #   Rohdaten (Query-/Expected-TXT, Excel)
 │   ├── artifacts/                     #   Trainierte Modelle + Trainingspaare
-│   └── outputs/                       #   Evaluationsergebnisse einzelner Modelle
+│   ├── outputs/                       #   QA-Reports, Manifeste, Auswertungen
+│   └── tests/
 │
-├── scripts/                           # Ad-hoc-Beispiele und Testskripte
+├── test-scripts/                      # Ad-hoc-Beispiele und lokale Tests
 ├── models/                            # Lokaler Modell-Cache (SBERT, Cross-Encoder)
 ├── IFC-Modelle/                       # Test-IFC-Dateien und UBP-Berechnungsergebnisse
 ├── Ökobilanzdaten.sqlite3             # KBOB-Materialdatenbank (im Repo enthalten)
 │
 ├── run_ifc_sbert_pipeline.py          # CLI-Einstiegspunkt: IFC → JSONL → SBERT-Matching
 ├── requirements.txt                   # Python-Abhängigkeiten
-├── .env.example                       # Vorlage für Umgebungsvariablen
 ├── DATENFLUSS_EIGENSCHAFTEN.md        # Dokumentation: Datenfluss IFC → SBERT → Dashboard
 ├── CONTRIBUTING.md
-├── LICENSE                            # MIT
+├── LICENSE                            # MPL-2.0
 └── THIRD_PARTY_NOTICES.md
 ```
 
@@ -124,8 +120,8 @@ Matching/
 
 ```bash
 # Repository klonen
-git clone https://github.com/<your-org>/Matching.git
-cd Matching
+git clone https://github.com/Hygros/ifc-kbob-ai-matcher.git
+cd ifc-kbob-ai-matcher
 
 # Virtuelle Umgebung erstellen und aktivieren
 python -m venv .venv
@@ -134,10 +130,6 @@ python -m venv .venv
 
 # Abhängigkeiten installieren
 pip install -r requirements.txt
-
-# Umgebungsvariablen konfigurieren
-cp .env.example .env
-# → KBOB_DATABASE_PATH in .env auf den Pfad zur SQLite-Datenbank setzen
 
 # Dashboard starten
 streamlit run Dashboard/app_with_viewer.py
@@ -182,8 +174,8 @@ python Evaluation/run_evaluation_pipeline.py
 
 # Mit expliziten Parametern
 python Evaluation/run_evaluation_pipeline.py \
-  --query-source Evaluation/outputs/queries/list_1_queries_with_ifc.txt \
-  --expected-file Evaluation/ground_truth/list_1_expected_mit-ohne_ifc.txt \
+  --query-source Evaluation/ground_truth/queries.txt \
+  --expected-file Evaluation/ground_truth/expected.txt \
   --cross-encoder-model BAAI/bge-reranker-v2-m3 \
   --rerank-top-n 30
 
@@ -206,47 +198,63 @@ Ergebnisse: `Evaluation/outputs/results/` (CSV, Markdown-Report, SVG-Grafik).
 
 ## Training
 
-Fine-Tuning von `BAAI/bge-m3` mit eigenen Query/Expected-Paaren:
+Empfohlener Standardpfad (Clean Baseline) ist in [Training/README.md](Training/README.md) dokumentiert.
+
+Beispiel für einen reproduzierbaren Pipeline-Run (strict Hard-Negatives):
 
 ```bash
 python Training/run_training_pipeline.py \
-  --query-file Evaluation/outputs/queries/list_1_queries_with_ifc.txt \
-  --expected-file Evaluation/ground_truth/list_1_expected_mit-ohne_ifc.txt \
+  --query-file Training/query_generation/generated_queries/generated_queries.txt \
+  --expected-file Training/query_generation/generated_queries/mapping_generated_queries.txt \
   --base-model BAAI/bge-m3 \
-  --output-dir Training/artifacts/models/bge-m3-finetuned \
-  --epochs 2 --batch-size 8 --lr 2e-5 --device cuda --fp16 --deduplicate
+  --pairs-out Training/artifacts/training_pairs_baseline_clean_run.jsonl \
+  --output-dir Training/artifacts/models/baseline_clean_run \
+  --hard-negatives-file Training/artifacts/hard_negatives_from_latest_eval.jsonl \
+  --hard-negative-mode strict \
+  --hard-negative-selection first \
+  --qa-eval-query-file Training/data/dashboard_training_queries.txt \
+  --qa-eval-expected-file Training/data/dashboard_training_expected.txt \
+  --seed 42 \
+  --dev-ratio 0.1 \
+  --run-id baseline_clean_run
 ```
 
-Das trainierte Modell kann direkt mit dem Single-Model-Runner evaluiert werden:
+Modell danach evaluieren:
 
 ```bash
 python Evaluation/run_single_model_evaluation.py \
-  --model Training/artifacts/models/bge-m3-finetuned \
-  --query-file Evaluation/outputs/queries/list_1_queries_with_ifc.txt \
-  --expected-file Evaluation/ground_truth/list_1_expected_mit-ohne_ifc.txt \
-  --run-label finetuned
+  --model Training/artifacts/models/baseline_clean_run \
+  --query-file Training/query_generation/generated_queries/generated_queries.txt \
+  --expected-file Training/query_generation/generated_queries/mapping_generated_queries.txt \
+  --device auto \
+  --run-label baseline_clean_run \
+  --output-dir Evaluation/outputs/single_model
 ```
 
-Details: [Training/README.md](Training/README.md).
+Hinweis für Windows bei mehreren Python-Installationen: optional explizit mit `.\\.venv\\Scripts\\python.exe` starten.
 
 ## Umgebungsvariablen
 
-Konfiguration über `.env` oder Umgebungsvariablen (siehe [.env.example](.env.example)):
+Konfiguration über Umgebungsvariablen:
 
 | Variable | Beschreibung | Default |
 | ---------- | ------------- | --------- |
-| `KBOB_DATABASE_PATH` | Pfad zur KBOB SQLite-Datenbank | `./Ökobilanzdaten.sqlite3` |
+| `KBOB_DATABASE_PATH` | DB-Pfad für `core/*`-Pipelines | `./Ökobilanzdaten.sqlite3` |
+| `KBOB_DB_PATH` | DB-Pfad für Dashboard/Evaluation/QA (Priorität vor Fallback-Pfaden) | leer |
+| `ECOBILANZ_DB_PATH` | Alternativer DB-Pfad-Name (Fallback) | leer |
 | `SBERT_DEVICE` | Device erzwingen: `cpu` oder `cuda` | Auto (GPU ab 500 Queries) |
 | `SBERT_BATCH_SIZE` | Feste Batch-Size | `64` |
 | `SBERT_AUTO_BENCH_BATCH` | Batch-Benchmark vor Matching | `0` |
 | `SBERT_AUTO_HEURISTIC_BATCH` | Heuristische Batch-Size | `1` (aktiv) |
 | `SBERT_CUDA_QUERY_THRESHOLD` | Mindest-Queries für Auto-GPU | `500` |
 | `SBERT_CROSS_ENCODER_REVISION` | Pinned Cross-Encoder Revision | — |
+| `SBERT_CROSS_ENCODER_ALLOW_UPDATES` | Erlaubt Remote-Code-Updates für Cross-Encoder (0/1) | `0` |
 
 ## Tests
 
 ```bash
-python -m pytest Evaluation/tests/ -v
+python -m unittest discover -s Evaluation/tests -p "test_*.py" -v
+python -m unittest discover -s Training/tests -p "test_*.py" -v
 ```
 
 ## Lizenz
