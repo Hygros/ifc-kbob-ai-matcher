@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from Dashboard.config import CHART_HEIGHT, REINFORCEMENT_KBOB_MATERIAL, get_available_indicator_definitions
+from Dashboard.config import CHART_HEIGHT, GALVANIZATION_KBOB_MATERIAL, REINFORCEMENT_KBOB_MATERIAL, get_available_indicator_definitions
 
 
 def _normalize_group_value(value):
@@ -23,18 +23,74 @@ def _first_existing_column(df: pd.DataFrame, candidates: list[str]) -> str | Non
     return None
 
 
+# Physical quantity columns produced by add_physical_quantity_columns()
+# (column, unit) — no prefix labels; values are shown with unit only.
+_PHYS_COLS: list[tuple[str, str]] = [
+    ("calc_volume_m3", "m³"),
+    ("calc_area_m2", "m²"),
+    ("calc_mass_kg", "kg"),
+    ("calc_length_m", "m"),
+    ("calc_volume_for_mass_m3", "m³"),
+]
+
+# Columns shown in the KPI total row (volume handled separately, area excluded)
+_KPI_PHYS: list[tuple[str, str, str]] = [
+    ("calc_mass_kg", "Masse", "kg"),
+]
+
+
+def _fmt_phys(value: float, unit: str) -> str:
+    """Format a physical quantity with Swiss thousands separator."""
+    if value >= 1000:
+        return f"{int(round(value)):,}".replace(",", "'") + f" {unit}"
+    if value >= 1:
+        return f"{value:.2f} {unit}"
+    if value > 0:
+        return f"{value:.3f} {unit}"
+    return ""
+
+
+def _build_phys_label(row: pd.Series) -> str:
+    """Build a compact label string from physical quantity columns.
+
+    Shows values directly with unit (no prefix). For mass-based elements the
+    underlying volume is appended so users see both.
+    """
+    parts = []
+    for col, unit in _PHYS_COLS:
+        val = row.get(col, 0.0)
+        if pd.notna(val) and val > 0:
+            parts.append(_fmt_phys(val, unit))
+    return " | ".join(parts)
+
+
 def _kpi_block(df: pd.DataFrame) -> None:
     total_gwp = df["gwp_kgco2eq"].sum()
     total_ubp = df["ubp"].sum()
     total_penre = df["penre_kwh_oil_eq"].sum()
-    c1, c2, c3 = st.columns(3)
 
     def chf_thousands(value):
         return f"{int(round(value)):,}".replace(",", "'")
 
-    c1.metric("Total Global Warming Potential", f"{chf_thousands(total_gwp)} kg CO₂ eq")
-    c2.metric("Total Environmental Impact Points", f"{chf_thousands(total_ubp)} UBP")
-    c3.metric("Total Primary Energy Non-Renewable", f"{chf_thousands(total_penre)} kWh oil‑eq")
+    # Collect non-zero physical totals
+    phys_metrics: list[tuple[str, str]] = []
+    # Total volume: sum volume-based AND mass-based elements (both have a volume)
+    total_vol = sum(df[c].sum() for c in ("calc_volume_m3", "calc_volume_for_mass_m3") if c in df.columns)
+    if total_vol > 0:
+        phys_metrics.append(("Total Volumen", _fmt_phys(total_vol, "m³")))
+    for col, label, unit in _KPI_PHYS:
+        if col in df.columns:
+            total = df[col].sum()
+            if total > 0:
+                phys_metrics.append((f"Total {label}", f"{_fmt_phys(total, unit)}"))
+
+    n_cols = 3 + len(phys_metrics)
+    cols = st.columns(n_cols)
+    cols[0].metric("Total Global Warming Potential", f"{chf_thousands(total_gwp)} kg CO₂ eq")
+    cols[1].metric("Total Environmental Impact Points", f"{chf_thousands(total_ubp)} UBP")
+    cols[2].metric("Total Primary Energy Non-Renewable", f"{chf_thousands(total_penre)} kWh oil‑eq")
+    for i, (lbl, val) in enumerate(phys_metrics):
+        cols[3 + i].metric(lbl, val)
 
 
 def render_tab_charts(df: pd.DataFrame | None) -> None:
@@ -125,6 +181,21 @@ def render_tab_charts(df: pd.DataFrame | None) -> None:
     agg["percent_label"] = agg["percent"].apply(lambda x: f"{x:.1f}%")
     agg["value_percent_label"] = agg["value_label"].astype(str) + " (" + agg["percent_label"].astype(str) + ")"
 
+    # --- Aggregate physical quantities per group ---
+    phys_col_names = [c for c, _ in _PHYS_COLS if c in fdf.columns]
+    if phys_col_names:
+        phys_agg = fdf.groupby(group_col, dropna=False)[phys_col_names].sum().reset_index()
+        agg = agg.merge(phys_agg, on=group_col, how="left", suffixes=("", "_phys"))
+        for c in phys_col_names:
+            agg[c] = agg[c].fillna(0.0)
+        agg["phys_label"] = agg.apply(_build_phys_label, axis=1)
+    else:
+        agg["phys_label"] = ""
+    agg["full_label"] = agg.apply(
+        lambda r: r["value_percent_label"] + ("<br>" + r["phys_label"] if r["phys_label"] else ""),
+        axis=1,
+    )
+
     _kpi_block(fdf)
 
     if chart_type == "Bar":
@@ -133,7 +204,7 @@ def render_tab_charts(df: pd.DataFrame | None) -> None:
             x=group_col,
             y="value",
             color="Kennwert",
-            text="value_percent_label",
+            text="full_label",
             barmode="group",
             title="Environmental Impact Visualization",
         )
@@ -144,7 +215,7 @@ def render_tab_charts(df: pd.DataFrame | None) -> None:
             x=group_col,
             y="value",
             color="Kennwert",
-            text="value_percent_label",
+            text="full_label",
             markers=True,
             title="Environmental Impact Visualization",
         )
@@ -158,7 +229,7 @@ def render_tab_charts(df: pd.DataFrame | None) -> None:
                 names="Segment",
                 values="value",
                 color="Segment",
-                custom_data=["value_label"],
+                custom_data=["value_label", "phys_label"],
                 title="Environmental Impact Visualization",
             )
         else:
@@ -167,10 +238,10 @@ def render_tab_charts(df: pd.DataFrame | None) -> None:
                 names=group_col,
                 values="value",
                 color=group_col,
-                custom_data=["value_label"],
+                custom_data=["value_label", "phys_label"],
                 title="Environmental Impact Visualization",
             )
-        fig.update_traces(texttemplate="%{label}<br>%{customdata[0]} (%{percent})")
+        fig.update_traces(texttemplate="%{label}<br>%{customdata[0]} (%{percent})<br>%{customdata[1]}")
     else:
         fig = px.scatter(
             agg,
@@ -178,7 +249,7 @@ def render_tab_charts(df: pd.DataFrame | None) -> None:
             y="value",
             size="value",
             color="Kennwert",
-            text="value_percent_label",
+            text="full_label",
             hover_name=group_col,
             title="Environmental Impact Visualization",
         )
@@ -240,7 +311,7 @@ def render_tab_charts(df: pd.DataFrame | None) -> None:
         if rebar_mask.any():
             st.markdown("### Bewehrungsannahmen")
             st.caption(
-                "Diese Beton-Bauteile haben kein modelliertes Bewehrungseisen (IfcReinforcingBar). "
+                "Diese Beton-Bauteile haben kein modelliertes Bewehrungseisen (IfcReinforcingBar/IfcTendon). "
                 "Die Bewehrung wurde anhand des Bewehrungsgehalts (kg/m³) angenommen und als "
                 f"separate «{REINFORCEMENT_KBOB_MATERIAL}»-Zeile in die UBP-Berechnung einbezogen."
             )
@@ -274,6 +345,48 @@ def render_tab_charts(df: pd.DataFrame | None) -> None:
                     lambda x: f"{x:.1f}" if pd.notna(x) else ""
                 )
             st.dataframe(rebar_display, width="stretch", hide_index=True)
+
+    # --- Verzinkungsannahmen (Galvanization assumptions) ---
+    if "galvanization_accepted" in df.columns:
+        galv_mask = pd.Series(
+            np.where(df["galvanization_accepted"].isna(), False, df["galvanization_accepted"]),
+            index=df.index,
+        ).astype(bool)
+        if galv_mask.any():
+            st.markdown("### Verzinkungsannahmen")
+            st.caption(
+                "Für diese Stahlbauteile wurde eine Verzinkung angenommen. "
+                "Die Umweltbelastung wird anhand der Oberfläche (m²) und der Flächendichte "
+                f"(kg/m²) als separate «{GALVANIZATION_KBOB_MATERIAL}»-Zeile in die Berechnung einbezogen."
+            )
+            galv_cols = []
+            if guid_col:
+                galv_cols.append(guid_col)
+            name_col_g = _first_existing_column(df, ["Name", "element_name"])
+            if name_col_g:
+                galv_cols.append(name_col_g)
+            entity_col_g = _first_existing_column(df, ["IfcEntity", "ifc_entity"])
+            if entity_col_g:
+                galv_cols.append(entity_col_g)
+            for gc in ["surface_area_m2"]:
+                if gc in df.columns:
+                    galv_cols.append(gc)
+            galv_display = df.loc[galv_mask, galv_cols].copy()
+            rename_g = {
+                "surface_area_m2": "Oberfläche (m²)",
+            }
+            if name_col_g:
+                rename_g[name_col_g] = "Bauteil"
+            if entity_col_g:
+                rename_g[entity_col_g] = "IfcEntity"
+            if guid_col:
+                rename_g[guid_col] = "GUID"
+            galv_display = galv_display.rename(columns=rename_g)
+            if "Oberfläche (m²)" in galv_display.columns:
+                galv_display["Oberfläche (m²)"] = galv_display["Oberfläche (m²)"].apply(
+                    lambda x: f"{x:.2f}" if pd.notna(x) else ""
+                )
+            st.dataframe(galv_display, width="stretch", hide_index=True)
 
     col1, col2 = st.columns(2)
     with col1:

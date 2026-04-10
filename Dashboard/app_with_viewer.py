@@ -1,14 +1,30 @@
 import sys
 import os
+import socket
+import time
 
 # python -m streamlit run Dashboard/app_with_viewer.py --server.port 8501
 
 if __name__ == "__main__" and not os.environ.get("_ST_LAUNCHED"):
     import subprocess
     env = {**os.environ, "_ST_LAUNCHED": "1"}
-    subprocess.run([sys.executable, "-m", "streamlit", "run", __file__, "--server.port", "8501"], env=env)
-    sys.exit(0)
+    proc = subprocess.Popen(
+        [sys.executable, "-m", "streamlit", "run", __file__, "--server.port", "8501"],
+        env=env,
+    )
 
+    deadline = time.time() + 30
+    while time.time() < deadline:
+        if proc.poll() is not None:
+            sys.exit(proc.returncode)
+        try:
+            with socket.create_connection(("127.0.0.1", 8501), timeout=1):
+                sys.exit(0)
+        except OSError:
+            time.sleep(0.2)
+
+    proc.terminate()
+    sys.exit(1)
 import streamlit as st
 from pathlib import Path
 

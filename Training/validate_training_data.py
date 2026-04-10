@@ -35,6 +35,17 @@ def parse_expected_tokens_line(line: str) -> list[str]:
     return tokens
 
 
+def coerce_str_list(value: object) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        text = value.strip()
+        return [text] if text else []
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    return []
+
+
 def validate_raw_files(query_file: Path, expected_file: Path) -> tuple[int, int]:
     queries = load_non_empty_lines(query_file)
     expected_lines = load_non_empty_lines(expected_file)
@@ -79,6 +90,8 @@ def validate_pairs_file(pairs_file: Path) -> tuple[int, int, int, int, int, int]
     unique_queries: set[str] = set()
     rows_with_hard_negatives = 0
     hard_negative_total = 0
+    query_to_positive_keys: dict[str, set[str]] = {}
+    query_to_hard_negative_keys: dict[str, set[str]] = {}
 
     with pairs_file.open("r", encoding="utf-8") as handle:
         for line_no, line in enumerate(handle, start=1):
@@ -91,48 +104,60 @@ def validate_pairs_file(pairs_file: Path) -> tuple[int, int, int, int, int, int]
                 raise ValueError(f"Ungültiges JSONL in Zeile {line_no}: {exc}") from exc
 
             query = str(row.get("query", "")).strip()
-            positive = str(row.get("positive", "")).strip()
-            if not query or not positive:
+            positives = coerce_str_list(row.get("pos"))
+            legacy_positive = str(row.get("positive", "")).strip()
+            if legacy_positive:
+                positives.append(legacy_positive)
+            positives = list(dict.fromkeys(positives))
+
+            if not query or not positives:
                 raise ValueError(
-                    f"Ungültiger Eintrag in Zeile {line_no}: 'query' und 'positive' müssen gesetzt sein."
+                    f"Ungültiger Eintrag in Zeile {line_no}: 'query' und positive/pos müssen gesetzt sein."
                 )
 
-            hard_negatives_raw = row.get("hard_negatives", [])
-            if isinstance(hard_negatives_raw, str):
-                hard_negatives = [hard_negatives_raw] if hard_negatives_raw.strip() else []
-            elif isinstance(hard_negatives_raw, list):
-                hard_negatives = hard_negatives_raw
-            elif hard_negatives_raw is None:
-                hard_negatives = []
-            else:
-                raise ValueError(
-                    f"Ungültiger Eintrag in Zeile {line_no}: 'hard_negatives' muss Liste oder String sein."
-                )
-
-            row_count += 1
             query_key = query.casefold()
-            positive_key = positive.casefold()
             unique_queries.add(query_key)
-            unique_pairs.add((query_key, positive_key))
+            hard_negatives = coerce_str_list(row.get("hard_negatives", [])) + coerce_str_list(row.get("neg", []))
 
-            if hard_negatives:
-                rows_with_hard_negatives += 1
-                seen_negatives: set[str] = set()
-                for value in hard_negatives:
-                    candidate = str(value).strip()
-                    candidate_key = candidate.casefold()
-                    if not candidate_key:
-                        raise ValueError(
-                            f"Ungültiger Eintrag in Zeile {line_no}: leeres hard negative gefunden."
-                        )
-                    if candidate_key == positive_key:
-                        raise ValueError(
-                            f"Ungültiger Eintrag in Zeile {line_no}: positive darf nicht in hard_negatives enthalten sein."
-                        )
-                    if candidate_key in seen_negatives:
-                        continue
-                    seen_negatives.add(candidate_key)
-                    hard_negative_total += 1
+            for positive in positives:
+                positive_key = positive.casefold()
+                if not positive_key:
+                    continue
+
+                row_count += 1
+                unique_pairs.add((query_key, positive_key))
+                query_to_positive_keys.setdefault(query_key, set()).add(positive_key)
+
+                if hard_negatives:
+                    rows_with_hard_negatives += 1
+                    seen_negatives: set[str] = set()
+                    for value in hard_negatives:
+                        candidate = str(value).strip()
+                        candidate_key = candidate.casefold()
+                        if not candidate_key:
+                            raise ValueError(
+                                f"Ungültiger Eintrag in Zeile {line_no}: leeres hard negative gefunden."
+                            )
+                        if candidate_key == positive_key:
+                            raise ValueError(
+                                f"Ungültiger Eintrag in Zeile {line_no}: positive darf nicht in hard_negatives enthalten sein."
+                            )
+                        if candidate_key in seen_negatives:
+                            continue
+                        seen_negatives.add(candidate_key)
+                        hard_negative_total += 1
+                        query_to_hard_negative_keys.setdefault(query_key, set()).add(candidate_key)
+
+    for query_key, positive_keys in query_to_positive_keys.items():
+        negative_keys = query_to_hard_negative_keys.get(query_key, set())
+        overlap = positive_keys.intersection(negative_keys)
+        if overlap:
+            overlap_preview = ", ".join(sorted(overlap)[:5])
+            raise ValueError(
+                "Ungültige Trainingsdaten: hard_negatives überschneiden sich mit Positives "
+                "derselben Query. "
+                f"query='{query_key}', overlap={overlap_preview}"
+            )
 
     if row_count == 0:
         raise ValueError("Pairs-Datei enthält keine gültigen Trainingszeilen.")

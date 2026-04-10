@@ -8,16 +8,25 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
-from Dashboard.config import DEFAULT_REINFORCEMENT_RATIO
+from Dashboard.config import DEFAULT_REINFORCEMENT_RATIO, GALVANIZATION_TRIGGER_MATERIALS, REINFORCEMENT_TRIGGER_MATERIALS
 from Dashboard.domain.mapping import (
     add_domain_defaults,
+    add_galvanization_info,
+    add_physical_quantity_columns,
     add_reinforcement_info,
     build_ai_mapping_groups,
 )
 from Dashboard.services.kbob_materials import load_all_kbob_materials
 from Dashboard.services.training_export import export_training_pairs, record_to_query
 from Dashboard.services.ubp import run_ubp_calculation
-from Dashboard.services.viewer import ensure_static_server, render_viewer_bridge, set_active_guid
+from Dashboard.services.viewer import (
+    STATIC_SERVER_PORT,
+    ensure_static_server,
+    get_static_server_origin,
+    get_viewer_origin,
+    render_viewer_bridge,
+    set_active_guid,
+)
 
 
 def _get_jsonl_path() -> Path | None:
@@ -42,12 +51,15 @@ def _load_selection_jsonl(jsonl_path: Path) -> pd.DataFrame:
                     "reinforcement_accepted": rec.get("reinforcement_accepted"),
                     "reinforcement_ratio_kg_m3": rec.get("reinforcement_ratio_kg_m3"),
                     "reinforcement_source": rec.get("reinforcement_source"),
+                    # Galvanization fields
+                    "galvanization_accepted": rec.get("galvanization_accepted"),
                 }
             )
         return pd.DataFrame(selection_rows)
     return pd.DataFrame(columns=[
         "GUID", "MaterialLayerIndex", "Material KBOB", "AI Score", "SelectedOn",
         "reinforcement_accepted", "reinforcement_ratio_kg_m3", "reinforcement_source",
+        "galvanization_accepted",
     ])
 
 
@@ -113,6 +125,10 @@ def _update_jsonl_with_selection(jsonl_path: Path, selection_df: pd.DataFrame) -
             rebar_source = sel_row.get("reinforcement_source")
             if rebar_source is not None and not (isinstance(rebar_source, float) and pd.isna(rebar_source)):
                 rec["reinforcement_source"] = str(rebar_source)
+            # Galvanization decision field
+            galv_accepted = sel_row.get("galvanization_accepted")
+            if galv_accepted is not None and not (isinstance(galv_accepted, float) and pd.isna(galv_accepted)):
+                rec["galvanization_accepted"] = bool(galv_accepted)
     with open(jsonl_path, "w", encoding="utf-8") as f:
         for rec in records:
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
@@ -151,6 +167,19 @@ def _as_reinforcement_dict(sel_df: pd.DataFrame) -> dict:
     return lookup
 
 
+def _as_galvanization_dict(sel_df: pd.DataFrame) -> dict:
+    """Build lookup  selection-key -> {accepted}  from persisted JSONL."""
+    lookup: dict[tuple, dict] = {}
+    for _, row in sel_df.iterrows():
+        key = _selection_key(row.get("GUID"), row.get("MaterialLayerIndex"))
+        if key is None:
+            continue
+        accepted = row.get("galvanization_accepted")
+        if accepted is not None and not (isinstance(accepted, float) and pd.isna(accepted)):
+            lookup[key] = {"accepted": bool(accepted)}
+    return lookup
+
+
 def _get_score_lookup(matches: list) -> dict:
     return {match.get("material"): match.get("score") for match in matches or []}
 
@@ -166,12 +195,16 @@ def _render_viewer(ifc_filename: str | None, active_guid: str | None, active_gui
         ifc_path = None
 
     if ifc_path and os.path.exists(ifc_path):
-        ensure_static_server(static_dir, port=8080)
+        try:
+            static_port = ensure_static_server(static_dir, port=STATIC_SERVER_PORT)
+        except RuntimeError as exc:
+            st.error(f"IFC static server could not start: {exc}")
+            return False
         file_stat = os.stat(ifc_path)
         cache_bust = f"{file_stat.st_mtime_ns}-{file_stat.st_size}"
-        file_url = f"http://127.0.0.1:8080/{quote(str(ifc_filename))}?v={cache_bust}"
+        file_url = f"{get_static_server_origin(port=static_port)}/{quote(str(ifc_filename))}?v={cache_bust}"
         viewer_query = urlencode({"file_url": file_url, "v": cache_bust})
-        viewer_url = f"http://localhost:3000/?{viewer_query}"
+        viewer_url = f"{get_viewer_origin()}/?{viewer_query}"
 
         st.markdown(
             f"<div class='viewer-sticky'><iframe class='viewer-iframe' src='{viewer_url}'></iframe></div>",
@@ -285,9 +318,9 @@ def render_tab_ai_mapping(df: pd.DataFrame | None) -> None:
                 if col not in df.columns:
                     df[col] = None
             base = df[base_cols].copy()
-            # Exclude synthetic reinforcement rows – they are only for charts/totals
+            # Exclude synthetic reinforcement/galvanization rows – they are only for charts/totals
             if "MaterialLayerIndex" in base.columns:
-                base = base[base["MaterialLayerIndex"].astype(str) != "R"].reset_index(drop=True)
+                base = base[~base["MaterialLayerIndex"].astype(str).isin({"R", "Z"})].reset_index(drop=True)
             base["Durchmesser"] = base["Durchmesser"].astype(str)
         else:
             st.warning("Daten konnten nicht geladen werden oder sind leer.")
@@ -316,16 +349,21 @@ def render_tab_ai_mapping(df: pd.DataFrame | None) -> None:
             sel_df = _load_selection_jsonl(jsonl_path)
             prev_sel = _as_selection_dict(sel_df)
             prev_rebar = _as_reinforcement_dict(sel_df)
+            prev_galv = _as_galvanization_dict(sel_df)
         else:
             sel_df = pd.DataFrame(columns=[
                 "GUID", "MaterialLayerIndex", "Material KBOB", "AI Score", "SelectedOn",
                 "reinforcement_accepted", "reinforcement_ratio_kg_m3", "reinforcement_source",
+                "galvanization_accepted",
             ])
             prev_sel = {}
             prev_rebar = {}
+            prev_galv = {}
 
         # Compute reinforcement info on the full DataFrame for status detection
         rebar_df = add_reinforcement_info(add_domain_defaults(df)) if df is not None else pd.DataFrame()
+        # Compute galvanization info (surface area) on the full DataFrame
+        galv_df = add_galvanization_info(add_domain_defaults(df)) if df is not None else pd.DataFrame()
 
         grouped_base = build_ai_mapping_groups(base)
 
@@ -478,15 +516,14 @@ def render_tab_ai_mapping(df: pd.DataFrame | None) -> None:
             rebar_source = None
             ifc_entity = str(row_data.get("IfcEntity") or "").strip()
 
-            # Determine reinforcement status from the enriched df
-            # Use the first GUID of the group to look up status
+            # Look up IFC reinforcement data from the enriched df
             group_rebar_rows = rebar_df[rebar_df["GUID"].isin(guids)] if not rebar_df.empty else pd.DataFrame()
             if not group_rebar_rows.empty:
-                first_status = group_rebar_rows.iloc[0].get("reinforcement_status", "none")
+                has_modeled_rebar = bool(group_rebar_rows.iloc[0].get("has_modeled_rebar", False))
                 first_ratio_source = group_rebar_rows.iloc[0].get("reinforcement_ratio_source")
                 first_ratio = group_rebar_rows.iloc[0].get("reinforcement_ratio_kg_m3")
             else:
-                first_status = "none"
+                has_modeled_rebar = False
                 first_ratio_source = None
                 first_ratio = None
 
@@ -494,58 +531,66 @@ def render_tab_ai_mapping(df: pd.DataFrame | None) -> None:
             prev_rebar_key = _selection_key(primary_guid, layer_index)
             prev_rebar_data = prev_rebar.get(prev_rebar_key, {})
 
-            if first_status == "explicit":
-                st.caption("✅ Bewehrung ist modelliert (IfcReinforcingBar vorhanden)")
-            elif first_status == "assumed":
-                default_ratio = float(first_ratio) if first_ratio is not None and not pd.isna(first_ratio) else DEFAULT_REINFORCEMENT_RATIO.get(ifc_entity, DEFAULT_REINFORCEMENT_RATIO["_default"])
+            # Reinforcement UI only for specific KBOB materials
+            if sel_material in REINFORCEMENT_TRIGGER_MATERIALS:
+                if has_modeled_rebar:
+                    st.caption("✅ Bewehrung ist modelliert (Bewehrungselement vorhanden)")
+                else:
+                    default_ratio = float(first_ratio) if first_ratio is not None and not pd.isna(first_ratio) else DEFAULT_REINFORCEMENT_RATIO.get(ifc_entity, DEFAULT_REINFORCEMENT_RATIO["_default"])
 
-                # Restore persisted state or default to True
-                prev_accepted = prev_rebar_data.get("accepted", True)
-                prev_ratio = prev_rebar_data.get("ratio")
-                if prev_ratio is not None:
-                    default_ratio = prev_ratio
+                    # Restore persisted state or default to True
+                    prev_accepted = prev_rebar_data.get("accepted", True)
+                    prev_ratio = prev_rebar_data.get("ratio")
+                    if prev_ratio is not None:
+                        default_ratio = prev_ratio
 
-                st.info(
-                    "⚠️ Keine Bewehrung modelliert. Kontrolliere die Annahme des Bewehrungsgehalts:"
-                )
-                cb_col, ni_col = st.columns([1, 2])
-                with cb_col:
-                    rebar_accepted = st.checkbox(
-                        "Bewehrung annehmen",
-                        value=prev_accepted,
-                        key=f"rebar_cb_{data_version}_{group_index}_{primary_guid}",
+                    st.info(
+                        "⚠️ Keine Bewehrung modelliert. Kontrolliere die Annahme des Bewehrungsgehalts:"
                     )
-                with ni_col:
-                    rebar_ratio_value = st.number_input(
-                        "Bewehrungsgehalt (kg/m³)",
-                        min_value=0.0,
-                        max_value=500.0,
-                        value=default_ratio,
-                        step=10.0,
-                        key=f"rebar_ratio_{data_version}_{group_index}_{primary_guid}",
-                        disabled=not rebar_accepted,
+                    cb_col, ni_col = st.columns([1, 2])
+                    with cb_col:
+                        rebar_accepted = st.checkbox(
+                            "Bewehrung annehmen",
+                            value=prev_accepted,
+                            key=f"rebar_cb_{data_version}_{group_index}_{primary_guid}",
+                        )
+                    with ni_col:
+                        rebar_ratio_value = st.number_input(
+                            "Bewehrungsgehalt (kg/m³)",
+                            min_value=0.0,
+                            max_value=500.0,
+                            value=default_ratio,
+                            step=10.0,
+                            key=f"rebar_ratio_{data_version}_{group_index}_{primary_guid}",
+                            disabled=not rebar_accepted,
+                        )
+                    if rebar_accepted:
+                        rebar_source = "user" if rebar_ratio_value != first_ratio else (first_ratio_source or "default")
+
+            # --- Galvanization UI per group ---
+            galv_accepted = False
+
+            if sel_material in GALVANIZATION_TRIGGER_MATERIALS:
+                group_galv_rows = galv_df[galv_df["GUID"].isin(guids)] if not galv_df.empty else pd.DataFrame()
+                has_sa = False
+                surface_area_val = None
+                if not group_galv_rows.empty:
+                    has_sa = bool(group_galv_rows.iloc[0].get("has_surface_area", False))
+                    surface_area_val = group_galv_rows.iloc[0].get("surface_area_m2")
+
+                if has_sa and surface_area_val is not None and not pd.isna(surface_area_val):
+                    st.caption(f"Oberfläche: {surface_area_val:.2f} m²")
+                    prev_galv_key = _selection_key(primary_guid, layer_index)
+                    prev_galv_data = prev_galv.get(prev_galv_key, {})
+                    prev_galv_accepted = prev_galv_data.get("accepted", False)
+
+                    galv_accepted = st.checkbox(
+                        "Verzinkung annehmen",
+                        value=prev_galv_accepted,
+                        key=f"galv_cb_{data_version}_{group_index}_{primary_guid}",
                     )
-                if rebar_accepted:
-                    rebar_source = "user" if rebar_ratio_value != first_ratio else (first_ratio_source or "default")
-            elif first_status == "no_material":
-                st.warning("Kein Material zugewiesen.")
-                treat_as_concrete = st.checkbox(
-                    "Als Beton behandeln",
-                    value=prev_rebar_data.get("accepted", False),
-                    key=f"rebar_concrete_cb_{data_version}_{group_index}_{primary_guid}",
-                )
-                if treat_as_concrete:
-                    default_ratio_nm = prev_rebar_data.get("ratio") or DEFAULT_REINFORCEMENT_RATIO.get(ifc_entity, DEFAULT_REINFORCEMENT_RATIO["_default"])
-                    rebar_ratio_value = st.number_input(
-                        "Bewehrungsgehalt (kg/m³)",
-                        min_value=0.0,
-                        max_value=500.0,
-                        value=float(default_ratio_nm),
-                        step=10.0,
-                        key=f"rebar_ratio_nm_{data_version}_{group_index}_{primary_guid}",
-                    )
-                    rebar_accepted = True
-                    rebar_source = "user"
+                else:
+                    st.warning("⚠️ Keine Oberflächenangabe (NetSurfaceArea / GrossSurfaceArea) im IFC vorhanden. Verzinkung kann nicht berechnet werden.")
 
             guid_layer_map = group.get("guid_layer_map", {})
             for guid in guids:
@@ -563,6 +608,7 @@ def render_tab_ai_mapping(df: pd.DataFrame | None) -> None:
                     update_entry["reinforcement_accepted"] = False
                     update_entry["reinforcement_ratio_kg_m3"] = None
                     update_entry["reinforcement_source"] = None
+                update_entry["galvanization_accepted"] = bool(galv_accepted)
                 updates.append(update_entry)
 
     # --- Build guid_map and render viewer bridge after all groups are in the DOM ---
@@ -595,7 +641,9 @@ def render_tab_ai_mapping(df: pd.DataFrame | None) -> None:
                 if df_new is not None and not df_new.empty:
                     df_new = add_domain_defaults(df_new)
                     df_new = add_reinforcement_info(df_new)
+                    df_new = add_galvanization_info(df_new)
                 df_new, ubp_db_path = run_ubp_calculation(str(jsonl_path), df_new)
+                df_new = add_physical_quantity_columns(df_new)
                 if df_new is None:
                     st.error("UBP-Berechnung lieferte keine Daten.")
                     st.stop()

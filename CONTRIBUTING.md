@@ -33,6 +33,11 @@ Thank you for considering a contribution! Here are a few guidelines.
 - Reference related issues.
 - Ensure CI passes.
 
+## Code of Conduct
+
+This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md).
+By participating, you are expected to uphold this code.
+
 ## Reporting Issues
 
 - Use the issue templates (Bug Report, Feature Request).

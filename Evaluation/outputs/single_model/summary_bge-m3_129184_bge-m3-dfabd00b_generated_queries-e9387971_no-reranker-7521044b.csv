@@ -1,0 +1,2 @@
+model,pipeline_variant,cross_encoder_model,cases,hit@1,hit@10,hit@20,hit@30,hit@50,mrr,map@10,ndcg@10,recall@10,avg_expected_score,hit@1_ci_low,hit@1_ci_high,hit@10_ci_low,hit@10_ci_high,mrr@10_ci_low,mrr@10_ci_high,ndcg@10_ci_low,ndcg@10_ci_high
+/mnt/nas05/data01/kbob-ai-matcher/models/bge-m3,baseline,-,9988,0.284141,0.880857,0.929916,0.957349,0.978074,0.460762,0.413927,0.530624,0.827205,0.540773,0.277333,0.293152,0.874650,0.886669,0.455096,0.468056,0.525317,0.536608

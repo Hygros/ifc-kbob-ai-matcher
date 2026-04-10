@@ -5,7 +5,7 @@ import streamlit as st
 
 from Dashboard.config import DEFAULT_SBERT_MODEL, DEFAULT_CROSS_ENCODER_MODEL
 from Dashboard.services.ifc_pipeline import preload_sbert_resources, preload_cross_encoder_resources
-from Dashboard.services.viewer import ensure_ifclite_viewer
+from Dashboard.services.viewer import VIEWER_PORT, ensure_ifclite_viewer
 
 
 VIEWER_START_RETRY_INTERVAL_SECONDS = 3.0
@@ -43,4 +43,4 @@ def initialize_app_runtime() -> None:
     last_attempt = float(st.session_state.get("viewer_server_last_attempt", 0.0) or 0.0)
     if now - last_attempt >= VIEWER_START_RETRY_INTERVAL_SECONDS:
         st.session_state["viewer_server_last_attempt"] = now
-        st.session_state["viewer_server_started"] = ensure_ifclite_viewer(viewer_root, port=3000)
+        st.session_state["viewer_server_started"] = ensure_ifclite_viewer(viewer_root, port=VIEWER_PORT)

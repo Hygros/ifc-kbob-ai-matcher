@@ -23,7 +23,6 @@ AggregateParentGUID    (Parent-GUID für Viewer-Highlighting)
 ### Aus PropertySets extrahiert
 DEFAULT_PROPERTY_FIELDS:
 ```
-Description
 Status
 CastingMethod
 StrengthClass

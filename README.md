@@ -77,22 +77,25 @@ Matching/
 │   ├── evaluate_material_models.py    #   Kern-Engine: 13 Bi-Encoder + Cross-Encoder Benchmarks
 │   ├── build_evaluation_report.py     #   Markdown-Report + SVG-Übersichtsgrafik generieren
 │   ├── export_sbert_queries_to_txt.py #   IFC/JSONL → Query-TXT für Evaluation
+│   ├── run_single_model_evaluation.py #   Einzelevaluation eines einzelnen Bi-Encoder-Modells
 │   ├── retrieval_metrics.py           #   Hit@K, MRR, MAP@10, nDCG@10, Recall@10
 │   ├── metric_explanations.md         #   Erklärung der Metriken
 │   ├── test_data/                     #   Testdaten (IFC, JSONL, Queries, Analyse-CSVs)
-│   ├── expected_material/             #   Ground-Truth-Dateien für Evaluation
-│   ├── exports/                       #   Generierte Queries + Evaluationsergebnisse
+│   ├── ground_truth/                  #   Ground-Truth-Dateien für Evaluation
+│   ├── outputs/                       #   Generierte Queries + Evaluationsergebnisse
 │   │   ├── queries/                   #     Query-TXT-Dateien
-│   │   └── model_evaluation/          #     CSV-Metriken, Reports, SVG-Grafiken
+│   │   │   └── _archive/              #     Historische Query-Varianten
+│   │   └── results/                   #     CSV-Metriken, Reports, SVG-Grafiken
 │   ├── tests/                         #   Unit-Tests (pytest)
-│   └── azure/                         #   Azure ML Evaluation-Jobs
 │
 ├── Training/                          # Bi-Encoder Fine-Tuning
 │   ├── run_training_pipeline.py       #   Orchestrator: validate → prepare → train
 │   ├── prepare_training_data.py       #   Query/Expected TXT → JSONL-Trainingspaare
 │   ├── train_bge_m3.py                #   Fine-Tuning mit MultipleNegativesRankingLoss
 │   ├── validate_training_data.py      #   Validierung von Roh- und JSONL-Trainingsdaten
-│   ├── run_single_model_evaluation.py #   Einzelmodell-Evaluation (ohne alle 13 Modelle)
+│   ├── query_generation/              #   Query-Generator-Skripte + Policy
+│   │   ├── sources/                   #     Eingabedateien (possible_*.txt, Materialliste)
+│   │   └── generated_queries/         #     Generierte Query-/Mapping-TXT aus den Query-Generatoren
 │   ├── data/                          #   Rohdaten (Query-/Expected-TXT, Excel)
 │   ├── artifacts/                     #   Trainierte Modelle + Trainingspaare
 │   └── outputs/                       #   Evaluationsergebnisse einzelner Modelle
@@ -100,7 +103,7 @@ Matching/
 ├── scripts/                           # Ad-hoc-Beispiele und Testskripte
 ├── models/                            # Lokaler Modell-Cache (SBERT, Cross-Encoder)
 ├── IFC-Modelle/                       # Test-IFC-Dateien und UBP-Berechnungsergebnisse
-├── Ökobilanzdaten.sqlite3             # KBOB-Materialdatenbank (nicht im Repo)
+├── Ökobilanzdaten.sqlite3             # KBOB-Materialdatenbank (im Repo enthalten)
 │
 ├── run_ifc_sbert_pipeline.py          # CLI-Einstiegspunkt: IFC → JSONL → SBERT-Matching
 ├── requirements.txt                   # Python-Abhängigkeiten
@@ -179,8 +182,8 @@ python Evaluation/run_evaluation_pipeline.py
 
 # Mit expliziten Parametern
 python Evaluation/run_evaluation_pipeline.py \
-  --query-source Evaluation/exports/queries/list_1_queries_with_ifc.txt \
-  --expected-file Evaluation/expected_material/list_1_expected_mit-ohne_ifc.txt \
+  --query-source Evaluation/outputs/queries/list_1_queries_with_ifc.txt \
+  --expected-file Evaluation/ground_truth/list_1_expected_mit-ohne_ifc.txt \
   --cross-encoder-model BAAI/bge-reranker-v2-m3 \
   --rerank-top-n 30
 
@@ -197,7 +200,7 @@ Material A | Material B | Material C
 Material A::1.0 | Material B::0.7
 ```
 
-Ergebnisse: `Evaluation/exports/model_evaluation/` (CSV, Markdown-Report, SVG-Grafik).
+Ergebnisse: `Evaluation/outputs/results/` (CSV, Markdown-Report, SVG-Grafik).
 
 **Metriken:** Hit@K, MRR, MAP@10, nDCG@10, Recall@10 — Details in [Evaluation/metric_explanations.md](Evaluation/metric_explanations.md).
 
@@ -207,8 +210,8 @@ Fine-Tuning von `BAAI/bge-m3` mit eigenen Query/Expected-Paaren:
 
 ```bash
 python Training/run_training_pipeline.py \
-  --query-file Evaluation/exports/queries/list_1_queries_with_ifc.txt \
-  --expected-file Evaluation/expected_material/list_1_expected_mit-ohne_ifc.txt \
+  --query-file Evaluation/outputs/queries/list_1_queries_with_ifc.txt \
+  --expected-file Evaluation/ground_truth/list_1_expected_mit-ohne_ifc.txt \
   --base-model BAAI/bge-m3 \
   --output-dir Training/artifacts/models/bge-m3-finetuned \
   --epochs 2 --batch-size 8 --lr 2e-5 --device cuda --fp16 --deduplicate
@@ -217,10 +220,10 @@ python Training/run_training_pipeline.py \
 Das trainierte Modell kann direkt mit dem Single-Model-Runner evaluiert werden:
 
 ```bash
-python Training/run_single_model_evaluation.py \
+python Evaluation/run_single_model_evaluation.py \
   --model Training/artifacts/models/bge-m3-finetuned \
-  --query-file Evaluation/exports/queries/list_1_queries_with_ifc.txt \
-  --expected-file Evaluation/expected_material/list_1_expected_mit-ohne_ifc.txt \
+  --query-file Evaluation/outputs/queries/list_1_queries_with_ifc.txt \
+  --expected-file Evaluation/ground_truth/list_1_expected_mit-ohne_ifc.txt \
   --run-label finetuned
 ```
 
@@ -254,3 +257,4 @@ Informationen zu Drittbibliotheken und Modell-Lizenzen: [THIRD_PARTY_NOTICES.md]
 
 > **Hinweis:** Einige optionale Cross-Encoder-Modelle (z. B. Jina Reranker) stehen unter
 > nicht-kommerziellen Lizenzen. Details siehe `THIRD_PARTY_NOTICES.md`.
+

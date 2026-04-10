@@ -69,10 +69,19 @@ def resolve_heuristic_batch_size(query_count: int, device: str) -> int:
 
 
 # --- Database Query ---
+# KBOB materials excluded from SBERT matching — these are used only for
+# synthetic add-on rows (e.g. galvanization) and should not appear in the
+# AI-Mapping selectbox as top matches.
+SBERT_EXCLUDED_MATERIALS: set[str] = {"Verzinken"}
+
+
 def fetch_materials_from_db(connection: sqlite3.Connection) -> List[str]:
     cursor = connection.cursor()
     cursor.execute(f"SELECT {COLUMN_MATERIAL} FROM {TABLE_NAME} WHERE {COLUMN_MATERIAL} IS NOT NULL")
-    materials = [row[0] for row in cursor.fetchall() if str(row[0]).strip() != ""]
+    materials = [
+        row[0] for row in cursor.fetchall()
+        if str(row[0]).strip() != "" and row[0] not in SBERT_EXCLUDED_MATERIALS
+    ]
     # Deduplicate while preserving order (reduces corpus size and speeds up encoding/search)
     return list(dict.fromkeys(materials))
 
@@ -167,6 +176,11 @@ def get_global_sbert_model(model_name: str | None = None, device: str = "cpu"):
         with torch.inference_mode():
             _ = _global_sbert_models[key].encode(["warmup"], batch_size=1, show_progress_bar=False)
     return _global_sbert_models[key]
+
+
+def _normalize_biencoder_score(score: float) -> float:
+    """Cosine-Similarity [-1, 1] → [0, 1] via linearer Skalierung."""
+    return (score + 1.0) / 2.0
 
 
 def _normalize_cross_encoder_scores(raw_scores: np.ndarray) -> list[float]:
@@ -400,7 +414,7 @@ def find_most_similar_db_entries(jsonl_path: str, model_name: str | None = None,
         matches = [
             {
                 "material": materials[int(h["corpus_id"])],
-                "score": round(float(h["score"]), 3),
+                "score": round(_normalize_biencoder_score(float(h["score"])), 3),
             }
             for h in top
         ]

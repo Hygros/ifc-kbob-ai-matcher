@@ -88,8 +88,8 @@ def add_reinforcement_info(df: pd.DataFrame) -> pd.DataFrame:
     # --- reinforcement_ratio_source & reinforcement_ratio_kg_m3 ---
     def _ratio_row(row):
         ifc_entity = str(row.get("IfcEntity") or "").strip()
-        # Skip IfcReinforcingBar itself
-        if ifc_entity == "IfcReinforcingBar":
+        # Skip reinforcement entities themselves
+        if ifc_entity in REINFORCEMENT_ENTITIES:
             return pd.Series({"reinforcement_ratio_source": None, "reinforcement_ratio_kg_m3": None})
         ifc_ratio = _to_float_safe(row.get("ReinforcementVolumeRatio"))
         if ifc_ratio is not None and ifc_ratio > 0:
@@ -103,7 +103,7 @@ def add_reinforcement_info(df: pd.DataFrame) -> pd.DataFrame:
     # --- reinforcement_status ---
     def _status(row):
         ifc_entity = str(row.get("IfcEntity") or "").strip()
-        if ifc_entity == "IfcReinforcingBar":
+        if ifc_entity in REINFORCEMENT_ENTITIES:
             return "none"
         has_material = bool(row.get("Material")) and str(row.get("Material", "")).strip() not in ("", "nan", "None", "[]")
         if not has_material:
@@ -128,6 +128,57 @@ def add_reinforcement_info(df: pd.DataFrame) -> pd.DataFrame:
     # Only meaningful for "assumed" status
     df.loc[~df["reinforcement_status"].isin(["assumed"]), "reinforcement_mass_kg"] = None
 
+    return df
+
+
+# ---------------------------------------------------------------------------
+# Verzinkungsinformationen pro Element  (Galvanization enrichment)
+# ---------------------------------------------------------------------------
+
+def add_galvanization_info(df: pd.DataFrame) -> pd.DataFrame:
+    """Enrich *df* with galvanization detection columns.
+
+    New columns:
+        surface_area_m2  – float | NaN  (prefers NetSurfaceArea, fallback GrossSurfaceArea)
+        has_surface_area  – bool
+    """
+    df = df.copy()
+
+    net_sa = pd.to_numeric(df["NetSurfaceArea"], errors="coerce") if "NetSurfaceArea" in df.columns else pd.Series(dtype=float, index=df.index)
+    gross_sa = pd.to_numeric(df["GrossSurfaceArea"], errors="coerce") if "GrossSurfaceArea" in df.columns else pd.Series(dtype=float, index=df.index)
+
+    df["surface_area_m2"] = net_sa.where(net_sa.notna() & (net_sa > 0), gross_sa)
+    df["has_surface_area"] = df["surface_area_m2"].notna() & (df["surface_area_m2"] > 0)
+
+    return df
+
+
+def add_physical_quantity_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Create aggregatable columns ``calc_volume_m3``, ``calc_area_m2``,
+    ``calc_mass_kg``, ``calc_length_m`` from the UBP calculation's
+    ``Bezugsgröße``/``Berechnungswert``.
+
+    Additionally ``calc_volume_for_mass_m3`` captures the volume of elements
+    whose reference unit is mass (kg) so charts can show volume alongside mass.
+
+    Each column is non-zero only for rows whose reference unit matches.
+    Rows without a value (missing basis) default to 0.0.
+    """
+    df = df.copy()
+    bezug = df["Bezugsgröße"] if "Bezugsgröße" in df.columns else pd.Series("", index=df.index)
+    wert = pd.to_numeric(df["Berechnungswert"] if "Berechnungswert" in df.columns else pd.Series(0.0, index=df.index), errors="coerce").fillna(0.0)
+
+    df["calc_volume_m3"] = np.where(bezug == "NetVolume", wert, 0.0)
+    df["calc_area_m2"] = np.where(bezug == "Ansichtsfläche", wert, 0.0)
+    df["calc_mass_kg"] = np.where(bezug == "Masse (kg)", wert, 0.0)
+    df["calc_length_m"] = np.where(bezug == "Length", wert, 0.0)
+
+    # Volume for mass-based elements (volume × density = mass)
+    vol_series = pd.to_numeric(
+        df["NetVolume"] if "NetVolume" in df.columns else pd.Series(0.0, index=df.index),
+        errors="coerce",
+    ).fillna(0.0)
+    df["calc_volume_for_mass_m3"] = np.where(bezug == "Masse (kg)", vol_series, 0.0)
     return df
 
 

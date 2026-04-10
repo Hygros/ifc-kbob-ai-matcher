@@ -5,3 +5,19 @@ IfcWall RETAININGWALL Widerlagerwand Nord Beton NPK G 2500*500
 IfcWall RETAININGWALL Widerlagerwand Nord Beton NPK G über Pfahlkopfriegel
 IfcWall RETAININGWALL Widerlagerwand Süd Beton NPK G Süd
 IfcWall RETAININGWALL Widerlagerwand Süd Beton NPK G 2500*500
+IfcBeam PIERCAP Beton NPK G
+IfcBeam EDGEBEAM Beton NPK G
+IfcBeam GIRDER_SEGMENT Beton NPK G
+IfcPile BORED Beton NPK L 600
+IfcRailing HANDRAIL
+IfcSlab TRACKSLAB
+IfcSlab TRACKSLAB Beton NPK D
+IfcWall SOLIDWALL Beton NPK G
+IfcWall RETAININGWALL
+IfcCovering
+IfcCovering
+IfcBeam DIAPHRAGM Massivholz
+IfcBuiltElement Spritzbeton SC 11
+IfcCovering
+IfcWall USERDEFINED
+IfcRailing HANDRAIL S235JR

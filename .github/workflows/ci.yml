@@ -35,7 +35,9 @@ jobs:
         run: ruff check .
 
       - name: Run tests
-        run: python -m unittest discover -s Evaluation/tests -p "test_*.py" -v
+        run: |
+          python -m unittest discover -s Evaluation/tests -p "test_*.py" -v
+          python -m unittest discover -s Training/tests -p "test_*.py" -v
 
   secret-scan:
     runs-on: ubuntu-latest

@@ -8,7 +8,7 @@ from typing import Dict, List, Tuple
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-RESULTS_DIR = PROJECT_ROOT / "Evaluation" / "exports" / "model_evaluation"
+RESULTS_DIR = PROJECT_ROOT / "Evaluation" / "outputs" / "results"
 METRIC_EXPLANATIONS_FILE = PROJECT_ROOT / "Evaluation" / "metric_explanations.md"
 
 

@@ -5,7 +5,7 @@ import pandas as pd
 import streamlit as st
 
 from Dashboard.config import DEFAULT_SBERT_MODEL, SBERT_MODEL_OPTIONS, DEFAULT_CROSS_ENCODER_MODEL, CROSS_ENCODER_MODEL_OPTIONS
-from Dashboard.domain.mapping import add_domain_defaults, add_reinforcement_info
+from Dashboard.domain.mapping import add_domain_defaults, add_galvanization_info, add_physical_quantity_columns, add_reinforcement_info
 from Dashboard.services.ifc_pipeline import (
     get_upload_key,
     load_data,
@@ -118,7 +118,10 @@ def render_tab_uploads() -> None:
                 df = df.drop(columns=["index"])
             df = add_domain_defaults(df)
             df = add_reinforcement_info(df)
+            df = add_galvanization_info(df)
             df, ubp_db_path = run_ubp_calculation(str(jsonl_path), df)
+            if df is not None:
+                df = add_physical_quantity_columns(df)
             st.session_state["data"] = df
             st.session_state["ai_mapping_data_version"] = st.session_state.get("ai_mapping_data_version", 0) + 1
             st.session_state.pop("ai_mapping_last_rendered_token", None)
@@ -151,7 +154,10 @@ def render_tab_uploads() -> None:
                 df = df.drop(columns=["index"])
             df = add_domain_defaults(df)
             df = add_reinforcement_info(df)
+            df = add_galvanization_info(df)
             df, ubp_db_path = run_ubp_calculation(str(jsonl_path), df)
+            if df is not None:
+                df = add_physical_quantity_columns(df)
             st.session_state["data"] = df
             st.session_state["ai_mapping_data_version"] = st.session_state.get("ai_mapping_data_version", 0) + 1
             st.session_state.pop("ai_mapping_last_rendered_token", None)

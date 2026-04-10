@@ -1,0 +1,202 @@
+# Format:  Entity PredefinedType: Material1 Material2
+#          Entity: Material1 Material2              (Default fuer alle PredefinedTypes)
+
+# IfcBeam
+IfcBeam BEAM: Beton Stahlbeton Stahl Holz Buche Eiche Fichte Tanne Lärche
+IfcBeam CORNICE: Beton Stahlbeton 
+IfcBeam DIAPHRAGM: Beton Stahlbeton Stahl
+IfcBeam EDGEBEAM: Beton Stahlbeton
+IfcBeam GIRDER_SEGMENT: Beton Stahlbeton Stahl
+IfcBeam HATSTONE: Beton Stahlbeton
+IfcBeam HOLLOWCORE: Beton Stahlbeton
+IfcBeam JOIST: Stahl Holz Buche Eiche Fichte Tanne Lärche
+IfcBeam PIERCAP: Beton Stahlbeton
+IfcBeam SPANDREL: Beton Stahlbeton
+IfcBeam T_BEAM: Beton Stahlbeton
+
+# IfcBearing
+IfcBearing CYLINDRICAL: Stahl
+IfcBearing DISK: Stahl Kunststoff Elastomer
+IfcBearing ELASTOMERIC: Kunststoff Elastomer
+IfcBearing GUIDE: Stahl
+IfcBearing POT: Stahl Kunststoff Elastomer
+IfcBearing ROCKER: Stahl
+IfcBearing ROLLER: Stahl
+IfcBearing SPHERICAL: Stahl
+
+# IfcBuiltElement (nur NOTDEFINED)
+IfcBuiltElement: Beton Stahlbeton Stahl Aluminium Holz Buche Eiche Fichte Tanne Lärche Kunststoff Mauerwerk Asphalt Bitumen Magerbeton
+
+# IfcBuildingElementProxy (nur NOTDEFINED)
+IfcBuildingElementProxy: Beton Stahlbeton Stahl Aluminium Holz Buche Eiche Fichte Tanne Lärche Kunststoff Mauerwerk Asphalt Bitumen Magerbeton
+
+# IfcCaissonFoundation
+IfcCaissonFoundation CAISSON: Beton Stahlbeton Stahl
+IfcCaissonFoundation WELL: Beton Stahlbeton
+
+# IfcColumn
+IfcColumn COLUMN: Beton Stahlbeton Stahl
+IfcColumn PIERSTEM: Beton Stahlbeton
+IfcColumn PIERSTEM_SEGMENT: Beton Stahlbeton
+IfcColumn PILASTER: Beton Stahlbeton
+IfcColumn STANDCOLUMN: Stahl
+
+# IfcCourse
+IfcCourse ARMOUR: Naturstein Beton Stahlbeton Gestein Schotter
+IfcCourse BALLASTBED: Naturstein Kies Schotter
+IfcCourse CORE: Beton Stahlbeton Mauerwerk Gestein Erdmaterial Magerbeton
+IfcCourse FILTER: Naturstein Mineralischer_Filter Kies-Sand-Gemisch
+IfcCourse PAVEMENT: Asphalt Beton Stahlbeton Bitumen
+IfcCourse PROTECTION: Beton Stahlbeton Naturstein Gestein Schotter
+
+# IfcCovering
+IfcCovering CLADDING: Holz Buche Eiche Fichte Tanne Lärche Aluminium Naturstein Kunststoff Metall
+IfcCovering COPING: Aluminium Naturstein Metall
+IfcCovering MEMBRANE: Bitumen Kunststoff
+IfcCovering MOLDING: Holz Buche Eiche Fichte Tanne Lärche Kunststoff Aluminium
+IfcCovering TOPPING: Feinmörtel
+IfcCovering WRAPPING: Kunststoff
+
+# IfcDiscreteAccessory
+IfcDiscreteAccessory ANCHORPLATE: Stahl
+IfcDiscreteAccessory BIRDPROTECTION: Kunststoff
+IfcDiscreteAccessory BRACKET: Stahl Aluminium
+IfcDiscreteAccessory CABLEARRANGER: Stahl Kunststoff
+IfcDiscreteAccessory ELASTIC_CUSHION: Kunststoff
+IfcDiscreteAccessory EXPANSION_JOINT_DEVICE: Stahl Kunststoff
+IfcDiscreteAccessory FILLER: Kunststoff
+IfcDiscreteAccessory FLASHING: Stahl Aluminium
+IfcDiscreteAccessory INSULATOR: Kunststoff
+IfcDiscreteAccessory LOCK: Stahl
+IfcDiscreteAccessory PANEL_STRENGTHENING: Stahl
+IfcDiscreteAccessory RAILBRACE: Stahl
+IfcDiscreteAccessory RAILPAD: Kunststoff
+IfcDiscreteAccessory RAIL_LUBRICATION: Stahl
+IfcDiscreteAccessory RAIL_MECHANICAL_EQUIPMENT: Stahl
+IfcDiscreteAccessory SHOE: Stahl
+IfcDiscreteAccessory SLIDINGCHAIR: Stahl
+IfcDiscreteAccessory SOUNDABSORPTION: Kunststoff Aluminium
+IfcDiscreteAccessory TENSIONINGEQUIPMENT: Stahl
+
+# IfcFooting
+IfcFooting CAISSON_FOUNDATION: Beton Stahlbeton Stahl
+IfcFooting FOOTING_BEAM: Beton Stahlbeton Magerbeton
+IfcFooting PAD_FOOTING: Beton Stahlbeton Magerbeton
+IfcFooting PILE_CAP: Beton Stahlbeton
+IfcFooting STRIP_FOOTING: Beton Stahlbeton Magerbeton
+
+# IfcKerb (nur NOTDEFINED)
+IfcKerb: Beton Stahlbeton Naturstein
+
+# IfcMember
+IfcMember ARCH_SEGMENT: Beton Stahlbeton Stahl
+IfcMember BRACE: Stahl Holz Buche Eiche Fichte Tanne Lärche
+IfcMember CHORD: Stahl Holz Buche Eiche Fichte Tanne Lärche
+IfcMember MEMBER: Stahl Beton Stahlbeton Holz Buche Eiche Fichte Tanne Lärche
+IfcMember PLATE: Stahl Holz Buche Eiche Fichte Tanne Lärche
+IfcMember POST: Stahl Holz Buche Eiche Fichte Tanne Lärche
+IfcMember PURLIN: Stahl Holz Buche Eiche Fichte Tanne Lärche
+IfcMember RAFTER: Stahl Holz Buche Eiche Fichte Tanne Lärche
+IfcMember STAY_CABLE: Stahl Litze
+IfcMember STIFFENING_RIB: Stahl Beton Stahlbeton
+IfcMember STRINGER: Stahl Beton Stahlbeton Holz Buche Eiche Fichte Tanne Lärche
+IfcMember STRUCTURALCABLE: Stahl Litze
+IfcMember STRUT: Stahl Holz Buche Eiche Fichte Tanne Lärche
+IfcMember STUD: Stahl Holz Buche Eiche Fichte Tanne Lärche
+IfcMember SUSPENDER: Stahl Litze
+IfcMember SUSPENSION_CABLE: Stahl Litze
+IfcMember TIEBAR: Stahl
+
+# IfcPavement
+IfcPavement FLEXIBLE: Asphalt Bitumen Walzasphalt Splittmastixasphalt Offenporiger_Asphalt Bitumenmischgut Polymermodifiziertes_Bitumen Hydraulisch_gebundene_Tragschicht Ungebundene_Tragschicht
+IfcPavement RIGID: Beton Stahlbeton Hydraulisch_gebundenes_Fundament Ungebundene_Tragschicht Magerbeton
+
+# IfcPipeFitting (alle Typen gleich)
+IfcPipeFitting: Kunststoff Stahl
+
+# IfcPipeSegment (alle Typen gleich)
+IfcPipeSegment: Kunststoff
+
+# IfcPile
+IfcPile BORED: Beton Stahlbeton
+IfcPile COHESION: Beton Stahlbeton
+IfcPile DRIVEN: Beton Stahlbeton Stahl
+IfcPile FRICTION: Beton Stahlbeton
+IfcPile JETGROUTING: Beton Stahlbeton
+IfcPile SUPPORT: Beton Stahlbeton Stahl Kies
+
+# IfcPlate
+IfcPlate BASE_PLATE: Stahl Stahlguss
+IfcPlate COVER_PLATE: Stahl Aluminium Hochfester_Stahl
+IfcPlate FLANGE_PLATE: Stahl Hochfester_Stahl
+IfcPlate GUSSET_PLATE: Stahl Hochfester_Stahl
+IfcPlate SHEET: Stahl Aluminium
+IfcPlate SPLICE_PLATE: Stahl Hochfester_Stahl
+IfcPlate STIFFENER_PLATE: Stahl Hochfester_Stahl
+IfcPlate WEB_PLATE: Stahl Hochfester_Stahl
+
+# IfcRail
+IfcRail BLADE: Stahl Vergütungsstahl
+IfcRail CHECKRAIL: Stahl Hochfester_Stahl
+IfcRail GUARDRAIL: Stahl Beton Stahlbeton
+IfcRail RACKRAIL: Stahl Vergütungsstahl
+IfcRail RAIL: Stahl Vergütungsstahl
+IfcRail STOCKRAIL: Stahl Vergütungsstahl
+
+# IfcRailing
+IfcRailing BALUSTRADE: Stahl Aluminium Holz Buche Eiche Fichte Tanne Lärche
+IfcRailing FENCE: Stahl Aluminium Holz Buche Eiche Fichte Tanne Lärche Kunststoff
+IfcRailing GUARDRAIL: Stahl Aluminium Beton Stahlbeton Holz Buche Eiche Fichte Tanne Lärche
+IfcRailing HANDRAIL: Stahl Aluminium Holz Buche Eiche Fichte Tanne Lärche
+
+# IfcReinforcingBar (alle Typen gleich)
+IfcReinforcingBar:
+
+# IfcReinforcingMesh (nur NOTDEFINED)
+IfcReinforcingMesh:
+
+# IfcSlab
+IfcSlab APPROACH_SLAB: Beton Stahlbeton
+IfcSlab BASESLAB: Beton Stahlbeton Magerbeton
+IfcSlab FLOOR: Beton Stahlbeton Holz Buche Eiche Fichte Tanne Lärche
+IfcSlab LANDING: Beton Stahlbeton
+IfcSlab PAVING: Beton Stahlbeton Asphalt Bitumen
+IfcSlab ROOF: Beton Stahlbeton Holz Buche Eiche Fichte Tanne Lärche
+IfcSlab SIDEWALK: Beton Stahlbeton Asphalt Bitumen
+IfcSlab TRACKSLAB: Beton Stahlbeton
+IfcSlab WEARING: Asphalt Beton Stahlbeton Bitumen
+
+# IfcTendon (alle Typen gleich)
+IfcTendon BAR: Stahl Vergütungsstahl
+IfcTendon COATED: Stahl Vergütungsstahl
+IfcTendon STRAND: Stahl Litze Spannstahl
+IfcTendon WIRE: Stahl Spannstahl Draht
+
+# IfcTendonAnchor (alle Typen gleich)
+IfcTendonAnchor: Stahl
+
+# IfcTendonConduit
+IfcTendonConduit COUPLER: Stahl Vergütungsstahl Kunststoff
+IfcTendonConduit DIABOLO: Stahl Vergütungsstahl Kunststoff
+IfcTendonConduit DUCT: Stahl Kunststoff
+IfcTendonConduit GROUTING_DUCT: Kunststoff
+IfcTendonConduit TRUMPET: Stahl Vergütungsstahl
+
+# IfcTrackElement
+IfcTrackElement BLOCKINGDEVICE: Stahl
+IfcTrackElement DERAILER: Stahl
+IfcTrackElement FROG: Stahl Vergütungsstahl
+IfcTrackElement HALF_SET_OF_BLADES: Stahl Vergütungsstahl
+IfcTrackElement SLEEPER: Beton Stahlbeton Holz Buche Eiche Kunststoff Polyolefin
+IfcTrackElement SPEEDREGULATOR: Stahl
+IfcTrackElement TRACKENDOFALIGNMENT: Stahl Beton Stahlbeton
+IfcTrackElement VEHICLESTOP: Stahl
+
+# IfcWall
+IfcWall PARAPET: Beton Stahlbeton Mauerwerk Naturstein
+IfcWall POLYGONAL: Beton Stahlbeton Mauerwerk Naturstein
+IfcWall RETAININGWALL: Beton Stahlbeton Naturstein Stahl
+IfcWall SHEAR: Beton Stahlbeton
+IfcWall SOLIDWALL: Beton Stahlbeton Mauerwerk Naturstein
+IfcWall STANDARD: Beton Stahlbeton Mauerwerk Naturstein
+IfcWall WAVEWALL: Beton Stahlbeton Stahl

@@ -22,12 +22,16 @@ def get_parent_assembly(element):
     return None
 
 reinforcements = ifc_file.by_type("IfcReinforcingBar")
+tendons = ifc_file.by_type("IfcTendon")
+structural_elements = list(reinforcements) + list(tendons)
 
 
 rel_aggregates = ifc_file.by_type("IfcRelAggregates")
 
-for reinforcement in reinforcements:
-    print(f"\nBewehrung: {reinforcement.GlobalId} ({reinforcement.Name})")
+for reinforcement in structural_elements:
+    print(
+        f"\n{reinforcement.is_a()}: {reinforcement.GlobalId} ({reinforcement.Name})"
+    )
 
     # Suche nach IfcElementAssembly (z.B. Bohrpfahl) über IfcRelAggregates
     for rel in rel_aggregates:

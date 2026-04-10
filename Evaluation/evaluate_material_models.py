@@ -26,7 +26,7 @@ BI_ENCODER_TOP_K = 50
 def resolve_database_path(project_root: Path) -> Path:
     """Resolve the KBOB/Ökobilanz SQLite DB path.
 
-    Azure/CI/Linux runs must not depend on a developer-specific absolute path.
+    CI/Linux runs must not depend on a developer-specific absolute path.
 
     Resolution order:
     1) Env var `KBOB_DB_PATH` (or `ECOBILANZ_DB_PATH`)
@@ -91,7 +91,7 @@ BOOTSTRAP_SAMPLES = int(os.environ.get("EVAL_BOOTSTRAP_SAMPLES", "300"))
 BOOTSTRAP_SEED = 42
 
 DEFAULT_QUERY_FILE_RELATIVE = Path("Evaluation") / "test_data" / "Bohrpfahl_4.3_sbert_queries.txt"
-DEFAULT_EVALUATION_OUTPUT_RELATIVE = Path("Evaluation") / "exports" / "model_evaluation"
+DEFAULT_EVALUATION_OUTPUT_RELATIVE = Path("Evaluation") / "outputs" / "results"
 
 EXPECTED_BY_QUERY_OVERRIDES: Dict[str, str] = {}
 
@@ -541,6 +541,8 @@ def evaluate_model(
     material_embeddings = model.encode(list(materials), normalize_embeddings=True, convert_to_numpy=True)
     print("  Computing similarities...", flush=True)
     similarities = np.matmul(query_embeddings, material_embeddings.T)
+    # Cosine-Similarity [-1, 1] → [0, 1]
+    similarities = (similarities + 1.0) / 2.0
 
     # Bi-Encoder nach dem Encoding vom GPU entladen, damit der Cross-Encoder
     # (der ggf. noch im VRAM ist) ausreichend Speicher hat.

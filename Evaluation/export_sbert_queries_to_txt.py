@@ -1,7 +1,7 @@
 # usage:
-# python.exe Evaluation/export_sbert_queries_to_txt.py Evaluation/test_data/Bohrpfahl_4.3.jsonl
+# python Evaluation/export_sbert_queries_to_txt.py Evaluation/test_data/Bohrpfahl_4.3.jsonl
 # or
-# python.exe Evaluation/export_sbert_queries_to_txt.py IFC-Modelle\Tekla\2026\test-2026-4.3.ifc
+# python Evaluation/export_sbert_queries_to_txt.py IFC-Modelle\Tekla\test-2026-4.3.ifc
 
 import argparse
 import json
@@ -9,20 +9,14 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-IFC_EXPORT_FIELDS = [
-    "IfcEntity",
-    "PredefinedType",
-    "Name",
-    "Material",
-    "Description",
-    "Durchmesser",
-    "CastingMethod",
-]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from core.sbert.sentence_transformer import ifc_entry_to_string
 
 
-QUERY_EXPORT_DIR = PROJECT_ROOT / "Evaluation" / "exports" / "queries"
+QUERY_EXPORT_DIR = PROJECT_ROOT / "Evaluation" / "outputs" / "queries"
 
 
 def load_ifc_jsonl_entries(jsonl_path: str) -> list[dict]:
@@ -32,20 +26,6 @@ def load_ifc_jsonl_entries(jsonl_path: str) -> list[dict]:
             if line.strip():
                 entries.append(json.loads(line))
     return entries
-
-
-def ifc_entry_to_string(entry: dict) -> str:
-    values: list[str] = []
-    for field in IFC_EXPORT_FIELDS:
-        raw_value = entry.get(field, "")
-        if isinstance(raw_value, list):
-            raw_value = ", ".join(str(value) for value in raw_value if value)
-
-        text = str(raw_value).strip() if raw_value is not None else ""
-        if text and text not in {"NOTDEFINED", "Undefined"}:
-            values.append(text)
-
-    return " ".join(values)
 
 
 def run_ifc_export(ifc_path: Path) -> Path:

@@ -4,6 +4,11 @@ import random
 import re
 from pathlib import Path
 
+from text_normalization import normalize_text_key
+
+
+VALID_QUERY_CLASSES = {"eindeutig", "mehrdeutig"}
+
 
 def load_non_empty_lines(path: Path) -> list[str]:
     if not path.is_file():
@@ -48,7 +53,23 @@ def parse_expected_tokens_line(line: str) -> list[tuple[str, float | None]]:
 
 
 def normalize_key(value: str) -> str:
-    return value.strip().casefold()
+    return normalize_text_key(value)
+
+
+def stable_unique(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for value in values:
+        key = normalize_key(value)
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        ordered.append(value)
+    return ordered
+
+
+def infer_query_class(query_positives: list[str]) -> str:
+    return "mehrdeutig" if len(query_positives) > 1 else "eindeutig"
 
 
 def load_hard_negatives_jsonl(path: Path) -> dict[str, list[str]]:
@@ -132,6 +153,7 @@ def parse_args() -> argparse.Namespace:
         default="",
         help="Optionales JSONL mit query + hard_negatives (z. B. aus mine_hard_negatives.py).",
     )
+
     return parser.parse_args()
 
 
@@ -147,6 +169,8 @@ def main() -> None:
         hard_negatives_by_query = load_hard_negatives_jsonl(hard_negatives_file)
         print(f"Hard-negatives geladen für {len(hard_negatives_by_query)} Queries: {hard_negatives_file}")
 
+
+
     queries = load_non_empty_lines(query_file)
     expected_lines = load_non_empty_lines(expected_file)
 
@@ -159,12 +183,33 @@ def main() -> None:
     records: list[dict[str, object]] = []
     seen_pairs: set[tuple[str, str]] = set()
     skipped_empty_expected = 0
+    class_counter: dict[str, int] = {label: 0 for label in sorted(VALID_QUERY_CLASSES)}
+    parsed_expected_per_query: list[list[tuple[str, float | None]]] = []
+    query_positive_key_union: dict[str, set[str]] = {}
 
     for idx, query in enumerate(queries):
         parsed_tokens = parse_expected_tokens_line(expected_lines[idx])
+        parsed_expected_per_query.append(parsed_tokens)
+        if not parsed_tokens:
+            continue
+
+        query_key = normalize_key(query)
+        query_positive_key_union.setdefault(query_key, set())
+        for positive, _weight in parsed_tokens:
+            positive_key = normalize_key(positive)
+            if positive_key:
+                query_positive_key_union[query_key].add(positive_key)
+
+    for idx, query in enumerate(queries):
+        parsed_tokens = parsed_expected_per_query[idx]
         if not parsed_tokens:
             skipped_empty_expected += 1
             continue
+
+        query_positive_labels = stable_unique([positive for positive, _weight in parsed_tokens])
+        query_key = normalize_key(query)
+        query_class = infer_query_class(query_positive_labels)
+        class_counter[query_class] += 1
 
         for positive, weight in parsed_tokens:
             key = (query.casefold().strip(), positive.casefold().strip())
@@ -176,16 +221,18 @@ def main() -> None:
                 "query": query,
                 "positive": positive,
                 "query_index": idx,
+                "query_class": query_class,
+                "query_positives": list(query_positive_labels),
             }
             if weight is not None:
                 record["weight"] = weight
 
             query_key = normalize_key(query)
-            positive_key = normalize_key(positive)
+            query_positive_keys = query_positive_key_union.get(query_key, set())
             hard_negatives = [
                 negative
                 for negative in hard_negatives_by_query.get(query_key, [])
-                if normalize_key(negative) != positive_key
+                if normalize_key(negative) not in query_positive_keys
             ]
             if hard_negatives:
                 record["hard_negatives"] = hard_negatives
@@ -225,6 +272,7 @@ def main() -> None:
     print(f"Expected-Zeilen: {len(expected_lines)}")
     print(f"Trainingspaare: {len(records)}")
     print(f"Leere Expected-Zeilen übersprungen: {skipped_empty_expected}")
+    print("Query-Klassen im Haupttraining: " + ", ".join(f"{key}={class_counter[key]}" for key in sorted(class_counter)))
     print(f"Output: {out_file}")
 
 

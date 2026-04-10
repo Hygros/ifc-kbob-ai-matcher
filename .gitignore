@@ -16,6 +16,9 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
+# macOS
+.DS_Store
+
 # Environment variables
 .env
 core/sbert/.hf_token
@@ -79,6 +82,9 @@ yarn-error.log*
 # IFC/Export/Resultate
 IFC-Modelle/Resultate_UBP_Berechnung/
 IFC-Modelle/AFRY/
+IFC-Modelle/Tekla/*.htm
+IFC-Modelle/Tekla/*.partReport
+IFC-Modelle/Tekla/*.js
 
 # Legacy / experimental
 Dashboard/old/
@@ -88,9 +94,12 @@ SBERT/old/
 models/
 
 # Evaluation artifacts (generated outputs, logs)
-Evaluation/exports/model_evaluation/
+Evaluation/outputs/results/
+Evaluation/test_data/
 Training/outputs/
 Training/artifacts/
+Training/data/
+Evaluation/outputs/queries/_archive/
 
 # Large / generated export files
 *.log
@@ -103,3 +112,8 @@ Training/artifacts/
 
 # old ideas
 Synonyme/
+
+# AI instructions
+.github/instructions/
+CLAUDE.md
+AGENTS.md

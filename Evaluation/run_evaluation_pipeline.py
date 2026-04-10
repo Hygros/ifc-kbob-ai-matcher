@@ -33,7 +33,7 @@ Beispiele
     python Evaluation/run_evaluation_pipeline.py
 
 - Mit fixer Query-Quelle (TXT):
-    python Evaluation/run_evaluation_pipeline.py --query-source Evaluation/exports/queries/meine_queries.txt
+    python Evaluation/run_evaluation_pipeline.py --query-source Evaluation/outputs/queries/meine_queries.txt
 
 - Vollständig mit Expected-Datei:
     python Evaluation/run_evaluation_pipeline.py --query-source <pfad> --expected-file <pfad>
@@ -43,8 +43,8 @@ Beispiele
 
 Ausgaben
 --------
-- Query-Export: `Evaluation/exports/queries/`
-- Evaluation + Report: `Evaluation/exports/model_evaluation/`
+- Query-Export: `Evaluation/outputs/queries/`
+- Evaluation + Report: `Evaluation/outputs/results/`
   (u. a. `summary*.csv`, `details*.csv`, `evaluation_report*.md`, `overview*.svg`)
 """
 
@@ -60,8 +60,9 @@ EVALUATION_DIR = PROJECT_ROOT / "Evaluation"
 EXPORT_SCRIPT = EVALUATION_DIR / "export_sbert_queries_to_txt.py"
 EVALUATE_SCRIPT = EVALUATION_DIR / "evaluate_material_models.py"
 REPORT_SCRIPT = EVALUATION_DIR / "build_evaluation_report.py"
-QUERIES_EXPORT_DIR = EVALUATION_DIR / "exports" / "queries"
-EXPECTED_MATERIAL_DIR = EVALUATION_DIR / "expected_material"
+SPLIT_MATRIX_SCRIPT = EVALUATION_DIR / "build_split_evaluation_matrix.py"
+QUERIES_EXPORT_DIR = EVALUATION_DIR / "outputs" / "queries"
+EXPECTED_MATERIAL_DIR = EVALUATION_DIR / "ground_truth"
 SUPPORTED_QUERY_SUFFIXES = {".ifc", ".jsonl", ".txt"}
 IGNORED_DIRS = {".git", "__pycache__", "models", ".venv", "venv", ".pytest_cache", ".mypy_cache", "node_modules"}
 
@@ -125,6 +126,23 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=None,
         help="Anzahl Top-Kandidaten pro Query, die per Cross-Encoder neu sortiert werden (Default: 30). Wenn nicht angegeben, wird interaktiv gefragt.",
+    )
+    parser.add_argument(
+        "--split-eval-matrix",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Erzeugt zusaetzlich eine Split-Metrikmatrix nach Query-Facetten.",
+    )
+    parser.add_argument(
+        "--split-eval-query-class-map-file",
+        default="",
+        help="Optionales CSV/JSONL fuer query->query_class in der Split-Matrix.",
+    )
+    parser.add_argument(
+        "--split-eval-min-cases",
+        type=int,
+        default=1,
+        help="Mindestanzahl Cases je Split-Zeile in der Split-Matrix.",
     )
     return parser.parse_args()
 
@@ -334,7 +352,7 @@ def main() -> None:
     if args.rerank_top_n is not None and args.rerank_top_n <= 0:
         raise ValueError("--rerank-top-n muss > 0 sein.")
 
-    for script in (EXPORT_SCRIPT, EVALUATE_SCRIPT, REPORT_SCRIPT):
+    for script in (EXPORT_SCRIPT, EVALUATE_SCRIPT, REPORT_SCRIPT, SPLIT_MATRIX_SCRIPT):
         if not script.is_file():
             raise FileNotFoundError(f"Skript nicht gefunden: {script}")
 
@@ -378,6 +396,20 @@ def main() -> None:
     ensure_evaluation_dependencies(env)
     run_command([sys.executable, str(EVALUATE_SCRIPT)], env=env)
     run_command([sys.executable, str(REPORT_SCRIPT)], env=env)
+
+    if args.split_eval_matrix:
+        split_command = [
+            sys.executable,
+            str(SPLIT_MATRIX_SCRIPT),
+            "--min-cases",
+            str(args.split_eval_min_cases),
+        ]
+        if args.split_eval_query_class_map_file.strip():
+            split_command.extend([
+                "--query-class-map-file",
+                args.split_eval_query_class_map_file,
+            ])
+        run_command(split_command, env=env)
 
     print("\nEvaluation-Pipeline abgeschlossen.")
 

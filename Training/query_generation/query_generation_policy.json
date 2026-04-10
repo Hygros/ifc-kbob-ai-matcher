@@ -1,0 +1,152 @@
+{
+    "variant_modules": {
+        "npk": {
+            "enabled": true,
+            "normal_grades": [
+                "D",
+                "E",
+                "F",
+                "G"
+            ],
+            "deep_foundation_grades": [
+                "H",
+                "I",
+                "K",
+                "L"
+            ],
+            "deep_foundation_targets": [
+                "IfcPile::BORED",
+                "IfcWall::RETAININGWALL"
+            ],
+            "entity_predefined_grades": {},
+            "select_one_grade_per_query": true,
+            "selection_seed": "npk-project-v1",
+            "emit_simplified_variant": true
+        },
+        "steel_grade_alias": {
+            "enabled": true,
+            "strength_aliases": {
+                "S235": [
+                    "S235JR",
+                    "S235J0"
+                ],
+                "S355": [
+                    "S355JR",
+                    "S355J0"
+                ]
+            }
+        },
+        "ptfe_alias": {
+            "enabled": true,
+            "entity_predefined_targets": [
+                "IfcBearing::GUIDE"
+            ],
+            "aliases": [
+                "PTFE",
+                "Teflon",
+                "Polytetrafluoroethylene"
+            ],
+            "emit_without_strength": true
+        },
+        "pavement": {
+            "enabled": true,
+            "predefined_targets": [
+                "PAVEMENT",
+                "PAVING",
+                "SIDEWALK",
+                "WEARING",
+                "FLEXIBLE"
+            ],
+            "material_aliases": {
+                "Asphalt": [
+                    "Asphaltbelag",
+                    "Walzasphalt"
+                ],
+                "Bitumen": [
+                    "Bitumenbelag"
+                ]
+            },
+            "emit_without_strength": true
+        },
+        "aggregate": {
+            "enabled": true,
+            "predefined_targets": [
+                "ARMOUR",
+                "BALLASTBED",
+                "FILTER",
+                "PROTECTION",
+                "SUPPORT"
+            ],
+            "material_aliases": {
+                "Kies": [
+                    "Aggregate"
+                ],
+                "Naturstein": [
+                    "Aggregate"
+                ]
+            },
+            "emit_without_strength": true
+        },
+        "casting_alias": {
+            "enabled": true,
+            "aliases": {
+                "INSITU": [
+                    "INSITU",
+                    "Ortbeton"
+                ],
+                "PRECAST": [
+                    "PRECAST",
+                    "Fertigteil"
+                ]
+            },
+            "selection_seed": "casting-default"
+        }
+    },
+    "confusion_expansions": {
+        "enabled": true,
+        "drop_strength_for_materials": [
+            "Beton",
+            "Magerbeton",
+            "Stahlbeton",
+            "Stahl",
+            "Holz",
+            "Buche",
+            "Eiche",
+            "Fichte",
+            "Tanne",
+            "Lärche"
+        ],
+        "drop_casting_for_concrete": true,
+        "drop_strength_and_casting_for_concrete": true,
+        "drop_material_for_steel_grade": true,
+        "steel_grade_tokens": [
+            "S235",
+            "S235JR",
+            "S235J0",
+            "S355",
+            "S355JR",
+            "S355J0",
+            "S460"
+        ],
+        "bare_entity_predefined_queries": [
+            "IfcWall RETAININGWALL"
+        ]
+    },
+    "balancing": {
+        "max_variants_per_entity_predefined_material": 0
+    },
+    "debug_exports": {
+        "enabled": true
+    },
+    "mapping": {
+        "steel_grade_tokens": [
+            "S235",
+            "S235JR",
+            "S235J0",
+            "S355",
+            "S355JR",
+            "S355J0",
+            "S460"
+        ]
+    }
+}

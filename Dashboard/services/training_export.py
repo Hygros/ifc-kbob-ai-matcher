@@ -15,7 +15,7 @@ python Training/run_training_pipeline.py `
 import math
 from pathlib import Path
 
-from Evaluation.export_sbert_queries_to_txt import IFC_EXPORT_FIELDS
+from core.sbert.sentence_transformer import IFC_EXPORT_FIELDS
 
 
 QUERIES_FILENAME = "dashboard_training_queries.txt"

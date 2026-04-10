@@ -29,11 +29,30 @@ REINFORCEMENT_KBOB_MATERIAL: str = "Armierungsstahl"
 # Fallback-Dichte (kg/m³) für Armierungsstahl, falls DB-Abfrage fehlschlägt
 REINFORCEMENT_STEEL_DENSITY_FALLBACK: float = 7850.0
 
+# KBOB-Materialeinträge, bei denen im AI-Mapping-Tab der Bewehrungsgehalt
+# (kg Stahl / m³ Beton) angezeigt und angepasst werden kann.
+REINFORCEMENT_TRIGGER_MATERIALS: set[str] = {"Tiefbaubeton", "Bohrpfahlbeton"}
+
+
+# ---------------------------------------------------------------------------
+# Verzinkungserkennung (Galvanization detection)
+# ---------------------------------------------------------------------------
+# KBOB-Materialeinträge, bei denen im AI-Mapping-Tab die Verzinkungsoption
+# angezeigt wird.
+GALVANIZATION_TRIGGER_MATERIALS: set[str] = {"Stahlprofil blank"}
+
+# KBOB-Materialname für synthetische Verzinkungszeilen
+GALVANIZATION_KBOB_MATERIAL: str = "Verzinken"
+
+# Fallback-Flächendichte (kg/m²) für Verzinken, falls DB-Abfrage fehlschlägt
+GALVANIZATION_DENSITY_FALLBACK: float = 0.679
+
 
 SBERT_MODEL_OPTIONS = [
     "BAAI/bge-m3",
     "Hygroskopisch/bge-m3-ifc-kbob-finetuned",
-    "Training/artifacts/models/Hygroskopisch/bge-m3-ifc-kbob-hn-phase1",
+    "Hygroskopisch/newest-finetuned",
+    "Training/artifacts/models/Hygroskopisch/bge-m3-finetuned-mnrl-hn",
     "intfloat/multilingual-e5-large",
     "intfloat/multilingual-e5-base",
     "google/embeddinggemma-300m",
@@ -43,7 +62,7 @@ SBERT_MODEL_OPTIONS = [
     "sentence-transformers/distiluse-base-multilingual-cased-v2",
 ]
 
-DEFAULT_SBERT_MODEL = "Hygroskopisch/bge-m3-ifc-kbob-finetuned"
+DEFAULT_SBERT_MODEL = "Hygroskopisch/newest-finetuned"
 
 # --- Cross-Encoder (Re-Ranking) ---
 DEFAULT_CROSS_ENCODER_MODEL = "jinaai/jina-reranker-v2-base-multilingual"

@@ -5,38 +5,129 @@ import subprocess
 import shutil
 import sys
 import time
+from urllib.error import URLError
+from urllib.request import Request, urlopen
 
 import streamlit as st
 import streamlit.components.v1 as components
 
 
-def _is_port_in_use(port: int) -> bool:
+def _read_port_from_env(env_name: str, default: int) -> int:
+    raw = os.environ.get(env_name, "").strip()
+    if not raw:
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        return default
+
+
+LOOPBACK_HOST = (os.environ.get("DASHBOARD_LOOPBACK_HOST") or "127.0.0.1").strip() or "127.0.0.1"
+STATIC_SERVER_PORT = _read_port_from_env("DASHBOARD_STATIC_SERVER_PORT", 8080)
+VIEWER_PORT = _read_port_from_env("DASHBOARD_VIEWER_PORT", 3000)
+STATIC_SERVER_PORT_SCAN_WINDOW = _read_port_from_env("DASHBOARD_STATIC_SERVER_PORT_SCAN_WINDOW", 20)
+
+_STATIC_SERVER_PROCESS: subprocess.Popen | None = None
+_STATIC_SERVER_ACTIVE_PORT: int | None = None
+
+
+def get_static_server_origin(port: int | None = None) -> str:
+    resolved_port = port if port is not None else (_STATIC_SERVER_ACTIVE_PORT or STATIC_SERVER_PORT)
+    return f"http://{LOOPBACK_HOST}:{resolved_port}"
+
+
+def get_viewer_origin(port: int = VIEWER_PORT) -> str:
+    return f"http://{LOOPBACK_HOST}:{port}"
+
+
+def _iter_candidate_ports(preferred_port: int) -> list[int]:
+    candidates = [preferred_port]
+    upper = preferred_port + max(STATIC_SERVER_PORT_SCAN_WINDOW, 0)
+    for candidate in range(preferred_port + 1, upper + 1):
+        candidates.append(candidate)
+    return candidates
+
+
+def _is_compatible_static_server(port: int) -> bool:
+    try:
+        request = Request(
+            f"http://{LOOPBACK_HOST}:{port}/",
+            method="HEAD",
+            headers={"Origin": get_viewer_origin()},
+        )
+        with urlopen(request, timeout=0.8) as response:
+            server_header = (response.headers.get("Server") or "").lower()
+            return "simplehttp" in server_header
+    except URLError:
+        return False
+    except Exception:
+        return False
+
+
+def _is_port_in_use(port: int, host: str = LOOPBACK_HOST) -> bool:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        return sock.connect_ex(("127.0.0.1", port)) == 0
+        return sock.connect_ex((host, port)) == 0
 
 
-def _wait_for_port(port: int, timeout_seconds: float = 10.0, poll_seconds: float = 0.2) -> bool:
+def _wait_for_port(
+    port: int,
+    host: str = LOOPBACK_HOST,
+    timeout_seconds: float = 10.0,
+    poll_seconds: float = 0.2,
+) -> bool:
     deadline = time.time() + timeout_seconds
     while time.time() < deadline:
-        if _is_port_in_use(port):
+        if _is_port_in_use(port, host=host):
             return True
         time.sleep(poll_seconds)
-    return _is_port_in_use(port)
+    return _is_port_in_use(port, host=host)
 
 
-def ensure_static_server(static_dir: str, port: int = 8080) -> None:
-    if _is_port_in_use(port):
-        return
+def ensure_static_server(static_dir: str, port: int = STATIC_SERVER_PORT) -> int:
+    global _STATIC_SERVER_PROCESS, _STATIC_SERVER_ACTIVE_PORT
+
+    if _STATIC_SERVER_PROCESS and _STATIC_SERVER_PROCESS.poll() is None and _STATIC_SERVER_ACTIVE_PORT:
+        return _STATIC_SERVER_ACTIVE_PORT
+
+    if _STATIC_SERVER_ACTIVE_PORT and _is_port_in_use(_STATIC_SERVER_ACTIVE_PORT, host=LOOPBACK_HOST):
+        return _STATIC_SERVER_ACTIVE_PORT
+
     cors_script = os.path.join(os.path.dirname(os.path.dirname(__file__)), "serve_static_with_cors.py")
-    subprocess.Popen(
-        [sys.executable, cors_script, static_dir, str(port)],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+    server_env = {**os.environ, "DASHBOARD_LOOPBACK_HOST": LOOPBACK_HOST}
+
+    for candidate_port in _iter_candidate_ports(port):
+        if _is_port_in_use(candidate_port, host=LOOPBACK_HOST):
+            if _is_compatible_static_server(candidate_port):
+                _STATIC_SERVER_ACTIVE_PORT = candidate_port
+                return candidate_port
+            continue
+
+        process = subprocess.Popen(
+            [sys.executable, cors_script, static_dir, str(candidate_port)],
+            env=server_env,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+
+        if process.poll() is not None:
+            continue
+
+        if _wait_for_port(candidate_port, host=LOOPBACK_HOST, timeout_seconds=5.0):
+            _STATIC_SERVER_PROCESS = process
+            _STATIC_SERVER_ACTIVE_PORT = candidate_port
+            return candidate_port
+
+    if _STATIC_SERVER_ACTIVE_PORT and _is_port_in_use(_STATIC_SERVER_ACTIVE_PORT, host=LOOPBACK_HOST):
+        return _STATIC_SERVER_ACTIVE_PORT
+
+    raise RuntimeError(
+        "No free local port available for IFC static server "
+        f"starting at {port} on host {LOOPBACK_HOST}."
     )
 
 
-def ensure_ifclite_viewer(viewer_root: str, port: int = 3000) -> bool:
-    if _is_port_in_use(port):
+def ensure_ifclite_viewer(viewer_root: str, port: int = VIEWER_PORT) -> bool:
+    if _is_port_in_use(port, host=LOOPBACK_HOST):
         return True
     if not os.path.isdir(viewer_root):
         return False
@@ -68,9 +159,9 @@ def ensure_ifclite_viewer(viewer_root: str, port: int = 3000) -> bool:
         return False
 
     if process.poll() is not None:
-        return _is_port_in_use(port)
+        return _is_port_in_use(port, host=LOOPBACK_HOST)
 
-    return _wait_for_port(port)
+    return _wait_for_port(port, host=LOOPBACK_HOST)
 
 
 def render_viewer_bridge(
@@ -85,6 +176,7 @@ def render_viewer_bridge(
     selected_guids = [guid for guid in selected_guids if isinstance(guid, str) and guid.strip()]
     payload = json.dumps({"guid": selected_guid, "guids": selected_guids})
     guid_map_json = json.dumps(guid_map or {})
+    viewer_origin = get_viewer_origin()
     bridge_html = f"""
 <script>
 (() => {{
@@ -92,7 +184,7 @@ def render_viewer_bridge(
     const GUID_MAP = {guid_map_json};
     const parentWindow = window.parent;
     const _viewerFrame = parentWindow.document.querySelector('iframe.viewer-iframe');
-    let VIEWER_ORIGIN = 'http://localhost:3000';
+    let VIEWER_ORIGIN = {json.dumps(viewer_origin)};
     if (_viewerFrame && _viewerFrame.src) {{
         try {{ VIEWER_ORIGIN = new URL(_viewerFrame.src).origin; }} catch(e) {{}}
     }}
