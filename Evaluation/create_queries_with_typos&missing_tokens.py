@@ -1,6 +1,8 @@
 from pathlib import Path
 from collections import Counter
-import random, json, re
+import random
+import json
+import re
 
 queries_path = Path('Evaluation/ground_truth/queries.txt')
 queries_text = queries_path.read_text(encoding='utf-8')
