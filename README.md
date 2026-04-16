@@ -219,9 +219,92 @@ Material A | Material B | Material C
 Material A::1.0 | Material B::0.7
 ```
 
-Ergebnisse: `Evaluation/outputs/results/` (CSV, Markdown-Report, SVG-Grafik).
+Ergebnisse: `Evaluation/outputs/results/` (Pipeline-Outputs) sowie `Evaluation/outputs/single_model/` (Einzelmodell-Läufe).
 
 **Metriken:** Hit@K, MRR, MAP@10, nDCG@10, Recall@10 — Details in [Evaluation/metric_explanations.md](Evaluation/metric_explanations.md).
+
+### Evaluationsergebnisse
+
+Die folgenden Ergebnisse basieren auf vier Single-Model-Läufen mit `models/Hygroskopisch/bge-m3-ifc-kbob-finetuned` ohne Cross-Encoder-Reranking.
+
+| Queries | Cases | Hit@1 | Hit@10 | Hit@20 | Hit@30 | Hit@50 | MRR@10 | MAP@10 | nDCG@10 | Recall@10 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Normal | 389 | 97.43% | 99.49% | 99.74% | 99.74% | 100.00% | 0.984 | 0.932 | 0.954 | 0.960 |
+| Typos | 389 | 88.43% | 94.86% | 98.20% | 98.97% | 99.49% | 0.909 | 0.844 | 0.876 | 0.890 |
+| Missing Attribute | 389 | 75.32% | 92.80% | 96.40% | 98.20% | 98.71% | 0.803 | 0.750 | 0.794 | 0.860 |
+| Missing + Typos | 389 | 68.12% | 88.17% | 94.34% | 96.92% | 98.46% | 0.739 | 0.682 | 0.731 | 0.805 |
+
+95%-Konfidenzintervalle (Bootstrap aus den Summary-Dateien):
+
+| Queries | Hit@1 95% CI | Hit@10 95% CI | MRR@10 95% CI | nDCG@10 95% CI |
+| --- | --- | --- | --- | --- |
+| Normal | [95.37%, 98.97%] | [98.71%, 100.00%] | [0.971, 0.994] | [0.939, 0.968] |
+| Typos | [84.83%, 91.77%] | [92.80%, 96.66%] | [0.881, 0.935] | [0.847, 0.902] |
+| Missing Attribute | [70.69%, 79.18%] | [89.97%, 94.99%] | [0.766, 0.835] | [0.759, 0.824] |
+| Missing + Typos | [63.36%, 72.49%] | [84.95%, 91.14%] | [0.695, 0.778] | [0.690, 0.767] |
+
+### Query-Definitionen
+
+Die vier unterschiedlichen Query-Dateien messen gezielt unterschiedliche Robustheitsachsen gegen verrauschte Eingaben.  
+Queries sind hier: [Evaluation\ground_truth](Evaluation\ground_truth)
+
+| Queries | Transformation | Harte Invarianten |
+| --- | --- | --- |
+| Normal | Unveränderte Query (Referenzlauf) | Keine Störung |
+| Missing-Datei | Entfernt wird ein erlaubtes Token aus: `PredefinedType`, `Material`, `StrengthClass` oder `insitu/precast` bzw. `Ortbeton/Fertigteil` | `IfcEntity` wird nie entfernt |
+| Typos-Datei | Pro Zeile 1 bis 2 Tippfehler, max. 1 Tippfehler pro Token/Wort | `IfcEntity` bleibt korrekt |
+| Kombinierte Datei | Zuerst ein erlaubtes Token entfernen, danach 1 bis 2 Tippfehler auf verbleibenden erlaubten Tokens; max. 1 Tippfehler pro Token | `IfcEntity` bleibt korrekt |
+
+Zusammenfassung der Queries:
+
+| Datei | Geänderte Zeilen | Verteilung Tippfehler |
+| --- | ---: | --- |
+| Missing | 388 | - |
+| Typos | 388 | 1 Tippfehler: 193, 2 Tippfehler: 195 |
+| Missing + Typos | 388 | 1 Tippfehler: 309, 2 Tippfehler: 61 |
+
+### Ausführliche Interpretation
+
+Hinweis zur Lesart: Die Metriken basieren auf 389 Evaluationsfällen; die Tabelle oben zur Query-Erzeugung beschreibt die Anzahl geänderter Zeilen in den Stördateien.  
+Artefakte: [Evaluation/outputs/single_model/bge-m3-ifc-kbob-finetuned/](Evaluation/outputs/single_model/bge-m3-ifc-kbob-finetuned/)
+
+**Degradation gegenüber den Normalen Queries (quantifiziert)**
+
+| Queries | Δ Hit@1 | Δ Hit@10 | Δ MRR@10 | Δ nDCG@10 |
+| --- | ---: | ---: | ---: | ---: |
+| Typos | -9.00% | -4.63% | -0.075 | -0.078 |
+| Missing Attribute | -22.11% | -6.69% | -0.181 | -0.160 |
+| Missing + Typos | -29.31% | -11.32% | -0.245 | -0.223 |
+
+Schlussfolgerung: Token-Entfernung verursacht den grösseren Schaden als reine Schreibfehler; die Kombination ist erwartungsgemäss am stärksten.
+
+**Typos vs. Missing (direkter Vergleich der Fehlerarten)**
+- Hit@1: Missing liegt 13.11 Prozentpunkte unter Typos (75.32% vs. 88.43%).
+- Hit@10: Missing liegt 2.06 Prozentpunkte unter Typos (92.80% vs. 94.86%).
+- MRR@10: Missing liegt 0.106 unter Typos (0.803 vs. 0.909).
+- nDCG@10: Missing liegt 0.082 unter Typos (0.794 vs. 0.876).
+
+Schlussfolgerung: Fehlende semantische Slots verschieben korrekte Treffer stärker aus den vorderen Rängen als Tippfehler.
+
+**Top-1 vs. Top-10: konkretes Aufholpotenzial**
+- Normal: Hit@10 - Hit@1 = 2.06%.
+- Typos: Hit@10 - Hit@1 = 6.43%.
+- Missing Attribute: Hit@10 - Hit@1 = 17.48%.
+- Missing + Typos: Hit@10 - Hit@1 = 20.05%.
+
+Schlussfolgerung: Unter Störungen bleibt das korrekte Material oft in den Top-10, fällt aber deutlich häufiger aus Rang 1.
+
+**Statistische Trennschärfe (Hit@1-CIs)**
+- Normal vs. Typos: keine Überlappung; Abstand zwischen Intervallen 3.60% (95.37% vs. 91.77%).
+- Typos vs. Missing: keine Überlappung; Abstand 5.65% (84.83% vs. 79.18%).
+- Missing vs. Missing + Typos: Überlappung 1.80% (70.69% bis 72.49%).
+
+Schlussfolgerung: Die ersten beiden Verschlechterungsschritte sind klar separiert; der letzte Schritt ist kleiner, aber weiterhin negativ.
+
+**Konsequenzen für Einsatz und UI**
+- Für hohe Automatisierungspräzision ist die Stabilität der Slots `Material`, `StrengthClass` und `CastingMethod` entscheidend.
+- Bei verrauschten IFC-Texten sollte die UI primär mit Top-10-Kandidaten arbeiten und Top-1 nicht als alleinige Entscheidung verwenden.
+- Verbesserungshebel liegt weniger bei zusätzlicher Tippfehler-Toleranz als bei robuster Extraktion/Erhaltung semantischer Tokens.
 
 ## Training
 

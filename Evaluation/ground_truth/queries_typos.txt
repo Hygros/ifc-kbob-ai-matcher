@@ -1,0 +1,411 @@
+IfcBeam GIRDER_SEGMENT Beton NPK G C30/37 initu
+IfcBeam EDGEBEAM Beton NPK G C30/37 insituz
+IfcBeam PIERCAP BBeton NPK G C30/37 insitu
+IfcBeam BAM Beton C30/37 initu
+IfcBeam CDORNICE Beton C30/37 precasf
+IfcBeam DIAPHRAGMM Beton C30/37 insittu
+IfcBeam EDEGBEAM Beton C30/37 insitu
+IfcBeam GIRDER_SEGMENT Beton C0/37 innsitu
+IfcBeam HATSTONEE Beton C30/37 insitu
+IfcBeam HOÖLOWCORE Beton C30/37 insitu
+IfcBeam JOIST Beton C31/37 insitu
+IfcBeam PIEERCAP Beton C30/37 nsitu
+IfcBeam SPANDREL Beton C30/31 insitu
+IfcBeam T_BEAMM Beton C30/37 insitu
+
+IfcBearing CYLIDNRICAL 2S35JR
+IfcBearing CYLINDRICAL SStahl
+IfcBearing DISKK Elasstomer
+IfcBearing ELASTFOMERIC Elsatomer
+IfcBearing GUIDDE PTEF
+IfcBearing G7IDE Polytetralfuoroethylene
+IfcBearing GUIED Teflno
+IfcBearing POT S253JR
+IfcBearing POT5 Stahl
+IfcBearing ROCKER S35JR
+IfcBearing ROCKER Stah
+IfcBearing ROLLE 2S35JR
+IfcBearing ROLLERT Stahl
+IfcBearing SPHERIAL S235JR
+IfcBearing SPHERDICAL Sthal
+
+IfcCaissonFoundation CAISSEON Beton C20/25 insitu
+IfcCaissonFoundation CAISSON Stahlbetonh C20/25 insitu
+IfcCaissonFoundation WELL Bton C20/25 insitu
+IfcCaissonFoundation WEL- Stahlbeton C20/25 insitu
+
+IfcColumn CO-UMN Beton C30/37 nsitu
+IfcColumn COLUMN Stahlbeton insiitu
+IfcColumn OLUMN S235JR
+IfcColumn PIERTSEM Beton C30/37 insit7
+IfcColumn PIERRSTEM Sthlbeton C30/37 insitu
+IfcColumn PIERSTEM S23JR
+IfcColumn PPIERSTEM_SEGMENT Beton C30/37 insitu
+IfcColumn PIERSTM_SEGMENT Sathlbeton C30/37 insitu
+IfcColumn PIERSTEM_SEGMENT S235HR
+IfcColumn PILASTTER Beton CD30/37 insitu
+IfcColumn PILASTER Stahlbetob C30/37 nisitu
+IfcColumn ILASTER S935JR
+IfcColumn STANDCOLUMN Beton C30/37 isnitu
+IfcColumn STANDCOLUMN Wtahlbeton C30/37 insit
+IfcColumn STANDCOLUN S235JR
+
+IfcCourse ARMOUR5 Gestedin
+IfcCourse ATMOUR Schotter
+IfcCourse BQLLASTBED chotter
+IfcCourse BALASTBED Kies
+IfcCourse COORE Geetein
+IfcCourse COREE Erdmaterial
+IfcCourse FILTER Mineraljscher Fil.ter
+IfcCourse FILTER Kies-Sand-GGemisch
+IfcCourse PAVEENT Asühalt
+IfcCourse PAVEEMNT eton C30/37 insitu
+IfcCourse PROTECTIION Gestein
+IfcCourse PROTECTION Schotte3r
+
+IfcCovering CLADDINHG Metall
+IfcCovering CLADDING Fasezrement
+IfcCovering COPING Betn C30/37 predcast
+IfcCovering CPOING Naturrstein
+IfcCovering MESMBRANE Sbdichtung
+IfcCovering MEWMBRANE Bitumenbah
+IfcCovering TOPING Feinmörtel
+IfcCovering WRYPPING Kunssttoff
+
+IfcFooting CAISSON_FOUNDDATION Beton CV30/37 insitu
+IfcFooting CAISSON_FOUNDATION Staahl
+IfcFooting CAISSO_FOUNDATION S23J5R
+IfcFooting FOTING_BEAM Beton C30/37 insituu
+IfcFooting FOOTING_BEAM Stazhlbeton C00/37 insitu
+IfcFooting PAD_FOOTIN Betton C30/37 insitu
+IfcFooting PAD_FOOOTING Stahlbton C30/37 insitu
+IfcFooting PILES_CAP Beton C0/37 insitu
+IfcFooting PILE_CAP Stahlbeotn C30/37 insizu
+IfcFooting STRIP_FOOTINNG Beto C30/37 insitu
+IfcFooting STRIP_FOOTING Stahlbet9n C30/37 insitu
+
+IfcMember ARCH_SEMGENT Beton C30/37 insitu
+IfcMember ARCH_SEGM,ENT Stahl
+IfcMember ARCH_SEGEMNT Naturstzein
+IfcMember BRAWCE Sthal
+IfcMember BRCE Hloz
+IfcMember CHOD Stahll
+IfcMember CHORD Hokz
+IfcMember EMMBER Stahbl
+IfcMember MMEBER Holz
+IfcMember PPATE Hollz
+IfcMember LPATE Brettrschichtholz
+IfcMember POST Hol
+IfcMember PÜOST Stahl
+IfcMember URLIN oHlz
+IfcMember PURLINM Stahl
+IfcMember RAZFTER Hol
+IfcMember RATER tSahl
+IfcMember STAZY_CABLE Stahhl
+IfcMember STAY_CAABLE LKitze
+IfcMember STIFFENIG_RIB Sthal
+IfcMember STRINGER Beton C30/7 insitu
+IfcMember STRIHGER Stahl
+IfcMember STRUCTURALACBLE Sttahl
+IfcMember STRUCTURALABLE Liktze
+IfcMember STRT Strahl
+IfcMember STRUT5 Holz
+IfcMember STUD Hoolz
+IfcMember SUSPENEDR Sthl
+IfcMember AUSPENDER L-itze
+IfcMember SUSPPENSION_CABLE Stahl
+IfcMember SUSPESION_CABLE Litze
+IfcMember IEBAR Stahp
+IfcMember TIEABR A.uminium
+
+IfcPavement FL.EXIBLE sAphalt
+IfcPavement F.EXIBLE Walzasohalt
+IfcPavement FLEXIBLE Spöittmastixasphalt
+IfcPavement FLEXIBLLE Offfenporiger Asphalt
+IfcPavement FLEXIBLE Bitumenmixchgut
+IfcPavement FCLEXIBLE Polyermodifiziertes Bitumen
+IfcPavement FLEXIBLE Hydraulisch gebunndene Tratschicht
+IfcPavement FLEXIBEL Ungebundene Tragschicht
+IfcPavement RIIGD Beton C30/37 insituu
+IfcPavement RIGID Stahlbeton C30/37 insith
+IfcPavement RIGID Faserbet6on C30/37 insi5u
+IfcPavement RIYID HUPC insitu
+IfcPavement RIGID Hydraulixch gebundenes Fundament
+IfcPavement RIGGID Beton
+
+IfcPile BORED Bteon C20/25 insituj
+IfcPile BORED Stalbeton C20/25 insitu
+IfcPile OBRED Stah
+IfcPile COHESIUON Beton C20/25 insitu
+IfcPile COHEION BNeton 100
+IfcPile DRIVE Stahl
+IfcPile DRIVEN Beton C20/52 precast
+IfcPile FRICTION Beto C20/25 precast
+IfcPile FFRICTION Stahlbeton C20/25 precast
+IfcPile FRIICTION Sthal
+IfcPile JETGROUTRING Mörtel
+IfcPile JETGROUUTING Zementmörtdl
+IfcPile JETGRIUTING Spezialmörtel
+IfcPile SUPORT Beton C20/25 instiu
+IfcPile SUPLORT Strahl
+
+IfcPlate BASE_PLAWTE Stahl
+IfcPlate BASE_P-ATE Stahlguss
+IfcPlate COVER_PLAT S6ahl
+IfcPlate COEVR_PLATE Hochfester Stahl
+IfcPlate FLANGE_PLATE Stah
+IfcPlate FLANGE_PLATE Hochfesrer Ytahl
+IfcPlate UGSSET_PLATE Stahl
+IfcPlate GUSSET_PLAZE Hochfester Stahl
+IfcPlate SHEET SAtahlblech
+IfcPlate AHEET Aluminiumblch
+IfcPlate SPLICE_OLATE Stahl
+IfcPlate SPPLICE_PLATE Hochfeester Stahl
+IfcPlate STIFFENER_PPLATE Stahl
+IfcPlate STIFFENER_PLATE Hochfester5 SYtahl
+IfcPlate 3EB_PLATE Stahl
+IfcPlate WEB_PLATE Hochfesteer Stahl
+
+IfcRail BLYDE Stahl.
+IfcRail BLDE tahl
+IfcRail CHCEKRAIL Stahl
+IfcRail CHECKRAAIL Hochfester SXtahl
+IfcRail GUYRDRAIL SDtahl
+IfcRail GUARDRAIL Hochfestdr Stagl
+IfcRail RAACKRAIL S5ahl
+IfcRail RACKRAIL Stahll
+IfcRail RAJL Sahl
+IfcRail RAILL Srahl
+IfcRail STOCKAIL Stahl
+IfcRail STOCKRAILL Stahl
+
+IfcRailing BALUSTRRADE Sthl
+IfcRailing BALUSTRADE Alumniium
+IfcRailing BWLUSTRADE Hoplz
+IfcRailing FENCE tahl
+IfcRailing FECNE Aluminiuk
+IfcRailing FENNCE Hoz
+IfcRailing FE3NCE Kuststoff
+IfcRailing GUARDRIAL Stalh
+IfcRailing GUAWRDRAIL ASluminium
+IfcRailing TUARDRAIL Hlz
+IfcRailing HANDRAIL SStahl
+IfcRailing HANDRIAL Aluminiumm
+IfcRailing HANHDRAIL Holz
+
+IfcTendon BBAR Staahl
+IfcTendon BAR Stayhl
+IfcTendon COATED SEtahl mit Korrosionsschuitz
+IfcTendon XOATED Stahl beschictet
+IfcTendon STRND Litze
+IfcTendon SRRAND Spannnstahl
+IfcTendon WIEE rDaht
+IfcTendon WIRE Spannsstahl
+
+IfcTendonConduit COUPLER S5ahl
+IfcTendonConduit COOUPLER Stahl
+IfcTendonConduit COUPLERR Kunststoff
+IfcTendonConduit DIAABOLO tahl
+IfcTendonConduit DIAHOLO Stahl
+IfcTendonConduit DIABOL Kunststoff
+IfcTendonConduit DUCVT Kunststoff
+IfcTendonConduit DUCT Stayhl
+IfcTendonConduit GROUTIJG_DUCT Kunststoff
+IfcTendonConduit GROUTINGG_DUCT Stahl
+IfcTendonConduit TRUMLET Sathl
+IfcTendonConduit TRUMMPET Sttahl
+
+IfcBuildingElementPart BLOCKINGDREVICE Stahl
+IfcBuildingElementPart BLOCKINGDEVICCE Aluminiumm
+IfcBuildingElementPart BLOCKNGDEVICE Stahlguss
+IfcBuildingElementPart DERAIKER Sathl
+IfcBuildingElementPart DERAILER Almuinium
+IfcBuildingElementPart DESRAILER Stahlguss
+IfcBuildingElementPart FRO Stahbl
+IfcBuildingElementPart FROG SStahl
+IfcBuildingElementPart FROLG Atahl
+IfcBuildingElementPart HALF_SET_F_BLADES Stashl
+IfcBuildingElementPart HALF_EST_OF_BLADES Stahl
+IfcBuildingElementPart HALF_SET_OF_BLLADES Stalh
+IfcBuildingElementPart SLEEEPR Beton C50/60 precast
+IfcBuildingElementPart SLEEPER Stahlbeton C50/60 rpecast
+IfcBuildingElementPart SLEPER Golz
+IfcBuildingElementPart SLEEPE Kuznststoff
+IfcBuildingElementPart SPEDREGULATOR Stahl
+IfcBuildingElementPart SPEEDREULATOR Aluminiium
+IfcBuildingElementPart SPPEEDREGULATOR Stahlugss
+IfcBuildingElementPart TRCKENDOFALIGNMENT Stahl
+IfcBuildingElementPart TRACKENDOFALIGNMENTT Alumkinium
+IfcBuildingElementPart TRADKENDOFALIGNMENT Beton C50/60 precast6
+IfcBuildingElementPart VEHICLESTOP Stalh
+IfcBuildingElementPart VEHICLESGOP Beton C50/60
+IfcBuildingElementPart EVHICLESTOP Gummipuffdr
+
+IfcWall PARAPETZ Beton C03/37 insitu
+IfcWall PARAPET Stahlbe3ton C30/37 insitu
+IfcWall POLYGONAL Beton C30/37 insiitu
+IfcWall -OLYGONAL Stahlbeton C30/37 nisitu
+IfcWall REETAININGWALL Beton C30/37 insaitu
+IfcWall RETAININGWALL Stahzlbeton C30/37 insitu
+IfcWall RETAININGWALL Sppritzbeton C12/15 initu
+IfcWall SHEA4 Stahlbetton C30/37 insitu
+IfcWall SHEAR Beton C30/37 insiitu
+IfcWall SOLIDWALL Beton C30/37 isnitu
+IfcWall OLIDWALL Stahlbeton C30/37 insitu
+IfcWall STANDARD Beton C30/37 inbsitu
+IfcWall STANDARD Stahlbeton C33/37 innsitu
+IfcWall WAVWEALL Beton C30/37 initu
+IfcWall WAVEWALL Stahlkbeton C30/32 insitu
+
+IfcReinforcingBar
+IfcReinforcingBar Vügel B500BB
+IfcReinforcingBar ängsstab B500B
+IfcReinforcingBar SHEAR Bügel B050B
+IfcReinforcingBar MAYIN 1. Lage B5000B
+IfcReinforcingBar unterer Stsb B500B
+IfcReinforcingBar 1. Lage aussen BB500B
+IfcReinforcingBar MAIIN 1. Lage aussen B50B
+IfcReinforcingBar Weendel unten B5004B
+IfcReinforcingBar Wendel mitte B200B
+IfcReinforcingBar Wendle oben B00B
+IfcReinforcingBar Eendelbewehrung B50B0
+IfcReinforcingBar Löngsarmierung B50B
+
+IfcFooting STRIP_FOOTINT Beton NPK G C30/37 isitu
+IfcSlab FLOOR eBton NPK D C20/25 instiu
+IfcWall RETAAININGWALL Betn NPK G C30/37 insitu
+IfcWall RETAININGGWALL Beton NPK G C30/37 insditu
+
+IfcPile BOERD eton 800 C20/25 insitu
+IfcPile BORED Betom 900 NPK F C20/25 insitu
+IfcPile BORDE Beton 600 C20/55 insitu
+IfcPile BORED Bton 700 C20/2 insitu
+
+IfcFooting SRTIP_FOOTING Magerbeton C15/20 insitu
+
+IfcCovering MEMBRANE Flüssigkunststotf
+
+IfcBuildingElementProxy RAIL Stahul
+IfcBuildingElementProxy RAI Stahhl
+IfcBeam GIRCER_SEGMENT S235JR
+IfcBeam LINTEP S235JR
+IfcBeam T_BAEM S235JIR
+IfcBeam LINTL S235JRR
+IfcBeam JIOST S325JR
+IfcBeam DIAPHGRAGM S2335JR
+IfcBeam S2335JR
+IfcReinforcingBar Büge B500B
+IfcReinforcingBar Bügel B50B
+IfcReinforcingBar Bgel B500B
+IfcReinforcingBar Längsstab B560B
+IfcReinforcingBar Längssttab B00B
+IfcReinforcingBar Länvsstab B500BG
+IfcReinforcingBar Längsstab B5007B
+IfcBeam GIRDER_SEGMENBT Beton NPK G Ortbetton C30/37
+IfcReinforcingBar SHEAR Bügl B500B
+IfcReinforcingBar MIN 1. Lage B560B
+IfcReinforcingBar un6erer Stab B500B
+IfcBeam EDGEBEAM Betton NPK G Ortbetno C30/37
+IfcColumn COLUMN Bdton Ortbeton
+IfcColumn COLUMNN Beton NPK L Ortbeton C20/25
+IfcReinforcingBar Bügel B5500B
+IfcReinforcingBar Längsstabb B600B
+IfcPile BORED Beton NPK L 600 Ortbeton C20/29
+IfcPile BORED Beton NPK H 800 Ortbetkn C23/30
+IfcPile BORED Beton NPK H 800 Ortbe3ton C25/30
+IfcPile BORED Betpn NPK H 800 Ortbeton C52/30
+IfcPile BODED Beton NPK H 800 Ortbton C25/30
+IfcPile BORD Beton NPK H 800 Ortbetn C25/30
+IfcPile BORED Beton NPK H 800 Ortbetonn C25/30
+IfcPile BORED Beton NPK H 800 Prtbeton C25/0
+IfcPile BORDE Betno NPK H 800 Ortbeton C25/30
+IfcPile BORD Beton NPK H 900 Ortbeton C25/30
+IfcPile BORD Beton NPK H 800 Ortbeton C25/30
+IfcFooting STRIP_FOTING Magerbeton Ortbeton
+IfcFooting STRIP_FOOTING Betton NPK G Ortbeton C30/37
+IfcFooting STRIP_FOOTING Mawgerbeton Orftbeton
+IfcFooting STRIP_FOOTING Begon NPK G Ortbetonh C30/37
+IfcFooting STRIP_FOOTIG Magerbeton Orttbeton
+IfcBeam PIERCAP Betonh NPK G Otrbeton C30/37
+IfcFooting STRPI_FOOTING Beton NPK G Orbteton C30/37
+IfcBuildingElementPart TracElement Hoz
+IfcBuildingElementPart TrackElement Holh
+IfcBuildingElementPart TrackEöement Holz
+IfcBuildingElementPart TracEklement Holu
+IfcBuildingElementPart TrackElemeht Hopz
+IfcBuildingElementPart TrackElem3nt Hloz
+IfcBuildingElementPart TracdkElement Holz
+IfcBuildingElementPart TrackElment oHlz
+IfcBuildingElementProxy RAI9L tahl
+IfcBuildingElementProxy RAIL- SWtahl
+IfcBuildingElementProxy RAILL Stahl
+IfcBuildingElementProxy RAIL Sthl
+IfcBuildingElementProxy RAIL Stahlo
+IfcBuildingElementProxy RASIL SWtahl
+IfcBuildingElementPart TrackElenent Kunststoff
+IfcBuildingElementPart TrackElemejt Kunstsdtoff
+IfcBuildingElementPart TraciElement Kunststoff
+IfcBuildingElementPart TrackEllement Kunststoff
+IfcBuildingElementPart TrackElemenht Kunststofff
+IfcBuildingElementPart TrackElement Bedton Fertigteil C40/50
+IfcBuildingElementPart Tracklement Beton Fertigteil C40/50
+IfcBuildingElementPart TradkElement Beton Fertigteil C40/50
+IfcBuildingElementPart TrackEkement eton Fertigteil C20/25
+IfcBuildingElementPart TrackElement Bton Fertigteeil C20/25
+IfcBuildingElementPart rTackElement Beton Fertigteil C20/25
+IfcRailing UGARDRAIL S253JR
+IfcRailing GUASRDRAIL S235JR
+IfcRailing GUARDAIL S2235JR
+IfcRailing GUAARDRAIL S235JR
+IfcRailing GUARDRAIL E235JR
+IfcRailing GU8ARDRAIL S235JR
+IfcRailing GUADRRAIL S2235JR
+IfcRailing GURADRAIL S235JRE
+IfcRailing GUARDFRAIL S2335JR
+IfcRailing HUANDRAIL 2S35JR
+IfcRailing HANDRAL S235JR
+IfcRailing HANRAIL S235JR
+IfcRailing HANDRAILL S23J5R
+IfcRailing HANDRAIL. S235JR
+IfcRailing HANRDAIL S235R
+IfcRailing HANDRAI S235JR
+IfcTendon ABR B500V
+IfcSlab TRACOSLAB Beton NPK D Ortbeton C25/30
+IfcCovering Bitumeb
+IfcSlab TRACKSLAB Beton NPK D Otbeton C25/30
+IfcCovering MEMBRANE Epoxidhrz
+IfcWall SOLIDWAL Beton NPK G Ortbeto C30/37
+IfcWall SOLIDWALL Beton NPK G Orttbeton C30/37
+IfcWall Epoxsidharz
+IfcReinforcingBar 1. Lage aussen B050B
+IfcReinforcingBar 1. Lage aussen 5B00B
+IfcReinforcingBar JAIN 1. Lage aussen B050B
+IfcReinforcingBar 1. Lage aussen 5B00B
+IfcReinforcingBar 1. Lage aussen B5000B
+IfcReinforcingBar 1. Lage aussen B505B
+IfcReinforcingBar 1. Lage aussen B5000B
+IfcReinforcingBar 1. Lage aussen B500N
+IfcWall RETAININGWALL Rühlwynd Fertivteil
+IfcWall RETAININGWALL Bohrpfahlwanbd rtbeton
+IfcReinforcingBar 1. Lage aussen B050B
+IfcReinforcingBar 1. Lage aussen B5500B
+IfcReinforcingBar MAIN 1. Lage aussen B5000B
+IfcReinforcingBar 1. Lage aussen B200B
+IfcReinforcingBar 1. Lage aussen B500BN
+IfcReinforcingBar 1. Lage aussen BB500B
+IfcReinforcingBar 1. Lage aussen B5500B
+IfcReinforcingBar 1. Lage aussen 5B00B
+IfcWall RETAININGWALL Rühlwand Fertkgteil
+IfcReinforcingBar Wendelebwehrung B500B
+IfcReinforcingBar Wendel unten B50B
+IfcReinforcingBar Wendle mitte B500BV
+IfcReinforcingBar Wenddel oben B5005B
+IfcReinforcingBar Lnägsarmierung B500V
+IfcWall RETAINIGWALL Bohrpfahlwand Orbteton
+IfcWall SOLIDWALL Beton NPK G O5tbeton C30/37
+IfcWall SOLIDWALL Beton NPK G Ortbetoj C30/37
+IfcBuildingElementProxy Course Balastbdd Schhotter
+IfcBearing ELASTOKMERIC Elastomer
+IfcBearing ELASTOEMRIC EElastomer
+IfcBearing ELASTOMERIC Ellastomer
+IfcBearing ELAST6OMERIC Elsatomer

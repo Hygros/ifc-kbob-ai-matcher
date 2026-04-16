@@ -10,6 +10,7 @@ venv/
 
 # VS Code settings
 .vscode/
+Matching.code-workspace
 
 # Windows
 Thumbs.db

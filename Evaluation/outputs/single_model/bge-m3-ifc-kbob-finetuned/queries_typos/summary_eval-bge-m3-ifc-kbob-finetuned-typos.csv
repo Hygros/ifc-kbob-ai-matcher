@@ -1,0 +1,2 @@
+model,pipeline_variant,cross_encoder_model,cases,hit@1,hit@10,hit@20,hit@30,hit@50,mrr,map@10,ndcg@10,recall@10,avg_expected_score,hit@1_ci_low,hit@1_ci_high,hit@10_ci_low,hit@10_ci_high,mrr@10_ci_low,mrr@10_ci_high,ndcg@10_ci_low,ndcg@10_ci_high
+models\\Hygroskopisch\\bge-m3-ifc-kbob-finetuned,baseline,-,389,0.884319,0.948586,0.982005,0.989717,0.994859,0.909083,0.844199,0.875710,0.889752,0.880119,0.848329,0.917738,0.928021,0.966581,0.880868,0.934868,0.847480,0.901832

@@ -51,7 +51,6 @@ GALVANIZATION_DENSITY_FALLBACK: float = 0.679
 SBERT_MODEL_OPTIONS = [
     "BAAI/bge-m3",
     "Hygroskopisch/bge-m3-ifc-kbob-finetuned",
-    "Hygroskopisch/train_129698/model",
     "intfloat/multilingual-e5-large",
     "intfloat/multilingual-e5-base",
     "google/embeddinggemma-300m",
@@ -61,7 +60,7 @@ SBERT_MODEL_OPTIONS = [
     "sentence-transformers/distiluse-base-multilingual-cased-v2",
 ]
 
-DEFAULT_SBERT_MODEL = "Hygroskopisch/train_129698/model"
+DEFAULT_SBERT_MODEL = "Hygroskopisch/bge-m3-ifc-kbob-finetuned"
 
 # --- Cross-Encoder (Re-Ranking) ---
 DEFAULT_CROSS_ENCODER_MODEL = "BAAI/bge-reranker-v2-m3"
