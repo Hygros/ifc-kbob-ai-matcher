@@ -1,7 +1,7 @@
 ISO-10303-21;
 HEADER;
 FILE_DESCRIPTION(('ViewDefinition [ReferenceView_V1.2]', 'ExchangeRequirement [Structural]', 'Option[Flat wide beams as plates:Off]', 'Option[Location by:Global]', 'Option[Locations from Organizer:On]', 'Option[Layer:Name]', 'Option[Object coloring:ByObjectClass]', 'Option[Export All:On]', 'Option[Export Pours:Off]'),'2;1');
-FILE_NAME('Tekla-Export.ifc','2025-04-15T16:11:46',('wpx619'),('Trimble'),'IFC Export Version Nov  6 2024','Tekla Structures 2024 Service Pack 5','IFC4 test model');
+FILE_NAME('Tekla-Export.ifc','2025-04-15T16:11:46',$,('Trimble'),'IFC Export Version Nov  6 2024','Tekla Structures 2024 Service Pack 5','IFC4 test model');
 FILE_SCHEMA(('IFC4'));
 ENDSEC;
 

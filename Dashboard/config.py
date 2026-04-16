@@ -51,8 +51,7 @@ GALVANIZATION_DENSITY_FALLBACK: float = 0.679
 SBERT_MODEL_OPTIONS = [
     "BAAI/bge-m3",
     "Hygroskopisch/bge-m3-ifc-kbob-finetuned",
-    "Hygroskopisch/newest-finetuned",
-    "Training/artifacts/models/Hygroskopisch/bge-m3-finetuned-mnrl-hn",
+    "Hygroskopisch/train_129698/model",
     "intfloat/multilingual-e5-large",
     "intfloat/multilingual-e5-base",
     "google/embeddinggemma-300m",
@@ -62,10 +61,10 @@ SBERT_MODEL_OPTIONS = [
     "sentence-transformers/distiluse-base-multilingual-cased-v2",
 ]
 
-DEFAULT_SBERT_MODEL = "Hygroskopisch/newest-finetuned"
+DEFAULT_SBERT_MODEL = "Hygroskopisch/train_129698/model"
 
 # --- Cross-Encoder (Re-Ranking) ---
-DEFAULT_CROSS_ENCODER_MODEL = "jinaai/jina-reranker-v2-base-multilingual"
+DEFAULT_CROSS_ENCODER_MODEL = "BAAI/bge-reranker-v2-m3"
 
 CROSS_ENCODER_MODEL_OPTIONS = [
     "jinaai/jina-reranker-v2-base-multilingual",   # 278M | 100 Sprachen | DE+EN optimiert

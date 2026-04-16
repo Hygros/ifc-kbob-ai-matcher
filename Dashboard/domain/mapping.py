@@ -1,7 +1,8 @@
-import json
+import re
 
 import numpy as np
 import pandas as pd
+from core import strip_numeric_ids
 
 from Dashboard.config import (
     CONCRETE_KEYWORDS,
@@ -197,22 +198,23 @@ def add_domain_defaults(df: pd.DataFrame) -> pd.DataFrame:
         if "NetVolume" in df.columns:
             df["volume_m3"] = df["NetVolume"]
             if "GrossVolume" in df.columns:
-                df["volume_m3"] = df["volume_m3"].fillna(df["GrossVolume"])
+                df["volume_m3"] = df["volume_m3"].where(df["volume_m3"].notna(), df["GrossVolume"])
         elif "GrossVolume" in df.columns:
             df["volume_m3"] = df["GrossVolume"]
     elif "GrossVolume" in df.columns and "NetVolume" in df.columns:
-        df["volume_m3"] = df["volume_m3"].fillna(df["NetVolume"]).fillna(df["GrossVolume"])
+        df["volume_m3"] = df["volume_m3"].where(df["volume_m3"].notna(), df["NetVolume"])
+        df["volume_m3"] = df["volume_m3"].where(df["volume_m3"].notna(), df["GrossVolume"])
 
     if "kbob_material" not in df.columns:
         df["kbob_material"] = df["ifc_material"] if "ifc_material" in df.columns else None
     else:
         if "ifc_material" in df.columns:
-            df["kbob_material"] = df["kbob_material"].fillna(df["ifc_material"])
+            df["kbob_material"] = df["kbob_material"].where(df["kbob_material"].notna(), df["ifc_material"])
         else:
             df["kbob_material"] = df["kbob_material"].fillna("Unbekannt")
 
     if "selected_kbob_material" in df.columns:
-        df["kbob_material"] = df["selected_kbob_material"].fillna(df["kbob_material"])
+        df["kbob_material"] = df["selected_kbob_material"].where(df["selected_kbob_material"].notna(), df["kbob_material"])
 
     if "density_kg_m3" not in df.columns:
         df["density_kg_m3"] = 2350
@@ -227,7 +229,8 @@ def add_domain_defaults(df: pd.DataFrame) -> pd.DataFrame:
     for col in ["gwp_kgco2eq", "ubp", "penre_kwh_oil_eq"]:
         if col not in df:
             df[col] = 0.0
-        df[col] = df[col].fillna(0.0)
+        df[col] = pd.to_numeric(df[col], errors="coerce")
+        df[col] = df[col].where(df[col].notna(), 0.0)
 
     return df
 
@@ -280,8 +283,69 @@ def _merge_matches(existing: list[dict], incoming: list[dict]) -> list[dict]:
     return merged
 
 
+_GROUP_NORMALIZED_FIELDS: set[str] = {"Name", "Description", "Material"}
+_GROUP_DECIMAL_TOKEN_RE = re.compile(r"\b\d+[.,]\d+\b")
+_GROUP_MULTI_SPACE_RE = re.compile(r"\s{2,}")
+
+
+def _to_group_text(value) -> str:
+    if isinstance(value, list):
+        return ", ".join(str(item).strip() for item in value if item is not None and str(item).strip())
+    return str(value or "").strip()
+
+
+def _normalize_dimension_tokens_for_grouping(field: str, text: str) -> str:
+    if field not in {"Name", "Description"}:
+        return text
+    compact = _GROUP_DECIMAL_TOKEN_RE.sub("", text)
+    compact = _GROUP_MULTI_SPACE_RE.sub(" ", compact).strip()
+    return compact
+
+
+def _normalize_group_field_value(field: str, value) -> str:
+    if isinstance(value, list):
+        normalized_items: list[str] = []
+        for item in value:
+            if item is None:
+                continue
+            text = str(item).strip()
+            if not text:
+                continue
+            if field in _GROUP_NORMALIZED_FIELDS:
+                text = strip_numeric_ids(text)
+                text = _normalize_dimension_tokens_for_grouping(field, text)
+            if text:
+                normalized_items.append(text)
+        return ", ".join(normalized_items)
+
+    text = str(value or "").strip()
+    if field in _GROUP_NORMALIZED_FIELDS:
+        text = strip_numeric_ids(text)
+        return _normalize_dimension_tokens_for_grouping(field, text)
+    return text
+
+
+def _merge_group_field(existing_value, new_value, field: str):
+    existing_text = _to_group_text(existing_value)
+    new_text = _to_group_text(new_value)
+    if existing_text == new_text:
+        if field in _GROUP_NORMALIZED_FIELDS:
+            normalized_existing = _normalize_group_field_value(field, existing_value)
+            if normalized_existing:
+                return normalized_existing
+        return existing_value
+
+    if field in _GROUP_NORMALIZED_FIELDS:
+        existing_norm = _normalize_group_field_value(field, existing_value)
+        new_norm = _normalize_group_field_value(field, new_value)
+        if existing_norm and new_norm and existing_norm == new_norm:
+            return existing_norm
+
+    return None
+
+
 def build_ai_mapping_groups(base_df: pd.DataFrame) -> list[dict]:
-    fields = ["IfcEntity", "PredefinedType", "Name", "Description", "Material", "Durchmesser", "MaterialLayerIndex"]
+    fields = ["IfcEntity", "PredefinedType", "Name", "Material", "Durchmesser", "MaterialLayerIndex"]
     merge_fields = ["PredefinedType", "Name", "Description", "Material", "Durchmesser", "MaterialLayerIndex"]
     groups: dict[tuple, dict] = {}
     for _, row in base_df.iterrows():
@@ -321,10 +385,13 @@ def build_ai_mapping_groups(base_df: pd.DataFrame) -> list[dict]:
             if isinstance(parent_guid, str) and parent_guid.strip():
                 groups[signature].setdefault("aggregate_parent_guids", []).append(parent_guid)
         else:
-            signature = tuple(str(row_dict.get(field) or "").strip() for field in fields) + (
-                json.dumps(normalized_matches, ensure_ascii=False, sort_keys=True),
-            )
-            if signature not in groups:
+            signature = tuple(_normalize_group_field_value(field, row_dict.get(field)) for field in fields)
+            if signature in groups:
+                grp = groups[signature]
+                for field in merge_fields:
+                    grp["row"][field] = _merge_group_field(grp["row"].get(field), row_dict.get(field), field)
+                grp["matches"] = _merge_matches(grp["matches"], normalized_matches)
+            else:
                 groups[signature] = {
                     "row": row_dict,
                     "guids": [],

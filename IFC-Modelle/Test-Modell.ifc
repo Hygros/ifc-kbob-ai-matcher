@@ -14,7 +14,7 @@ DATA;
 #7 = IFCCOLUMN('0yQf$dmcH6rOJ2rwTJv5VG', #8, 'STB St\X\FCtze - rechteckig:STB 300 x 300:2516403', $, 'STB St\X\FCtze - rechteckig:STB 300 x 300', #2284, #14, '2516403', .COLUMN.);
 #8 = IFCOWNERHISTORY(#9, #12, $, .NOCHANGE., $, $, $, 1694859414);
 #9 = IFCPERSONANDORGANIZATION(#10, #11, $);
-#10 = IFCPERSON($, $, 'valentina.giampa', $, $, $, $, $);
+#10 = IFCPERSON($, $, $, $, $, $, $, $);
 #11 = IFCORGANIZATION($, '', $, $, $);
 #12 = IFCAPPLICATION(#13, '2024', 'Autodesk Revit 2024 (DEU)', 'Revit');
 #13 = IFCORGANIZATION($, 'Autodesk Revit 2024 (DEU)', $, $, $);

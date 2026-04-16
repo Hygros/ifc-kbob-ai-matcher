@@ -84,6 +84,33 @@ DEFAULT_POLICY = {
             },
             "emit_without_strength": True,
         },
+        "baugrubensicherung": {
+            "enabled": True,
+            "entity_predefined_targets": ["IfcWall::", "IfcWall::RETAININGWALL", "IfcWall::WAVEWALL"],
+            "concrete_wall_types": [
+                "Bohrpfahlwand verankert",
+                "Bohrpfahlwand unverankert",
+                "Bohrpfahlwand gespriesst",
+                "Rühlwand auskragend",
+                "Rühlwand gespriesst",
+                "Rühlwand verankert",
+                "Schlitzwand 400",
+                "Schlitzwand 800",
+                "Nagelwand",
+            ],
+            "steel_wall_types": [
+                "Spundwand auskragend",
+                "Spundwand gespriesst",
+                "Spundwand verankert",
+            ],
+            "emit_with_material": True,
+            "emit_without_material": True,
+            "emit_with_strength": True,
+            "emit_with_casting": True,
+            "emit_with_strength_and_casting": True,
+            "emit_with_npk": True,
+            "emit_with_steel_alias": True,
+        },
     },
     "confusion_expansions": {
         "enabled": True,
@@ -571,6 +598,148 @@ def generate_variant_queries(slots: dict[str, str], policy: dict | None = None) 
                     )
                 else:
                     variants.append(_build_row_from_slots(slots, material=alias))
+
+    # Baugrubensicherung module for precise IfcWall wall-type disambiguation
+    if _module_enabled(policy, "baugrubensicherung"):
+        bg_policy = module_config.get("baugrubensicherung", {})
+        targets = {
+            str(value).strip()
+            for value in bg_policy.get("entity_predefined_targets", [])
+            if str(value).strip()
+        }
+        if _entity_predefined_key(slots) in targets:
+            wall_types: list[str] = []
+            if _is_concrete_family(slots["material"]):
+                wall_types = [
+                    str(value).strip()
+                    for value in bg_policy.get("concrete_wall_types", [])
+                    if str(value).strip()
+                ]
+            elif _is_steel_material(slots["material"]):
+                wall_types = [
+                    str(value).strip()
+                    for value in bg_policy.get("steel_wall_types", [])
+                    if str(value).strip()
+                ]
+
+            alias_policy = module_config.get("steel_grade_alias", {})
+            alias_strengths = alias_policy.get("strength_aliases", {}).get(slots["strength"], [])
+            steel_alias_strengths = unique_preserve_order(
+                [str(value).strip() for value in alias_strengths if str(value).strip()]
+            )
+
+            npk_policy = module_config.get("npk", {})
+            npk_grades = []
+            if (
+                bg_policy.get("emit_with_npk", False)
+                and _is_concrete_family(slots["material"])
+                and slots["strength"] not in LEAN_STRENGTHS
+            ):
+                npk_grades = _resolve_npk_grades(slots, npk_policy)
+                if npk_grades and bool(npk_policy.get("select_one_grade_per_query", True)):
+                    selection_seed = str(npk_policy.get("selection_seed", "npk-default"))
+                    selection_key = "|".join(
+                        [
+                            selection_seed,
+                            slots["entity"],
+                            slots["predefined_type"],
+                            slots["material"],
+                            slots["strength"],
+                            slots["diameter"],
+                            slots["casting_method"],
+                        ]
+                    )
+                    npk_grades = [_deterministic_choice(npk_grades, selection_key)]
+
+            for wall_type in unique_preserve_order(wall_types):
+                material_with_wall_type = f"{slots['material']} {wall_type}".strip()
+
+                if bg_policy.get("emit_with_material", True):
+                    variants.append(
+                        _build_row_from_slots(
+                            slots,
+                            material=material_with_wall_type,
+                            strength=DEFAULT_VALUE,
+                            exposure=DEFAULT_VALUE,
+                            diameter=DEFAULT_VALUE,
+                            casting_method=DEFAULT_VALUE,
+                        )
+                    )
+                if bg_policy.get("emit_without_material", True):
+                    variants.append(
+                        _build_row_from_slots(
+                            slots,
+                            material=wall_type,
+                            strength=DEFAULT_VALUE,
+                            exposure=DEFAULT_VALUE,
+                            diameter=DEFAULT_VALUE,
+                            casting_method=DEFAULT_VALUE,
+                        )
+                    )
+                if (
+                    bg_policy.get("emit_with_strength", False)
+                    and slots["strength"]
+                    and slots["strength"] not in LEAN_STRENGTHS
+                ):
+                    variants.append(
+                        _build_row_from_slots(
+                            slots,
+                            material=material_with_wall_type,
+                            exposure=DEFAULT_VALUE,
+                            diameter=DEFAULT_VALUE,
+                            casting_method=DEFAULT_VALUE,
+                        )
+                    )
+                if bg_policy.get("emit_with_casting", False) and slots["casting_method"]:
+                    variants.append(
+                        _build_row_from_slots(
+                            slots,
+                            material=material_with_wall_type,
+                            strength=DEFAULT_VALUE,
+                            exposure=DEFAULT_VALUE,
+                            diameter=DEFAULT_VALUE,
+                        )
+                    )
+                if (
+                    bg_policy.get("emit_with_strength_and_casting", False)
+                    and slots["strength"]
+                    and slots["casting_method"]
+                    and slots["strength"] not in LEAN_STRENGTHS
+                ):
+                    variants.append(
+                        _build_row_from_slots(
+                            slots,
+                            material=material_with_wall_type,
+                            exposure=DEFAULT_VALUE,
+                            diameter=DEFAULT_VALUE,
+                        )
+                    )
+                for npk_grade in npk_grades:
+                    variants.append(
+                        _build_row_from_slots(
+                            slots,
+                            material=f"{slots['material']} NPK {npk_grade} {wall_type}".strip(),
+                            strength=DEFAULT_VALUE,
+                            exposure=DEFAULT_VALUE,
+                            diameter=DEFAULT_VALUE,
+                            casting_method=DEFAULT_VALUE,
+                        )
+                    )
+                if (
+                    bg_policy.get("emit_with_steel_alias", False)
+                    and _is_steel_material(slots["material"])
+                ):
+                    for alias_strength in steel_alias_strengths:
+                        variants.append(
+                            _build_row_from_slots(
+                                slots,
+                                material=material_with_wall_type,
+                                strength=alias_strength,
+                                exposure=DEFAULT_VALUE,
+                                diameter=DEFAULT_VALUE,
+                                casting_method=DEFAULT_VALUE,
+                            )
+                        )
 
     return variants
 

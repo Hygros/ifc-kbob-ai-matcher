@@ -15,7 +15,7 @@ python Training/run_training_pipeline.py `
 import math
 from pathlib import Path
 
-from core.sbert.sentence_transformer import IFC_EXPORT_FIELDS
+from core.sbert.sentence_transformer import IFC_EXPORT_FIELDS, extract_disambiguation_tokens
 
 
 QUERIES_FILENAME = "dashboard_training_queries.txt"
@@ -36,6 +36,13 @@ def record_to_query(record: dict) -> str:
         text = str(raw_value).strip()
         if text and text not in _SKIP_VALUES:
             values.append(text)
+
+    for token in extract_disambiguation_tokens(
+        record.get("Name", ""),
+        ifc_entity=record.get("IfcEntity", ""),
+    ):
+        if token not in values:
+            values.append(token)
     return " ".join(values)
 
 

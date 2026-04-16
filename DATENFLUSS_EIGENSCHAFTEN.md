@@ -70,14 +70,20 @@ Dashboard/services/ifc_pipeline.py
 ```
 IfcEntity
 PredefinedType
-Name
 Material
 Durchmesser
 CastingMethod
 StrengthClass
 ```
 
-Diese Felder werden zu einem Query-Text konkateniert und gegen die KBOB-Materialdatenbank gematcht.
+Diese Basisfelder werden zu einem Query-Text konkateniert und gegen die KBOB-Materialdatenbank gematcht.
+
+`Name` wird nicht als Rohtext in die Basisfelder aufgenommen. Stattdessen wird `Name` gezielt für Baugrubensicherungs-Disambiguierung genutzt (fuzzy, mehrsprachig), und nur erkannte Tokens werden ergänzt, z. B.:
+```
+Schlitzwand | Bohrpfahlwand | Spundwand | Nagelwand | Rühlwand
+verankert | gespriesst | auskragend | unverankert
+400 | 800
+```
 
 ### Cross-Encoder Reranking (optional im Upload-Tab)
 ```
@@ -87,13 +93,10 @@ RERANK_TOP_N = 30
 
 Bei aktivem Cross-Encoder werden die Top-N Treffer pro Query neu bewertet; die Scores werden auf [0, 1] normalisiert.
 
-### Wichtige Abweichung für Export/Training
-In Evaluation/export_sbert_queries_to_txt.py ist die Feldliste leicht anders:
-```
-IfcEntity, PredefinedType, Name, Material, Description, Durchmesser, CastingMethod
-```
+### Export/Training-Konsistenz
+Evaluation/export_sbert_queries_to_txt.py nutzt dieselbe Query-Funktion (`ifc_entry_to_string`) wie das Laufzeit-Matching.
 
-Also: dort Description statt StrengthClass.
+Dashboard/services/training_export.py (`record_to_query`) ist auf dieselbe Logik abgeglichen, inklusive Name-basierter Disambiguierungs-Tokens.
 
 ---
 
@@ -109,6 +112,8 @@ MaterialLayerIndex
 Description
 Material
 Durchmesser
+CastingMethod
+StrengthClass
 top_k_matches
 AggregateChildGUIDs
 AggregateParentGUID
@@ -117,15 +122,13 @@ AggregateParentGUID
 ### Element-Label in der linken Liste
 Zusammengestellt aus gültigen Werten in:
 ```
-IfcEntity | PredefinedType | Name | Description | Material | Ø Durchmesser
+IfcEntity | PredefinedType | Name | Description | Material | CastingMethod | StrengthClass | Ø Durchmesser
 ```
 
 Zusatz:
 ```
 (n Elemente)            (wenn eine Gruppe mehrere GUIDs enthält)
 ```
-
-Hinweis: CastingMethod/StrengthClass sind im aktuellen base_cols nicht enthalten und erscheinen daher im Label standardmässig nicht.
 
 ### Materialauswahl pro Gruppe
 ```
@@ -157,8 +160,9 @@ AI Score               (3 Nachkommastellen)
 ### Ausgeschlossene Zeilen
 ```
 MaterialLayerIndex == "R"
+MaterialLayerIndex == "Z"
 ```
-Diese synthetischen Bewehrungszeilen werden in AI-Mapping ausgeblendet und primär für Charts/Totals genutzt.
+Diese synthetischen Bewehrungs-/Verzinkungszeilen werden in AI-Mapping ausgeblendet und primär für Charts/Totals genutzt.
 
 ### Gruppierungslogik (Dashboard/domain/mapping.py)
 Standard-Gruppierung über:
@@ -227,7 +231,7 @@ IFC-Export
     Basis + PSet + berechnete Felder + Material-Layer + Viewer-GUID-Hilfsfelder
 
 SBERT-Matching (Runtime)
-    7 Query-Felder -> top_k_matches (Top 30)
+    6 Basis-Query-Felder + optionale Name-Disambiguierungs-Tokens -> top_k_matches (Top 30)
     optional: Cross-Encoder Reranking der Top 30
 
 Dashboard AI-Mapping

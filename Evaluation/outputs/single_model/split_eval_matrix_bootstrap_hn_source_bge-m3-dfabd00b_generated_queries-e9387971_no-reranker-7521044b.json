@@ -1,0 +1,16 @@
+{
+  "details_file": "C:\\Users\\wpx619\\.AAA_Python_MTH\\ifc-kbob-ai-matcher\\Evaluation\\outputs\\single_model\\details_bootstrap_hn_source_bge-m3-dfabd00b_generated_queries-e9387971_no-reranker-7521044b.csv",
+  "out_csv": "C:\\Users\\wpx619\\.AAA_Python_MTH\\ifc-kbob-ai-matcher\\Evaluation\\outputs\\single_model\\split_eval_matrix_bootstrap_hn_source_bge-m3-dfabd00b_generated_queries-e9387971_no-reranker-7521044b.csv",
+  "annotated_details_csv": "",
+  "rows_input": 11383,
+  "rows_output": 21,
+  "min_cases": 1,
+  "split_rows_by_axis": {
+    "casting_method": 3,
+    "material_family": 8,
+    "query_class": 2,
+    "source_rule": 6,
+    "strength_presence": 2
+  },
+  "query_class_map_file": ""
+}

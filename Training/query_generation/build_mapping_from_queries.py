@@ -144,6 +144,72 @@ def precast_beton_by_strength(has_normal_strength: bool, has_high_strength: bool
     return "Betonfertigteil normalfest | Betonfertigteil hochfest"
 
 
+def _map_baugrubensicherung_wall_type(
+    *,
+    has_schlitzwand: bool,
+    has_bohrpfahlwand: bool,
+    has_spundwand: bool,
+    has_nagelwand: bool,
+    has_ruehlwand: bool,
+    has_auskragend: bool,
+    has_gespriesst: bool,
+    has_verankert: bool,
+    has_unverankert: bool,
+    has_size_400: bool,
+    has_size_800: bool,
+) -> str | None:
+    if has_schlitzwand:
+        if has_size_400 and not has_size_800:
+            return "Baugrubensicherung Schlitzwand 400"
+        if has_size_800 and not has_size_400:
+            return "Baugrubensicherung Schlitzwand 800"
+        return "Baugrubensicherung Schlitzwand 400 | Baugrubensicherung Schlitzwand 800"
+
+    if has_bohrpfahlwand:
+        if has_unverankert:
+            return "Baugrubensicherung Bohrpfahlwand unverankert"
+        if has_gespriesst:
+            return "Baugrubensicherung Bohrpfahlwand gespriesst"
+        if has_verankert:
+            return "Baugrubensicherung Bohrpfahlwand verankert"
+        return (
+            "Baugrubensicherung Bohrpfahlwand verankert | "
+            "Baugrubensicherung Bohrpfahlwand unverankert | "
+            "Baugrubensicherung Bohrpfahlwand gespriesst"
+        )
+
+    if has_spundwand:
+        if has_auskragend:
+            return "Baugrubensicherung Spundwand auskragend"
+        if has_gespriesst:
+            return "Baugrubensicherung Spundwand gespriesst"
+        if has_verankert:
+            return "Baugrubensicherung Spundwand verankert"
+        return (
+            "Baugrubensicherung Spundwand auskragend | "
+            "Baugrubensicherung Spundwand gespriesst | "
+            "Baugrubensicherung Spundwand verankert"
+        )
+
+    if has_ruehlwand:
+        if has_auskragend:
+            return "Baugrubensicherung Rühlwand auskragend"
+        if has_gespriesst:
+            return "Baugrubensicherung Rühlwand gespriesst"
+        if has_verankert:
+            return "Baugrubensicherung Rühlwand verankert"
+        return (
+            "Baugrubensicherung Rühlwand auskragend | "
+            "Baugrubensicherung Rühlwand gespriesst | "
+            "Baugrubensicherung Rühlwand verankert"
+        )
+
+    if has_nagelwand:
+        return "Baugrubensicherung Nagelwand"
+
+    return None
+
+
 def get_mapping(query: str, original: str, policy: dict) -> str:
     """Return improved mapping for a query line."""
     parts = query.split()
@@ -213,6 +279,22 @@ def get_mapping(query: str, original: str, policy: dict) -> str:
     has_hydraulisch_fundament = "Hydraulisch" in query and "Fundament" in query
     has_elastomer = "ELASTOMER" in query_upper
     has_kies = ("Kies" in query) or _contains_any(query_upper, aggregate_tokens)
+    has_schlitzwand = "SCHLITZWAND" in query_upper
+    has_bohrpfahlwand = "BOHRPFAHLWAND" in query_upper
+    has_spundwand = "SPUNDWAND" in query_upper
+    has_nagelwand = "NAGELWAND" in query_upper
+    has_ruehlwand = (
+        "RÜHLWAND" in query_upper
+        or "RUEHLWAND" in query_upper
+        or "RUHLWAND" in query_upper
+    )
+    has_auskragend = "AUSKRAGEND" in query_upper
+    has_gespriesst = "GESPRIESST" in query_upper or "GESPRIEST" in query_upper
+    has_unverankert = "UNVERANKERT" in query_upper
+    has_verankert = ("VERANKERT" in query_upper) and not has_unverankert
+    token_set = {part.upper() for part in parts}
+    has_size_400 = "400" in token_set or "D400" in token_set
+    has_size_800 = "800" in token_set or "D800" in token_set
     has_normal_strength = "C20/25" in query or "C25/30" in query or "C30/37" in query
     has_high_strength = "C35/45" in query or "C40/50" in query
     has_lean_strength = "C12/15" in query or "C16/20" in query
@@ -493,38 +575,36 @@ def get_mapping(query: str, original: str, policy: dict) -> str:
     # ── IfcWall ──────────────────────────────────────────────────────
     if entity == "IfcWall":
         if predefined == "RETAININGWALL":
+            wall_type_mapping = _map_baugrubensicherung_wall_type(
+                has_schlitzwand=has_schlitzwand,
+                has_bohrpfahlwand=has_bohrpfahlwand,
+                has_spundwand=has_spundwand,
+                has_nagelwand=has_nagelwand,
+                has_ruehlwand=has_ruehlwand,
+                has_auskragend=has_auskragend,
+                has_gespriesst=has_gespriesst,
+                has_verankert=has_verankert,
+                has_unverankert=has_unverankert,
+                has_size_400=has_size_400,
+                has_size_800=has_size_800,
+            )
+            if wall_type_mapping is not None:
+                return wall_type_mapping
             if has_naturstein:
                 return (
                     "Natursteinplatte geschnitten | Natursteinplatte geschliffen | "
                     "Hartsandsteinplatte | Kalksteinplatte | Kunststeinplatte zementgebunden"
                 )
             if has_stahl:
-                return (
-                    "Baugrubensicherung Spundwand auskragend | "
-                    "Baugrubensicherung Spundwand gespriesst | "
-                    "Baugrubensicherung Spundwand verankert | "
-                    "Stahlblech blank | Stahlprofil blank"
-                )
+                return "Stahlblech blank | Stahlprofil blank"
             if has_beton and has_insitu:
-                return (
-                    "Tiefbaubeton | "
-                    "Baugrubensicherung Bohrpfahlwand verankert | "
-                    "Baugrubensicherung Bohrpfahlwand unverankert | "
-                    "Baugrubensicherung Bohrpfahlwand gespriesst | "
-                    "Baugrubensicherung Schlitzwand 400 | Baugrubensicherung Schlitzwand 800 | "
-                    "Baugrubensicherung Nagelwand"
-                )
+                return "Tiefbaubeton"
             if has_beton and has_precast:
                 return precast_beton_by_strength(has_normal_strength, has_high_strength)
             if has_beton:
                 return (
                     "Tiefbaubeton | "
-                    f"{precast_beton_by_strength(has_normal_strength, has_high_strength)} | "
-                    "Baugrubensicherung Bohrpfahlwand verankert | "
-                    "Baugrubensicherung Bohrpfahlwand unverankert | "
-                    "Baugrubensicherung Bohrpfahlwand gespriesst | "
-                    "Baugrubensicherung Schlitzwand 400 | Baugrubensicherung Schlitzwand 800 | "
-                    "Baugrubensicherung Nagelwand"
+                    f"{precast_beton_by_strength(has_normal_strength, has_high_strength)}"
                 )
             return (
                 "Baugrubensicherung Spundwand auskragend | "
@@ -540,13 +620,23 @@ def get_mapping(query: str, original: str, policy: dict) -> str:
                 "Baugrubensicherung Nagelwand"
             )
         if predefined == "WAVEWALL":
+            wall_type_mapping = _map_baugrubensicherung_wall_type(
+                has_schlitzwand=has_schlitzwand,
+                has_bohrpfahlwand=has_bohrpfahlwand,
+                has_spundwand=has_spundwand,
+                has_nagelwand=has_nagelwand,
+                has_ruehlwand=has_ruehlwand,
+                has_auskragend=has_auskragend,
+                has_gespriesst=has_gespriesst,
+                has_verankert=has_verankert,
+                has_unverankert=has_unverankert,
+                has_size_400=has_size_400,
+                has_size_800=has_size_800,
+            )
+            if wall_type_mapping is not None:
+                return wall_type_mapping
             if has_stahl:
-                return (
-                    "Baugrubensicherung Spundwand auskragend | "
-                    "Baugrubensicherung Spundwand gespriesst | "
-                    "Baugrubensicherung Spundwand verankert | "
-                    "Stahlblech blank | Stahlprofil blank"
-                )
+                return "Stahlblech blank | Stahlprofil blank"
         if predefined in ("PARAPET", "POLYGONAL"):
             if has_naturstein:
                 return "Natursteinplatte geschnitten | Hartsandsteinplatte | Kalksteinplatte | Kunststeinplatte zementgebunden"
@@ -563,39 +653,31 @@ def get_mapping(query: str, original: str, policy: dict) -> str:
             or predefined.upper() not in _IFCWALL_KNOWN_PREDEFINED
         )
         if _no_predefined:
+            wall_type_mapping = _map_baugrubensicherung_wall_type(
+                has_schlitzwand=has_schlitzwand,
+                has_bohrpfahlwand=has_bohrpfahlwand,
+                has_spundwand=has_spundwand,
+                has_nagelwand=has_nagelwand,
+                has_ruehlwand=has_ruehlwand,
+                has_auskragend=has_auskragend,
+                has_gespriesst=has_gespriesst,
+                has_verankert=has_verankert,
+                has_unverankert=has_unverankert,
+                has_size_400=has_size_400,
+                has_size_800=has_size_800,
+            )
+            if wall_type_mapping is not None:
+                return wall_type_mapping
             if has_stahl:
-                return (
-                    "Baugrubensicherung Spundwand auskragend | "
-                    "Baugrubensicherung Spundwand gespriesst | "
-                    "Baugrubensicherung Spundwand verankert | "
-                    "Stahlblech blank | Stahlprofil blank"
-                )
+                return "Stahlblech blank | Stahlprofil blank"
             if has_beton and has_insitu:
-                return (
-                    "Tiefbaubeton | "
-                    "Baugrubensicherung Bohrpfahlwand verankert | "
-                    "Baugrubensicherung Bohrpfahlwand unverankert | "
-                    "Baugrubensicherung Bohrpfahlwand gespriesst | "
-                    "Baugrubensicherung Rühlwand auskragend | "
-                    "Baugrubensicherung Rühlwand gespriesst | "
-                    "Baugrubensicherung Rühlwand verankert | "
-                    "Baugrubensicherung Schlitzwand 400 | Baugrubensicherung Schlitzwand 800 | "
-                    "Baugrubensicherung Nagelwand"
-                )
+                return "Tiefbaubeton"
             if has_beton and has_precast:
                 return precast_beton_by_strength(has_normal_strength, has_high_strength)
             if has_beton:
                 return (
                     "Tiefbaubeton | "
-                    f"{precast_beton_by_strength(has_normal_strength, has_high_strength)} | "
-                    "Baugrubensicherung Bohrpfahlwand verankert | "
-                    "Baugrubensicherung Bohrpfahlwand unverankert | "
-                    "Baugrubensicherung Bohrpfahlwand gespriesst | "
-                    "Baugrubensicherung Rühlwand auskragend | "
-                    "Baugrubensicherung Rühlwand gespriesst | "
-                    "Baugrubensicherung Rühlwand verankert | "
-                    "Baugrubensicherung Schlitzwand 400 | Baugrubensicherung Schlitzwand 800 | "
-                    "Baugrubensicherung Nagelwand"
+                    f"{precast_beton_by_strength(has_normal_strength, has_high_strength)}"
                 )
         if predefined in ("STANDARD", "SOLIDWALL"):
             if has_buche or has_eiche:

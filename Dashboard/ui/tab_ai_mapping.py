@@ -312,7 +312,7 @@ def render_tab_ai_mapping(df: pd.DataFrame | None) -> None:
 
     with left_col:
         active_guid = st.session_state.get("viewer_selected_guid") if isinstance(st.session_state.get("viewer_selected_guid"), str) else None
-        base_cols = ["IfcEntity", "PredefinedType", "Name", "GUID", "MaterialLayerIndex", "Description", "Material", "Durchmesser", "top_k_matches", "AggregateChildGUIDs", "AggregateParentGUID"]
+        base_cols = ["IfcEntity", "PredefinedType", "Name", "GUID", "MaterialLayerIndex", "Description", "Material", "Durchmesser", "CastingMethod", "StrengthClass", "top_k_matches", "AggregateChildGUIDs", "AggregateParentGUID"]
         if df is not None and hasattr(df, "columns"):
             for col in base_cols:
                 if col not in df.columns:
@@ -643,28 +643,28 @@ def render_tab_ai_mapping(df: pd.DataFrame | None) -> None:
                     df_new = add_reinforcement_info(df_new)
                     df_new = add_galvanization_info(df_new)
                 df_new, ubp_db_path = run_ubp_calculation(str(jsonl_path), df_new)
-                df_new = add_physical_quantity_columns(df_new)
                 if df_new is None:
                     st.error("UBP-Berechnung lieferte keine Daten.")
                     st.stop()
-                else:
-                    st.session_state["data"] = df_new
-                    st.session_state["ai_mapping_data_version"] = st.session_state.get("ai_mapping_data_version", 0) + 1
-                    if ubp_db_path:
-                        st.session_state["ubp_db_path"] = ubp_db_path
-                    st.success("Auswahl gespeichert und in JSONL übernommen")
-                    # --- Export training pairs for fine-tuning ---
-                    manual_pairs = st.session_state.get("_manual_training_pairs", [])
-                    if manual_pairs:
-                        try:
-                            training_dir = Path(__file__).resolve().parent.parent.parent / "Training" / "data"
-                            total, added = export_training_pairs(manual_pairs, training_dir)
-                            if added:
-                                st.info(f"Trainingsdaten: {added} neue Paare exportiert ({total} gesamt)")
-                            else:
-                                st.info(f"Trainingsdaten: keine neuen Paare ({total} gesamt)")
-                        except Exception as exc:
-                            st.warning(f"Trainingsexport fehlgeschlagen: {exc}")
+
+                df_new = add_physical_quantity_columns(df_new)
+                st.session_state["data"] = df_new
+                st.session_state["ai_mapping_data_version"] = st.session_state.get("ai_mapping_data_version", 0) + 1
+                if ubp_db_path:
+                    st.session_state["ubp_db_path"] = ubp_db_path
+                st.success("Auswahl gespeichert und in JSONL übernommen")
+                # --- Export training pairs for fine-tuning ---
+                manual_pairs = st.session_state.get("_manual_training_pairs", [])
+                if manual_pairs:
+                    try:
+                        training_dir = Path(__file__).resolve().parent.parent.parent / "Training" / "data"
+                        total, added = export_training_pairs(manual_pairs, training_dir)
+                        if added:
+                            st.info(f"Trainingsdaten: {added} neue Paare exportiert ({total} gesamt)")
+                        else:
+                            st.info(f"Trainingsdaten: keine neuen Paare ({total} gesamt)")
+                    except Exception as exc:
+                        st.warning(f"Trainingsexport fehlgeschlagen: {exc}")
             else:
                 st.error("Kein JSONL-Pfad gefunden. Auswahl konnte nicht gespeichert werden.")
 

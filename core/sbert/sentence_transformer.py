@@ -3,6 +3,7 @@
 
 
 import sqlite3
+import difflib
 from typing import List
 import numpy as np
 import torch
@@ -11,6 +12,8 @@ from sentence_transformers import SentenceTransformer, SimilarityFunction, util
 from sentence_transformers import CrossEncoder
 import sys
 import json
+import re
+import unicodedata
 from pathlib import Path
 from functools import lru_cache
 
@@ -145,18 +148,203 @@ def load_or_save_model(model_name: str | None = None, device: str = "cpu") -> Se
 IFC_EXPORT_FIELDS = [
     "IfcEntity",
     "PredefinedType",
-    "Name",
     "Material",
     "Durchmesser",
     "CastingMethod",
     "StrengthClass",
 ]
 
+# "Name"
 # "ReinforcementStrengthClass",
 # "Description",
 # "StructuralClass",
 # "ExposureClass",
 # "comment", (nur für Tekla 2025)
+
+
+_BAUGRUBENSICHERUNG_WALL_TYPE_SYNONYMS: dict[str, tuple[str, ...]] = {
+    "Bohrpfahlwand": (
+        "bohrpfahlwand",
+        "bohrpfahl",
+        "bohrpfahlw",
+        "paroi de pieux fores",
+        "pieux fores",
+        "parete di pali trivellati",
+        "pali trivellati",
+        "bored pile wall",
+        "bored pile",
+    ),
+    "Nagelwand": (
+        "nagelwand",
+        "bodennagelung",
+        "paroi clouee",
+        "clouage",
+        "parete chiodata",
+        "soil nail wall",
+        "soil nailing",
+    ),
+    "Rühlwand": (
+        "ruhlwand",
+        "berliner verbau",
+        "berliner wand",
+        "paroi berlinoise",
+        "berlinese",
+        "soldier pile wall",
+        "berlin wall",
+    ),
+    "Schlitzwand": (
+        "schlitzwand",
+        "paroi moulee",
+        "parete a diaframma",
+        "diaframma",
+        "diaphragm wall",
+    ),
+    "Spundwand": (
+        "spundwand",
+        "palplanche",
+        "rideau de palplanches",
+        "palancola",
+        "palancolata",
+        "sheet pile wall",
+        "sheet pile",
+    ),
+}
+
+_BAUGRUBENSICHERUNG_VARIANT_SYNONYMS: dict[str, tuple[str, ...]] = {
+    "auskragend": (
+        "auskragend",
+        "freitragend",
+        "en console",
+        "a sbalzo",
+        "cantilever",
+        "cantilevered",
+    ),
+    "gespriesst": (
+        "gespriesst",
+        "gespriest",
+        "gespriesst",
+        "spriess",
+        "spriessung",
+        "butonne",
+        "puntellato",
+        "braced",
+        "strutted",
+    ),
+    "unverankert": (
+        "unverankert",
+        "nicht verankert",
+        "non ancre",
+        "non ancorato",
+        "unanchored",
+    ),
+    "verankert": (
+        "verankert",
+        "anker",
+        "ancre",
+        "ancorato",
+        "anchored",
+    ),
+}
+
+_BAUGRUBENSICHERUNG_SIZE_PATTERNS: dict[str, tuple[re.Pattern[str], ...]] = {
+    "400": (re.compile(r"\b(?:d\s*)?400\b"),),
+    "800": (re.compile(r"\b(?:d\s*)?800\b"),),
+}
+
+
+def _normalize_disambiguation_text(value: str | None) -> str:
+    text = str(value or "").strip().lower()
+    if not text:
+        return ""
+    text = text.replace("ß", "ss")
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    text = re.sub(r"[^a-z0-9]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _best_group_match(
+    normalized_name: str,
+    words: list[str],
+    synonyms_by_token: dict[str, tuple[str, ...]],
+    cutoff: float,
+) -> str | None:
+    best_token: str | None = None
+    best_score = 0.0
+
+    for token, raw_synonyms in synonyms_by_token.items():
+        for synonym in raw_synonyms:
+            normalized_synonym = _normalize_disambiguation_text(synonym)
+            if not normalized_synonym:
+                continue
+
+            score = 0.0
+            if " " in normalized_synonym:
+                if normalized_synonym in normalized_name:
+                    score = 1.0
+                else:
+                    synonym_word_count = len(normalized_synonym.split())
+                    if synonym_word_count <= len(words):
+                        for index in range(len(words) - synonym_word_count + 1):
+                            ngram = " ".join(words[index : index + synonym_word_count])
+                            score = max(score, difflib.SequenceMatcher(None, normalized_synonym, ngram).ratio())
+            else:
+                if normalized_synonym in words:
+                    score = 1.0
+                else:
+                    candidates = difflib.get_close_matches(
+                        normalized_synonym,
+                        words,
+                        n=1,
+                        cutoff=cutoff,
+                    )
+                    if candidates:
+                        score = difflib.SequenceMatcher(None, normalized_synonym, candidates[0]).ratio()
+
+            if score >= cutoff and score > best_score:
+                best_score = score
+                best_token = token
+
+    return best_token
+
+
+def extract_disambiguation_tokens(
+    name: str | None,
+    ifc_entity: str | None = None,
+) -> list[str]:
+    entity_upper = str(ifc_entity or "").strip().upper()
+    if entity_upper and not entity_upper.startswith("IFCWALL"):
+        return []
+
+    normalized_name = _normalize_disambiguation_text(name)
+    if not normalized_name:
+        return []
+
+    words = normalized_name.split()
+    wall_type = _best_group_match(
+        normalized_name,
+        words,
+        _BAUGRUBENSICHERUNG_WALL_TYPE_SYNONYMS,
+        cutoff=0.78,
+    )
+    if wall_type is None:
+        return []
+
+    tokens: list[str] = [wall_type]
+    variant = _best_group_match(
+        normalized_name,
+        words,
+        _BAUGRUBENSICHERUNG_VARIANT_SYNONYMS,
+        cutoff=0.76,
+    )
+    if variant is not None and variant not in tokens:
+        tokens.append(variant)
+
+    for size, patterns in _BAUGRUBENSICHERUNG_SIZE_PATTERNS.items():
+        if any(pattern.search(normalized_name) for pattern in patterns):
+            tokens.append(size)
+
+    return tokens
 
 
 
@@ -338,6 +526,13 @@ def ifc_entry_to_string(entry: dict) -> str:
             val = ", ".join(str(v) for v in val if v)
         if val is not None and str(val).strip() != "" and str(val).strip() != "NOTDEFINED" and str(val).strip() != "Undefined":
             values.append(str(val).strip())
+
+    for token in extract_disambiguation_tokens(
+        entry.get("Name", ""),
+        ifc_entity=entry.get("IfcEntity", ""),
+    ):
+        if token not in values:
+            values.append(token)
     return " ".join(values)
 
 
@@ -378,6 +573,9 @@ def find_most_similar_db_entries(jsonl_path: str, model_name: str | None = None,
         selected_batch_size = ENCODE_BATCH_SIZE
         batch_mode = "default"
     print(f"Number of IFC queries: {query_count}")
+    # Zeige zusätzlich die Anzahl deduplizierter Query-Strings (Anzeige only)
+    unique_queries = list(dict.fromkeys(queries))
+    print(f"Number of IFC queries deduplicated: {len(unique_queries)}")
     print(f"Runtime device: {device} (threshold={CUDA_QUERY_THRESHOLD})")
     print(f"SBERT batch size: {selected_batch_size} ({batch_mode})")
 

@@ -10,6 +10,19 @@ from .ifc_material_extract_util import extract_materials
 NO_AGGREGATES_ALLOWED_SUBENTITY_TYPES = {"IfcCovering", "IfcReinforcingBar", "IfcReinforcingMesh", "IfcTendon"}
 _REINFORCEMENT_ENTITY_TYPES = {"IfcReinforcingBar", "IfcReinforcingMesh", "IfcTendon"}
 DIAMETER_CANDIDATE_ENTITIES = {"IfcPile"}
+EXCLUDED_EXPORT_ENTITY_TYPES = (
+    "IfcOpeningElement",
+    "IfcElementAssembly",
+    "IfcCurtainWall",
+    "IfcFlowTerminal",
+    "IfcDoor",
+    "IfcWindow",
+    "IfcFurnishingElement",
+    "IfcAnnotation",
+    "IfcSpace",
+    "IfcVirtualElement",
+)
+EXCLUDED_IFC_COVERING_PREDEFINED_TYPES = {"CEILING"}
 VALUE_CONVERSION_FIELDS = ["Length", "Height", "NetVolume", "GrossVolume", "Ansichtsfläche", "NetArea", "NetSurfaceArea", "GrossSurfaceArea", "Durchmesser"]
 COMPUTED_FIELDS = {"Durchmesser", "Ansichtsfläche"}
 DEFAULT_PROPERTY_FIELDS = [
@@ -256,7 +269,27 @@ def _build_no_aggregates_elements(elements):
 
 
 def is_exportable_ifc_element(element):
-    return element.is_a() not in {"IfcOpeningElement", "IfcElementAssembly"}
+    if not hasattr(element, "is_a"):
+        return False
+    if _is_excluded_ifc_covering(element):
+        return False
+    return not any(element.is_a(entity_type) for entity_type in EXCLUDED_EXPORT_ENTITY_TYPES)
+
+
+def _normalize_ifc_enum(value):
+    return str(value).strip().upper() if value is not None else ""
+
+
+def _is_excluded_ifc_covering(element):
+    if not element.is_a("IfcCovering"):
+        return False
+
+    predefined_type = _normalize_ifc_enum(getattr(element, "PredefinedType", None))
+    if predefined_type == "USERDEFINED":
+        object_type = _normalize_ifc_enum(getattr(element, "ObjectType", None))
+        return object_type in EXCLUDED_IFC_COVERING_PREDEFINED_TYPES
+
+    return predefined_type in EXCLUDED_IFC_COVERING_PREDEFINED_TYPES
 
 
 def _is_missing_value(value):

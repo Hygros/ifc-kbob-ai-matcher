@@ -87,6 +87,37 @@
             },
             "emit_without_strength": true
         },
+        "baugrubensicherung": {
+            "enabled": true,
+            "entity_predefined_targets": [
+                "IfcWall::",
+                "IfcWall::RETAININGWALL",
+                "IfcWall::WAVEWALL"
+            ],
+            "concrete_wall_types": [
+                "Bohrpfahlwand verankert",
+                "Bohrpfahlwand unverankert",
+                "Bohrpfahlwand gespriesst",
+                "Rühlwand auskragend",
+                "Rühlwand gespriesst",
+                "Rühlwand verankert",
+                "Schlitzwand 400",
+                "Schlitzwand 800",
+                "Nagelwand"
+            ],
+            "steel_wall_types": [
+                "Spundwand auskragend",
+                "Spundwand gespriesst",
+                "Spundwand verankert"
+            ],
+            "emit_with_material": true,
+            "emit_without_material": true,
+            "emit_with_strength": true,
+            "emit_with_casting": true,
+            "emit_with_strength_and_casting": true,
+            "emit_with_npk": true,
+            "emit_with_steel_alias": true
+        },
         "casting_alias": {
             "enabled": true,
             "aliases": {

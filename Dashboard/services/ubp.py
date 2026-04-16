@@ -74,7 +74,7 @@ def apply_ubp_results(df: pd.DataFrame, results: list) -> pd.DataFrame:
         calc_col = f"{col_name}_calc"
         if calc_col in merged.columns:
             if col_name in merged.columns:
-                merged[col_name] = merged[calc_col].fillna(merged[col_name])
+                merged[col_name] = merged[calc_col].where(merged[calc_col].notna(), merged[col_name])
             else:
                 merged[col_name] = merged[calc_col]
             merged = merged.drop(columns=[calc_col])

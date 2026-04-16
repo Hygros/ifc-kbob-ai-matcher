@@ -26,6 +26,31 @@ IFC-Datei
   → Dashboard              (Nutzer wählt Zuordnung, UBP-Berechnung, Charts)
 ```
 
+### SBERT Query-Bildung
+
+Die Bi-Encoder-Queries werden in `core/sbert/sentence_transformer.py` aus folgenden Basisfeldern aufgebaut:
+
+```text
+IfcEntity
+PredefinedType
+Material
+Durchmesser
+CastingMethod
+StrengthClass
+```
+
+Das Feld `Name` wird bewusst **nicht** direkt als Rohtext in die Basis-Query übernommen, um Rauschen aus projektspezifischen Benennungen zu reduzieren.
+
+Für Baugrubensicherungs-Fälle wird stattdessen eine gezielte, fuzzy und mehrsprachige Disambiguierung über `Name` angewendet (DE/FR/IT/EN), z. B.:
+
+```text
+Schlitzwand | Bohrpfahlwand | Spundwand | Nagelwand | Rühlwand
+verankert | gespriesst | auskragend | unverankert
+400 | 800
+```
+
+Diese erkannten Tokens werden zusätzlich an die Query angehängt.
+
 ## Projektstruktur
 
 ```text
@@ -150,6 +175,8 @@ streamlit run Dashboard/app_with_viewer.py
 > **Credits:** Der integrierte 3D-Viewer basiert auf dem Open-Source-Projekt [ifc-lite](https://github.com/louistrue/ifc-lite) von [Louis True](https://github.com/louistrue) (Lizenz: MPL-2.0).
 
 Manuell korrigierte Zuordnungen werden automatisch als Trainingsdaten nach `Training/data/` exportiert.
+
+Der Dashboard-Trainingsexport verwendet dieselbe Query-Logik wie das Laufzeit-Matching (inklusive Name-basierter Disambiguierungs-Tokens), damit Evaluation/Training und Dashboard konsistent bleiben.
 
 ### CLI-Pipeline (ohne Dashboard)
 
