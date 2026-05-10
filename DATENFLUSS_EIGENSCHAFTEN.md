@@ -26,7 +26,6 @@ DEFAULT_PROPERTY_FIELDS:
 Status
 CastingMethod
 StrengthClass
-ExposureClass
 Length
 NetVolume
 GrossVolume
@@ -184,7 +183,6 @@ AggregateParentGUID
 Status
 CastingMethod
 StrengthClass
-ExposureClass
 Height
 NetArea
 Count
