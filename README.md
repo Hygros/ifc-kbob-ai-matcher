@@ -4,9 +4,10 @@ Automatisierte Zuordnung von IFC-Bauelementen zu Ökobilanzdaten (KBOB) mit Sent
 
 ## Du möchtest das Tool ausprobieren und der Code interessiert dich weniger?
 Leider hat HuggingFace den Space in der Vergangenheit gesperrt. Könnte sein das er nicht verfügbar ist oder etwas nicht funktioniert.  
-Dann gehe auf diese Seite: [https://huggingface.co/spaces/Hygros-LCA/ifc-kbob-ai-matcher]  
+Dann gehe auf diese Seite:  
+[https://huggingface.co/spaces/Hygroskopisch/ifc-kbob-ai-matcher]  
 oder auf  
-[https://huggingface.co/spaces/Hygroskopisch/ifc-kbob-ai-matcher]
+[https://huggingface.co/spaces/Hygros-LCA/ifc-kbob-ai-matcher]  
 
 
 ## Überblick
