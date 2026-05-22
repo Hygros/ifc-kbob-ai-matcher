@@ -247,7 +247,7 @@ IfcWall POLÖYGONAL Beton C30/37
 IfcWall POLYGOAL Stahlpbeton C30/37
 IfcWall RETAININGSALL Betn insitu
 IfcWall RETAIININGWALL C30/37 inswitu
-IfcWall RETAININGWQALL Spritzbeton C12/15
+IfcWall RETAININGWQALL Spritzbeton C20/25
 IfcWall Stahlebton C30/37 insitu
 IfcWall Betoon C30/37 nsitu
 IfcWall SOLDWALL Beton C30/307

@@ -1,2 +1,10 @@
 IfcBuildingElementPart TrackElement Beton
 IfcCovering
+IfcBearing ELASTOMERIC Elastomer
+IfcBuildingElementProxy ELASTOMERIC Stahlbeton
+IfcWall RETAININGWALL Fertigteil Rühlwand
+IfcCovering
+IfcWall RETAININGWALL Ortbeton Bohrpfahlwand
+IfcWall RETAININGWALL Fertigteil Rühlwand
+IfcWall RETAININGWALL Fertigteil Rühlwand
+IfcWall RETAININGWALL Ortbeton Bohrpfahlwand

@@ -13,13 +13,13 @@ Optional mit Re-Ranking:
 
 """
 
-# python Evaluation/run_single_model_evaluation.py --model models\Hygroskopisch\bge-m3-ifc-kbob-finetuned --query-file Evaluation\ground_truth\queries.txt --expected-file Evaluation\ground_truth\expected.txt --run-label eval-bge-m3-ifc-kbob-finetuned --output-dir Evaluation\outputs\single_model\bge-m3-ifc-kbob-finetuned\normal_queries
+# python Evaluation/run_single_model_evaluation.py --model models\Hygros-LCA\bge-m3-ifc-kbob-finetuned --query-file Evaluation\ground_truth\queries.txt --expected-file Evaluation\ground_truth\expected.txt --run-label eval-bge-m3-ifc-kbob-finetuned --output-dir Evaluation\outputs\single_model\bge-m3-ifc-kbob-finetuned\normal_queries
 
-# python Evaluation/run_single_model_evaluation.py --model models\Hygroskopisch\bge-m3-ifc-kbob-finetuned --query-file Evaluation\ground_truth\queries_typos.txt --expected-file Evaluation\ground_truth\expected.txt --run-label eval-bge-m3-ifc-kbob-finetuned-typos --output-dir Evaluation\outputs\single_model\bge-m3-ifc-kbob-finetuned\queries_typos
+# python Evaluation/run_single_model_evaluation.py --model models\Hygros-LCA\bge-m3-ifc-kbob-finetuned --query-file Evaluation\ground_truth\queries_typos.txt --expected-file Evaluation\ground_truth\expected.txt --run-label eval-bge-m3-ifc-kbob-finetuned-typos --output-dir Evaluation\outputs\single_model\bge-m3-ifc-kbob-finetuned\queries_typos
 
-# python Evaluation/run_single_model_evaluation.py --model models\Hygroskopisch\bge-m3-ifc-kbob-finetuned --query-file Evaluation\ground_truth\queries_missing.txt --expected-file Evaluation\ground_truth\expected.txt --run-label eval-bge-m3-ifc-kbob-finetuned-missing-queries --output-dir Evaluation\outputs\single_model\bge-m3-ifc-kbob-finetuned\queries_missing
+# python Evaluation/run_single_model_evaluation.py --model models\Hygros-LCA\bge-m3-ifc-kbob-finetuned --query-file Evaluation\ground_truth\queries_missing.txt --expected-file Evaluation\ground_truth\expected.txt --run-label eval-bge-m3-ifc-kbob-finetuned-missing-queries --output-dir Evaluation\outputs\single_model\bge-m3-ifc-kbob-finetuned\queries_missing
 
-# python Evaluation/run_single_model_evaluation.py --model models\Hygroskopisch\bge-m3-ifc-kbob-finetuned --query-file Evaluation\ground_truth\queries_missing+typos.txt --expected-file Evaluation\ground_truth\expected.txt --run-label eval-bge-m3-ifc-kbob-finetuned-missing-queries+typos --output-dir Evaluation\outputs\single_model\bge-m3-ifc-kbob-finetuned\queries_missing+typos
+# python Evaluation/run_single_model_evaluation.py --model models\Hygros-LCA\bge-m3-ifc-kbob-finetuned --query-file Evaluation\ground_truth\queries_missing+typos.txt --expected-file Evaluation\ground_truth\expected.txt --run-label eval-bge-m3-ifc-kbob-finetuned-missing-queries+typos --output-dir Evaluation\outputs\single_model\bge-m3-ifc-kbob-finetuned\queries_missing+typos
 
 
 import argparse

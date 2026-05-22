@@ -1,0 +1,2 @@
+model,pipeline_variant,cross_encoder_model,cases,hit@1,hit@10,hit@20,hit@30,hit@50,mrr,map@10,ndcg@10,recall@10,avg_expected_score,hit@1_ci_low,hit@1_ci_high,hit@10_ci_low,hit@10_ci_high,mrr@10_ci_low,mrr@10_ci_high,ndcg@10_ci_low,ndcg@10_ci_high
+models\Hygros-LCA\bge-m3-ifc-kbob-finetuned,baseline,-,389,0.969152,0.989717,0.989717,0.997429,1.000000,0.979006,0.928776,0.950049,0.955458,0.910530,0.946015,0.984576,0.979434,1.000000,0.962500,0.991003,0.934088,0.964733

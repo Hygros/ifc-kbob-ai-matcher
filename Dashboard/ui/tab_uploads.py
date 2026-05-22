@@ -61,14 +61,15 @@ def render_tab_uploads() -> None:
     st.caption(f"Aktives SBERT-Modell: {active_model_display}")
 
     # --- Cross-Encoder Reranking ---
-    use_cross_encoder = st.checkbox(
-        "Cross-Encoder Reranking aktivieren",
-        key="use_cross_encoder",
-        help=(
-            "Nach dem Bi-Encoder (SBERT) werden die Top-K Treffer zusätzlich mit einem "
-            "Cross-Encoder re-ranked. Höhere Qualität, aber langsamere Verarbeitung."
-        ),
-    )
+    # use_cross_encoder = st.checkbox(
+    #     "Cross-Encoder Reranking aktivieren",
+    #     key="use_cross_encoder",
+    #     help=(
+    #         "Nach dem Bi-Encoder (SBERT) werden die Top-K Treffer zusätzlich mit einem "
+    #         "Cross-Encoder re-ranked. Höhere Qualität, aber langsamere Verarbeitung."
+    #     ),
+    # )
+    use_cross_encoder = False
     if use_cross_encoder:
         if st.session_state.get("selected_cross_encoder_model") not in CROSS_ENCODER_MODEL_OPTIONS:
             st.session_state["selected_cross_encoder_model"] = DEFAULT_CROSS_ENCODER_MODEL

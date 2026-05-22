@@ -247,7 +247,7 @@ IfcWall POLYGONAL Beton C30/37 insitu
 IfcWall POLYGONAL Stahlbeton C30/37 insitu
 IfcWall RETAININGWALL Beton C30/37 insitu
 IfcWall RETAININGWALL Stahlbeton C30/37 insitu
-IfcWall RETAININGWALL Spritzbeton C12/15 insitu
+IfcWall RETAININGWALL Spritzbeton C20/25 insitu
 IfcWall SHEAR Stahlbeton C30/37 insitu
 IfcWall SHEAR Beton C30/37 insitu
 IfcWall SOLIDWALL Beton C30/37 insitu

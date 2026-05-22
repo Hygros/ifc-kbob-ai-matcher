@@ -490,11 +490,23 @@ def render_tab_ai_mapping(df: pd.DataFrame | None) -> None:
             else:
                 default_label = NO_SELECTION_LABEL
 
+            widget_key = f"sel_group_{data_version}_{group_index}_{primary_guid}"
+            # Resolve effective index: prefer the value already stored in
+            # session_state (user's last interaction) over the computed
+            # default so that the index parameter never conflicts with
+            # the session-state value — which would cause Streamlit to
+            # reset the widget to the default on every rerun.
+            _current_val = st.session_state.get(widget_key)
+            if _current_val is not None and _current_val in options:
+                _effective_index = options.index(_current_val)
+            else:
+                _effective_index = options.index(default_label) if default_label in options else 0
+
             sel_label = st.selectbox(
                 "Materialauswahl",
                 options=options,
-                index=(options.index(default_label) if default_label in options else 0),
-                key=f"sel_group_{data_version}_{group_index}_{primary_guid}",
+                index=_effective_index,
+                key=widget_key,
                 on_change=set_active_guid,
                 args=(primary_guid, all_viewer_guids),
                 label_visibility="collapsed",

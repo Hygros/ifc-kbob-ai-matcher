@@ -22,6 +22,8 @@ RULE_STEEL_ALIAS_PATTERN = re.compile(r"\bs(?:235|355)(?:jr|j0)\b", re.IGNORECAS
 RULE_PTFE_PATTERN = re.compile(r"\b(?:ptfe|teflon|polytetrafluoroethylene)\b", re.IGNORECASE)
 RULE_PAVEMENT_PATTERN = re.compile(r"\b(?:asphaltbelag|bitumenbelag|pavement|wearing)\b", re.IGNORECASE)
 RULE_AGGREGATE_PATTERN = re.compile(r"\b(?:aggregate|kies|schotter|naturstein)\b", re.IGNORECASE)
+STEEL_GRADE_PATTERN = re.compile(r"\bs\d{3}(?:j[0-9r]*)?\b")
+IFCTENDON_PATTERN = re.compile(r"\bifctendon\b")
 
 
 @dataclass
@@ -146,21 +148,48 @@ def infer_source_rule(query: str) -> str:
 
 def infer_material_family(query: str) -> str:
     text = normalize_text(query)
-    if "stahlbeton" in text:
-        return "stahlbeton"
+    # 1. bewehrung_spannstahl (before stahl — these queries often contain "stahl")
+    if "ifcreinforcingbar" in text or IFCTENDON_PATTERN.search(text) or any(
+        kw in text for kw in ("b500", "litze", "draht")
+    ):
+        return "bewehrung_spannstahl"
+    # 2. strassenoberbau
+    if "tragschicht" in text or "hydraulisch gebund" in text:
+        return "strassenoberbau"
+    if "uhpc" in text and ("pavement" in text or "ifcpavement" in text):
+        return "strassenoberbau"
+    # 3. aluminium
+    if "aluminium" in text:
+        return "aluminium"
+    # 4. elastomer
+    if "elastomer" in text:
+        return "elastomer"
+    # 5. abdichtung (all IfcCovering MEMBRANE + standalone Epoxidharz)
+    if ("ifccovering" in text and "membrane" in text) or "epoxidharz" in text:
+        return "abdichtung"
+    # 6. beton_stahlbeton (both "beton" and "stahlbeton" queries)
     if "beton" in text:
-        return "beton"
-    if "stahl" in text:
+        return "beton_stahlbeton"
+    # 7. stahl (keyword or steel-grade like S235, S355JR, S460)
+    if "stahl" in text or STEEL_GRADE_PATTERN.search(text):
         return "stahl"
+    # 8. holz
     if "holz" in text:
         return "holz"
+    # 9. asphalt_bitumen
     if "asphalt" in text or "bitumen" in text:
         return "asphalt_bitumen"
-    if "kunststoff" in text or "ptfe" in text or "teflon" in text:
+    # 10. kunststoff
+    if any(kw in text for kw in ("kunststoff", "ptfe", "teflon", "polytetrafluoroethylene")):
         return "kunststoff"
+    # 11. schotter_kies_erdbau
+    if any(kw in text for kw in ("schotter", "kies", "erdmaterial", "mineralischer filter")):
+        return "schotter_kies_erdbau"
+    # 12. stein_mauerwerk
     if "mauerwerk" in text or "stein" in text:
         return "stein_mauerwerk"
-    return "other"
+    # 13. fallback
+    return "uebrige"
 
 
 def infer_casting_method(query: str) -> str:

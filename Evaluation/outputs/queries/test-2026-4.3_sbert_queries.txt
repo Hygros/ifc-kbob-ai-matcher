@@ -1,0 +1,124 @@
+IfcBuildingElementProxy RAIL Stahl
+IfcBuildingElementProxy RAIL Stahl
+IfcBeam GIRDER_SEGMENT S235JR
+IfcBeam LINTEL S235JR
+IfcBeam T_BEAM S235JR
+IfcBeam LINTEL S235JR
+IfcBeam JOIST S235JR
+IfcBeam DIAPHRAGM S235JR
+IfcBeam S235JR
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcBeam GIRDER_SEGMENT Beton NPK G Ortbeton C30/37
+IfcReinforcingBar SHEAR B500B
+IfcReinforcingBar MAIN B500B
+IfcReinforcingBar B500B
+IfcBeam EDGEBEAM Beton NPK G Ortbeton C30/37
+IfcColumn COLUMN Beton Ortbeton
+IfcColumn COLUMN Beton NPK L Ortbeton C20/25
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcPile BORED Beton NPK L 600 Ortbeton C20/25
+IfcPile BORED Beton NPK H 800 Ortbeton C25/30
+IfcPile BORED Beton NPK H 800 Ortbeton C25/30
+IfcPile BORED Beton NPK H 800 Ortbeton C25/30
+IfcPile BORED Beton NPK H 800 Ortbeton C25/30
+IfcPile BORED Beton NPK H 800 Ortbeton C25/30
+IfcPile BORED Beton NPK H 800 Ortbeton C25/30
+IfcPile BORED Beton NPK H 800 Ortbeton C25/30
+IfcPile BORED Beton NPK H 800 Ortbeton C25/30
+IfcPile BORED Beton NPK H 900 Ortbeton C25/30
+IfcPile BORED Beton NPK H 800 Ortbeton C25/30
+IfcFooting STRIP_FOOTING Magerbeton Ortbeton
+IfcFooting STRIP_FOOTING Beton NPK G Ortbeton C30/37
+IfcFooting STRIP_FOOTING Magerbeton Ortbeton
+IfcFooting STRIP_FOOTING Beton NPK G Ortbeton C30/37
+IfcFooting STRIP_FOOTING Magerbeton Ortbeton
+IfcBeam PIERCAP Beton NPK G Ortbeton C30/37
+IfcFooting STRIP_FOOTING Beton NPK G Ortbeton C30/37
+IfcRailing GUARDRAIL S235JR
+IfcRailing GUARDRAIL S235JR
+IfcRailing GUARDRAIL S235JR
+IfcRailing GUARDRAIL S235JR
+IfcRailing GUARDRAIL S235JR
+IfcRailing GUARDRAIL S235JR
+IfcRailing GUARDRAIL S235JR
+IfcRailing GUARDRAIL S235JR
+IfcRailing GUARDRAIL S235JR
+IfcRailing HANDRAIL S235JR
+IfcRailing HANDRAIL S235JR
+IfcRailing HANDRAIL S235JR
+IfcRailing HANDRAIL S235JR
+IfcRailing HANDRAIL S235JR
+IfcRailing HANDRAIL S235JR
+IfcRailing HANDRAIL S235JR
+IfcTendon BAR B500B
+IfcCovering
+IfcSlab TRACKSLAB Beton NPK D Ortbeton C25/30
+IfcCovering
+IfcSlab TRACKSLAB Beton NPK D Ortbeton C25/30
+IfcWall SOLIDWALL Beton NPK G Ortbeton C30/37
+IfcWall SOLIDWALL Beton NPK G Ortbeton C30/37
+IfcWall Epoxidharz
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar MAIN B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcWall RETAININGWALL Fertigteil Rühlwand
+IfcWall RETAININGWALL Ortbeton Bohrpfahlwand
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar MAIN B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcWall RETAININGWALL Fertigteil Rühlwand
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcReinforcingBar B500B
+IfcWall RETAININGWALL Ortbeton Bohrpfahlwand
+IfcWall SOLIDWALL Beton NPK G Ortbeton C30/37
+IfcWall SOLIDWALL Beton NPK G Ortbeton C30/37
+IfcBuildingElementPart TrackElement Eiche
+IfcBuildingElementPart TrackElement Eiche
+IfcBuildingElementPart TrackElement Eiche
+IfcBuildingElementPart TrackElement Eiche
+IfcBuildingElementPart TrackElement Eiche
+IfcBuildingElementPart TrackElement Eiche
+IfcBuildingElementPart TrackElement Eiche
+IfcBuildingElementPart TrackElement Eiche
+IfcBuildingElementPart TrackElement Vergütungsstahl
+IfcBuildingElementPart TrackElement Vergütungsstahl
+IfcBuildingElementPart TrackElement Vergütungsstahl
+IfcBuildingElementPart TrackElement Vergütungsstahl
+IfcBuildingElementPart TrackElement Vergütungsstahl
+IfcBuildingElementPart TrackElement Vergütungsstahl
+IfcBuildingElementPart TrackElement Kunststoff
+IfcBuildingElementPart TrackElement Kunststoff
+IfcBuildingElementPart TrackElement Kunststoff
+IfcBuildingElementPart TrackElement Kunststoff
+IfcBuildingElementPart TrackElement Kunststoff
+IfcBuildingElementPart TrackElement Beton
+IfcBuildingElementPart TrackElement Beton
+IfcBuildingElementPart TrackElement Beton
+IfcBuildingElementPart TrackElement Beton
+IfcBuildingElementPart TrackElement Beton
+IfcBuildingElementPart TrackElement Beton
+IfcBuildingElementProxy Course Balastbed Schotter
+IfcBearing ELASTOMERIC Elastomer
+IfcBearing ELASTOMERIC Elastomer
+IfcBearing ELASTOMERIC Elastomer
+IfcBearing ELASTOMERIC Elastomer

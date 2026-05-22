@@ -334,7 +334,7 @@ def render_tab_charts(df: pd.DataFrame | None) -> None:
                 "reinforcement_mass_kg": "Masse Stahl (kg)",
             }
             if name_col:
-                rename[name_col] = "Bauteil"
+                rename[name_col] = "Bauteilname"
             if entity_col:
                 rename[entity_col] = "IfcEntity"
             if guid_col:
@@ -376,7 +376,7 @@ def render_tab_charts(df: pd.DataFrame | None) -> None:
                 "surface_area_m2": "Oberfläche (m²)",
             }
             if name_col_g:
-                rename_g[name_col_g] = "Bauteil"
+                rename_g[name_col_g] = "Bauteilname"
             if entity_col_g:
                 rename_g[entity_col_g] = "IfcEntity"
             if guid_col:

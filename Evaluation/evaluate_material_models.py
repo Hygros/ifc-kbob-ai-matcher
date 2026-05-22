@@ -59,21 +59,25 @@ def resolve_database_path(project_root: Path) -> Path:
 TABLE_NAME = "Oekobilanzdaten"
 COLUMN_MATERIAL = "Material"
 
+#"Hygroskopisch/bge-m3-ifc-kbob-finetuned",
+    # "google/embeddinggemma-300m",
+    # "BAAI/bge-m3",
+    # "intfloat/multilingual-e5-large",
+    # "intfloat/multilingual-e5-base",
+    # "sentence-transformers/LaBSE",
+    # "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    # "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    # "sentence-transformers/distiluse-base-multilingual-cased-v2",
+    # "kforth/IfcMaterial2MP",
+    # "kforth/IfcElement2ConstructionSets",
+    # "google-bert/bert-base-german-cased",
+    # "google-bert/bert-base-multilingual-uncased",
+    # "google-bert/bert-base-multilingual-cased",
+
 MODEL_NAMES = [
-    "google/embeddinggemma-300m",
-    "BAAI/bge-m3",
-    "Hygroskopisch/bge-m3-ifc-kbob-finetuned",
-    "intfloat/multilingual-e5-large",
-    "intfloat/multilingual-e5-base",
-    "sentence-transformers/LaBSE",
-    "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
-    "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    "sentence-transformers/distiluse-base-multilingual-cased-v2",
-    "kforth/IfcMaterial2MP",
-    "kforth/IfcElement2ConstructionSets",
-    "google-bert/bert-base-german-cased",
-    "google-bert/bert-base-multilingual-uncased",
-    "google-bert/bert-base-multilingual-cased",
+
+    "Hygros-LCA/bge-m3-ifc-kbob-finetuned",
+
 ]
 
 SBERT_DEVICE = os.environ.get("SBERT_DEVICE", "").strip().lower()
